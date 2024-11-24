@@ -12,6 +12,10 @@ export default function Home() {
     setError('');
     setShortUrl('');
 
+    const formattedUrl = originalUrl.startsWith('http://') || originalUrl.startsWith('https://')
+      ? originalUrl
+      : `http://${originalUrl}`;
+
     try {
       const res = await fetch('/api/shorten', {
         method: 'POST',
@@ -20,9 +24,7 @@ export default function Home() {
       });
 
       const data = await res.json();
-
       if (!res.ok) throw new Error(data.message);
-
       setShortUrl(data.shortenUrl);
     } catch (err) {
       setError(err.message);
@@ -34,7 +36,7 @@ export default function Home() {
       <h1>URL Shortener</h1>
       <form onSubmit={handleSubmit}>
         <input
-          type="url"
+          type="string"
           placeholder="Enter original URL"
           value={originalUrl}
           onChange={(e) => setOriginalUrl(e.target.value)}
