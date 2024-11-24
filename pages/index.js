@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import QRCodeSVG from 'qrcode.react';
+import { QRCodeCanvas, QRCodeSVG } from 'qrcode.react';
 
 export default function Home() {
   const [originalUrl, setOriginalUrl] = useState('');
