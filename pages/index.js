@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import QRCode from 'qrcode.react';
+import QRCodeSVG from 'qrcode.react';
 
 export default function Home() {
   const [originalUrl, setOriginalUrl] = useState('');
@@ -52,7 +52,7 @@ export default function Home() {
       {shortenUrl && (
         <div>
           <p>Short URL: <a href={shortenUrl} target="_blank" rel="noopener noreferrer">{shortenUrl}</a></p>
-          <QRCode value={shortenUrl} />
+          <QRCodeSVG value={shortenUrl} />
         </div>
       )}
     </div>

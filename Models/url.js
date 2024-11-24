@@ -5,12 +5,12 @@ const URLSchema = new mongoose.Schema(
     originalUrl: {
       type: String,
       required: true,
-      unique: true,
+      
     },
     shortenUrl: {
       type: String,
       required: true,
-      unique: true,
+      
     },
     alias: {
       type: String,
