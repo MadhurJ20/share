@@ -1,6 +1,6 @@
 import { useRef, useState } from 'react';
 import { QRCodeCanvas, QRCodeSVG } from 'qrcode.react';
-import { Copy, Github, Link, Share } from 'lucide-react';
+import { ChartArea, Check, Copy, Github, HomeIcon, Link, Share } from 'lucide-react';
 
 import { Input } from '../components/ui/input'
 import { Button } from '../components/ui/button'
@@ -11,7 +11,7 @@ export default function Home() {
   const [alias, setCustomAlias] = useState('');
   const [shortenUrl, setShortUrl] = useState('');
   const [error, setError] = useState('');
-  const qrCodeRef = useRef(null);
+  const [clickedButton, setClickedButton] = useState(null);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -34,6 +34,10 @@ export default function Home() {
       setShortUrl(data.shortenUrl);
     } catch (err) {
       setError(err.message);
+
+      if (err.message === 'This URL has already been shortened') { toast.error('This URL has already been shortened'); }
+      else toast.error('An error occurred: ' + err.message);
+
     }
   };
 
@@ -45,7 +49,6 @@ export default function Home() {
     }
     return url;
   };
-
 
   const handleCopy = () => {
     if (shortenUrl) {
@@ -59,6 +62,14 @@ export default function Home() {
     }
   };
 
+  const handleClick = (buttonName, action = () => { }) => {
+    action();
+    setClickedButton(buttonName);
+    setTimeout(() => {
+      setClickedButton(null);
+    }, 1000);
+  };
+
   const handleClear = () => {
     setOriginalUrl('');
     setCustomAlias('');
@@ -68,7 +79,15 @@ export default function Home() {
 
   console.log("Look at me: ", generateQRCodeValue(shortenUrl));
   return (
-    <main className="flex flex-col items-center justify-center h-screen font-inter min-h-svh">
+    <main className="relative flex flex-col items-center justify-center h-screen font-inter min-h-svh bg-zinc-50">
+      <nav
+        className='flex px-6 py-3 justify-between bg-[#ccc2] backdrop-blur-md shadow-lg mt-8 absolute rounded-full lg:w-1/3 top-0 w-4/5 z-10'>
+        <h2 className='font-bold'> ACES </h2>
+        <section className='flex space-x-4'>
+          <a href='/' className='hover:text-blue-500'><HomeIcon className="w-5 h-5" /></a>
+          <a href='/analytics' className='hover:text-blue-500'><ChartArea className="w-5 h-5" /></a>
+        </section>
+      </nav>
       <div className="relative py-24 overflow-hidden lg:py-32">
         {/* Gradients */}
         <div
@@ -82,17 +101,20 @@ export default function Home() {
           <div className="container py-10 lg:py-16">
             <div className="max-w-2xl mx-auto text-center">
               <p className="small-caps">URL Shortener + QR Code Generator</p>
+
               <header className="max-w-2xl mt-5">
                 <h1 className="text-4xl font-extrabold tracking-tight scroll-m-20 lg:text-5xl">
                   Enter The Link!
                 </h1>
               </header>
+
               <article className="max-w-2xl mt-5">
                 <p className="text-lg text-muted-foreground">
                   Enter your link below. In case you want to see analytics
-                  head over to the <a href='/analytics' className='hover:underline'><span>analytics page</span><Link className='inline-block w-6 ps-1 pe-1 aspect-square' /></a>. Each link can only be shortened once.
+                  head over to the <a href='/analytics' className='hover:underline hover:text-blue-500'><span>analytics page</span><Link className='inline-block w-6 ps-1 pe-1 aspect-square' /></a>. Each link can only be shortened once.
                 </p>
               </article>
+
               {/* Buttons */}
               <form className="flex flex-col justify-center gap-3 mt-8" onSubmit={handleSubmit}>
                 <section className='flex flex-col justify-center gap-3 mt-2 md:flex-row'>
@@ -110,14 +132,42 @@ export default function Home() {
                     onChange={(e) => setCustomAlias(e.target.value)}
                   />
                 </section>
-                <footer className='flex flex-row gap-3'>
-                  <Button type="submit" className='flex-1'>Shorten</Button>
-                  <Button type="button" className='flex flex-1 w-max' onClick={handleClear}>Clear</Button>
-                  <Button type="button" variant='outline'><span className='flex w-4 aspect-square' onClick={handleCopy}><Copy /></span></Button>
-                  <Button type="button" variant='outline'><span className='flex w-4 aspect-square'><Share /></span></Button>
-                  <Button type="button" variant='outline'><a className='flex w-4 aspect-square' href="https://github.com/ACES-RMDSSOE/qr-code-generator"><Github /></a></Button>
+                <footer className="flex flex-row gap-3">
+                  <Button
+                    type="submit"
+                    className="flex-1"
+                    onClick={() => handleClick("shorten")}
+                  >
+                    {clickedButton === "shorten" ? <Check /> : "Shorten"}
+                  </Button>
+                  <Button
+                    type="button"
+                    className="flex flex-1 w-max"
+                    onClick={() => handleClick("clear", handleClear)}
+                  >
+                    {clickedButton === "clear" ? <Check /> : "Clear"}
+                  </Button>
+                  <Button type="button" variant="outline">
+                    <span
+                      className="flex w-4 aspect-square"
+                      onClick={() => handleClick("copy", handleCopy)}
+                    >
+                      {clickedButton === "copy" ? <Check /> : <Copy />}
+                    </span>
+                  </Button>
+                  <Button type="button" variant="outline">
+                    <span className="flex w-4 aspect-square">
+                      {clickedButton === "share" ? <Check /> : <Share />}
+                    </span>
+                  </Button>
+                  <Button type="button" variant="outline">
+                    <a className="flex w-4 aspect-square"
+                      href="https://github.com/ACES-RMDSSOE/qr-code-generator">
+                      <Github /></a>
+                  </Button>
                 </footer>
               </form>
+
               <section className='mt-4'>
                 {error && <p style={{ color: 'red' }}>{error}</p>}
                 {shortenUrl && (
@@ -129,7 +179,7 @@ export default function Home() {
                         className='font-mono font-thin text-primary hover:underline'
                       >{shortenUrl}</a>
                     </header>
-                    <footer>
+                    <footer className='p-3 pb-6 bg-white rounded-lg shadow'>
                       <QRCodeSVG value={generateQRCodeValue(shortenUrl)}
                         title={"Scan me!"}
                         size={128}

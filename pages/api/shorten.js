@@ -3,20 +3,21 @@ import Url from '../../models/url';
 import { nanoid } from 'nanoid';
 
 export default async function handler(req, res) {
-  if (req.method !== 'POST') {
-    return res.status(405).json({ message: 'Method not allowed' });
-  }
-
+  if (req.method !== 'POST') { return res.status(405).json({ message: 'Method not allowed' }); }
   const { originalUrl, alias } = req.body;
+  if (!originalUrl) { return res.status(400).json({ message: 'Original URL is required' }); }
 
-  if (!originalUrl) {
-    return res.status(400).json({ message: 'Original URL is required' });
-  }
+  const dotCount = (originalUrl.match(/\./g) || []).length;
+  if (dotCount <= 0) { return res.status(400).json({ message: 'Invalid URL or Domain' }); }
 
   await dbConnect();
-
   try {
-    // Check if alias already exists (only if alias is provided)
+    const existingUrl = await Url.findOne({ originalUrl });
+    if (existingUrl) {
+      return res.status(400).json({ message: 'This URL has already been shortened' });
+    }
+
+    // Check if alias already exists (Only if alias is provided)
     if (alias) {
       const existingAlias = await Url.findOne({ alias });
       if (existingAlias) {
@@ -25,7 +26,6 @@ export default async function handler(req, res) {
     }
 
     const shortenUrl = alias || nanoid(6);
-
     const newUrl = await Url.create({ originalUrl, shortenUrl, alias: alias || undefined });
 
     res.status(201).json({ shortenUrl: `${process.env.BASE_URL}/${shortenUrl}` });
