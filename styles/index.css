@@ -1,0 +1,8 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+pre, mono {
+  font-family: 'Roboto Mono', monospace;
+  /* font-family: var(--font-roboto-mono); */
+}

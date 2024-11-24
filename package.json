@@ -1,6 +1,5 @@
 {
   "dependencies": {
-    "bootstrap": "^5.3.3",
     "mongoose": "^8.8.2",
     "mongoose-sequence": "^6.0.1",
     "next": "^15.0.3",

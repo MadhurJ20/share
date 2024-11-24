@@ -32,8 +32,8 @@ export default function Home() {
   };
 
   return (
-    <div className="container">
-      <h1>URL Shortener</h1>
+    <main className="flex flex-col items-center justify-center font-inter">
+      <h1 className='underline'>URL Shortener</h1>
       <form onSubmit={handleSubmit}>
         <input
           type="string"
@@ -57,6 +57,6 @@ export default function Home() {
           <QRCodeSVG value={shortenUrl} />
         </div>
       )}
-    </div>
+    </main>
   );
 }
