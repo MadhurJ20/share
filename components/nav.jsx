@@ -1,3 +1,5 @@
+"use client";
+
 import { ChartArea, HomeIcon } from "lucide-react";
 import { ThemeToggle } from "./themeToggle";
 
