@@ -3,23 +3,25 @@ const BASE_URL = process.env.BASE_URL || 'http://';
 
 const AccessSchema = new mongoose.Schema({
   count: { type: Number, default: 0 },
-  lastAccessed: { type: Date },
+  lastAccessed: { type: [Date], default: [] },
 });
 
 const URLSchema = new mongoose.Schema(
   {
     originalUrl: {
       type: String,
+      unique: true,
       required: true,
       set(value) {
         // If no protocol is provided, prepend http://
         if (!/^https?:\/\//i.test(value)) value = `${BASE_URL}${value}`;
         return value;
       },
-      match: [/^https?:\/\/[^\s$.?#].[^\s]*$/, 'Please enter a valid URL'],
+      // match: [/^https?:\/\/[^\s$.?#].[^\s]*$/, 'Please enter a valid URL'],
     },
     shortenUrl: {
       type: String,
+      unique: true,
       required: true,
     },
     alias: {
@@ -29,12 +31,13 @@ const URLSchema = new mongoose.Schema(
     },
     accesses: {
       type: AccessSchema,
-      default: () => ({}),
+      default: () => ({
+        count: 0,
+        lastAccessed: [new Date()],
+      }),
     },
   },
-  {
-    timestamps: true,
-  }
+  { timestamps: true, }
 );
 
 URLSchema.index({ originalUrl: 1 });

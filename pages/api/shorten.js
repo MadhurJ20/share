@@ -1,5 +1,5 @@
 import dbConnect from '../../utils/db';
-import Url from '../../Models/url';
+import Url from '../../models/url';
 import { nanoid } from 'nanoid';
 
 export default async function handler(req, res) {
@@ -24,7 +24,7 @@ export default async function handler(req, res) {
       }
     }
 
-    const shortenUrl = alias || nanoid(6);  
+    const shortenUrl = alias || nanoid(6);
 
     const newUrl = await Url.create({ originalUrl, shortenUrl, alias: alias || undefined });
 
