@@ -2,6 +2,7 @@ import { useRef, useState } from 'react';
 import { QRCodeCanvas, QRCodeSVG } from 'qrcode.react';
 import { ChartArea, Check, Copy, Github, HomeIcon, Link, Share } from 'lucide-react';
 
+import { Nav } from '../components/nav'
 import { Input } from '../components/ui/input'
 import { Button } from '../components/ui/button'
 import { toast } from 'sonner';
@@ -79,24 +80,19 @@ export default function Home() {
 
   console.log("Look at me: ", generateQRCodeValue(shortenUrl));
   return (
-    <main className="relative flex flex-col items-center justify-center h-screen font-inter min-h-svh bg-zinc-50">
-      <nav
-        className='flex px-6 py-3 justify-between bg-[#ccc2] backdrop-blur-md shadow-lg mt-8 absolute rounded-full lg:w-1/3 top-0 w-4/5 z-10'>
-        <h2 className='font-bold'> ACES </h2>
-        <section className='flex space-x-4'>
-          <a href='/' className='hover:text-blue-500'><HomeIcon className="w-5 h-5" /></a>
-          <a href='/analytics' className='hover:text-blue-500'><ChartArea className="w-5 h-5" /></a>
-        </section>
-      </nav>
-      <div className="relative py-24 overflow-hidden lg:py-32">
-        {/* Gradients */}
-        <div
-          aria-hidden="true"
-          className="absolute flex transform -translate-x-1/2 -top-96 start-1/2"
-        >
-          <div className="bg-gradient-to-r from-background/50 to-background blur-3xl w-[25rem] h-[44rem] rotate-[-60deg] transform -translate-x-[10rem]" />
-          <div className="bg-gradient-to-tl blur-3xl w-[90rem] h-[50rem] rounded-full origin-top-left -rotate-12 -translate-x-[15rem] from-primary-foreground via-primary-foreground to-background" />
-        </div>
+    <main className="relative overflow-hidden flex flex-col items-center justify-center h-screen font-inter min-h-svh bg-zinc-50 dark:bg-[#09090b]">
+      {/* Gradients */}
+      <div
+        aria-hidden="true"
+        className="absolute flex transform -translate-x-1/2 -top-96 start-1/2"
+      >
+        <div className="bg-gradient-to-r from-background/50 to-background blur-3xl w-[25rem] h-[44rem] rotate-[-60deg] transform -translate-x-[10rem]" />
+        <div className="bg-gradient-to-tl blur-3xl w-[90rem] h-[50rem] rounded-full origin-top-left -rotate-12 -translate-x-[15rem] from-primary-foreground via-primary-foreground to-background" />
+      </div>
+      <Nav />
+
+      <div className="relative w-full py-24 overflow-hidden lg:py-32">
+
         <div className="relative z-10">
           <div className="container py-10 lg:py-16">
             <div className="max-w-2xl mx-auto text-center">
