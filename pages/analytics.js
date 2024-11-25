@@ -1,9 +1,10 @@
+import { useRouter } from 'next/router';
 import { useEffect } from "react";
 import { useState } from "react";
 import { useRef } from "react";
 
-import { ChartSpline, Copy, Check, Mouse, Trash2, ImageDown, MousePointerClick } from "lucide-react";
-import { QrCode, Calendar, Pencil, Link, ExternalLink } from "lucide-react";
+import { ChartSpline, Copy, Check, Mouse, Trash2, ImageDown, MousePointerClick, Database } from "lucide-react";
+import { QrCode, Calendar, Pencil, Link, ExternalLink, RefreshCcw } from "lucide-react";
 
 import { Nav } from "@components/nav";
 import SearchUrls from "@components/searchURL";
@@ -16,8 +17,6 @@ import { EditUrlDialog } from "@components/editUrl";
 import QRCodeDialog from "@components/qrcodeDialog";
 import RecentAccessesDialog from "@components/recentAccesses";
 import AccessGraphDialog from "@components/graphDialog";
-import { Database } from "lucide-react";
-import { RefreshCcw } from "lucide-react";
 import { GradientTop } from "@components/gradientTop";
 
 export default function Analytics() {
@@ -35,6 +34,9 @@ export default function Analytics() {
   const [openRecents, setOpenRecents] = useState(false);
   const [selectedUrl, setSelectedUrl] = useState(null);
   const [openGraphDialog, setOpenGraphDialog] = useState(false);
+
+  const router = useRouter();
+  const { query } = router;
 
   const fetchUrls = async () => {
     try {
@@ -182,11 +184,33 @@ export default function Analytics() {
     }
   };
 
+
+  useEffect(() => {
+    if (!query.id) return;
+
+    setTimeout(() => {
+      const element = document.getElementById(query.id);
+      if (element) {
+        console.log("Element found:", element);
+        element.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        const iconElement = element.querySelector('.short-link');
+        element.classList.add('animate-pulse');
+        iconElement.classList.add('animate-spin', 'text-blue-500');
+
+        setTimeout(() => {
+          element.classList.remove('animate-pulse');
+          iconElement.classList.remove('animate-spin', 'text-blue-500');
+          window.history.replaceState(null, '', window.location.pathname);
+        }, 2000);
+      } else {
+        console.log("Element not found with id:", query.id);
+      }
+    }, 500);
+  }, [query.id]);
+
+
   return (
-    <main className="relative overflow-hidden flex flex-col items-center justify-center h-screen font-inter min-h-svh bg-zinc-50 dark:bg-[#09090b]">
-      <div className="absolute bottom-0 scrollbar-none">
-        <GradientTop />
-      </div>
+    <main className="relative flex flex-col items-center justify-center h-screen font-inter min-h-svh bg-zinc-50 dark:bg-[#09090b]">
       <Nav />
       <div className="relative w-full py-24 overflow-x-hidden">
         <div className="container py-10 mx-auto lg:py-16">
@@ -212,7 +236,7 @@ export default function Analytics() {
                 placeholder="Search by URL..."
                 className="flex-grow focus-visible:ring-0 focus-visible:ring-offset-0 dark:bg-[#0c0e0f] border-none"
               />
-              <kbd className="p-1 ml-2 font-mono text-xs bg-gray-100 rounded ring-1 ring-gray-900/10 dark:bg-zinc-800 dark:ring-gray-900/50 dark:text-zinc-300 whitespace-nowrap">
+              <kbd className="p-1 ml-2 mr-2 font-mono text-xs bg-gray-100 rounded ring-1 ring-gray-900/10 dark:bg-zinc-800 dark:ring-gray-900/50 dark:text-zinc-300 whitespace-nowrap">
                 ALT<span className="text-[.25rem]">&nbsp;</span>
                 +<span className="text-[.25rem]">&nbsp;</span>
                 L
@@ -223,11 +247,12 @@ export default function Analytics() {
           {urls.length > 0 ? (
             <ul className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-3">
               {filteredUrls.map((url) => (
-                <li key={url._id} id={url._id} className="p-4 rounded-lg shadow-lg url-card dark:border dark:bg-[#0c0e0f]">
+                // url._id
+                <li key={url._id} id={url._id} className="p-4 rounded-lg shadow-lg url-card dark:border dark:bg-[#0c0e0f88] dark:backdrop-blur">
                   <header className="flex flex-col gap-0 !text-sm">
                     <h2 className="flex justify-between p-1 space-x-4">
                       <main className="flex items-center ml-1 space-x-4">
-                        <Link className="w-5 h-5" />
+                        <Link className="w-5 h-5 short-link" />
                         <a href={url.shortenUrl}
                           target="_blank" rel="noopener noreferrer"
                           className='inline-block px-3 py-1.5 font-mono border rounded-lg text-primary hover:underline'

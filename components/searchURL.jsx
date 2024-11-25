@@ -1,12 +1,22 @@
 import { useState, useEffect } from "react";
-import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandSeparator, CommandList, CommandDialog } from "@components/ui/command";
-import { Link2 } from "lucide-react";
-import { LinkIcon } from "lucide-react";
+import {
+  Command,
+  CommandEmpty,
+  CommandGroup,
+  CommandInput,
+  CommandItem,
+  CommandList,
+  CommandDialog
+} from "@components/ui/command";
+import { LinkIcon, ExternalLinkIcon } from "lucide-react";
+import Link from "next/link";
 
 const SearchUrls = () => {
   const [error, setError] = useState('');
   const [urls, setUrls] = useState([]);
   const [open, setOpen] = useState(false);
+  const [selectedIndex, setSelectedIndex] = useState(0); // Track the selected item index
+  const [searchQuery, setSearchQuery] = useState('');
 
   useEffect(() => {
     const fetchUrls = async () => {
@@ -22,7 +32,15 @@ const SearchUrls = () => {
     fetchUrls();
   }, []);
 
+  // Filter URLs based on search query
+  const filteredUrls = urls.filter((url) =>
+    url.originalUrl.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    url.shortenUrl.toLowerCase().includes(searchQuery.toLowerCase())
+  );
+
+  // Handle keydown events for navigation and selection
   const handleKeyDown = (e) => {
+    // Allow the input to focus and type freely
     if (e.key === "k" && (e.metaKey || e.ctrlKey || e.altKey)) {
       e.preventDefault();
       setOpen((prev) => !prev);
@@ -38,10 +56,10 @@ const SearchUrls = () => {
     return () => {
       document.removeEventListener("keydown", handleKeyDown);
     };
-  }, []);
+  }, [filteredUrls, selectedIndex]);
 
   return (
-    <CommandDialog open={open} onOpenChange={setOpen} className="w-3/4 border rounded-lg shadow-md lg:w-1/4">
+    <CommandDialog open={open} onOpenChange={setOpen} className="border rounded-lg max-w-3/4 lg:w-1/4">
       <CommandInput
         placeholder="Search for a link..."
         onChange={handleSearchChange}
@@ -54,30 +72,32 @@ const SearchUrls = () => {
           <CommandGroup heading="Search URLs">
             {urls.map((url, index) => (
               <CommandItem key={index}>
-                <article className="flex items-center gap-2">
-                  <LinkIcon />
-                  <main className="flex flex-col font-mono">
-                    <a
-                      href={url.originalUrl}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="font-semibold hover:text-blue-400 hover:underline"
-                    >
-                      {url.originalUrl.replace(/^https?:\/\//, '')}
-                    </a>
-                    <div className="flex justify-between text-sm text-muted-foreground">
+                <article className="flex items-center gap-2 p-1">
+                  <section className="flex flex-col space-y-2">
+                    <main className="flex items-center space-x-3 font-mono">
+                      <ExternalLinkIcon className="w-4 h-4" />
                       <a
-                        href={url.shortenUrl}
+                        href={url.originalUrl}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="hover:text-blue-400 hover:underline"
+                        className="text-sm font-normal hover:text-blue-400 hover:underline"
+                      >
+                        {url.originalUrl.replace(/^https?:\/\//, '')}
+                      </a>
+                    </main>
+                    <div className="flex items-center space-x-3 font-mono text-muted-foreground">
+                      <LinkIcon className="w-4 h-4" />
+                      <Link
+                        href={`/analytics?id=${url._id}`}
+                        target="_blank"
+                        className="text-[.85rem] hover:underline"
+                        passHref
                       >
                         {url.shortenUrl}
-                      </a>
+                      </Link>
                     </div>
-                  </main>
+                  </section>
                 </article>
-
               </CommandItem>
             ))}
           </CommandGroup>
