@@ -22,15 +22,27 @@ export default async function handler(req, res) {
     if (req.method === 'PUT') {
       const { id } = req.query;  // Get the URL ID from the query parameters
       if (!id) { return res.status(400).json({ message: 'URL ID is required' }); }
-      const { shortenUrl } = req.body;
+      const { shortenUrl, expirationDate, scheduledDate } = req.body;
+
       if (!shortenUrl) { return res.status(400).json({ message: 'Shorten URL is required' }); }
+      if (typeof shortenUrl !== 'string') {
+        return res.status(400).json({ message: 'Shorten URL must be a string' });
+      }
 
       const existingUrl = await Url.findOne({ shortenUrl });
       if (existingUrl && existingUrl._id.toString() !== id) {
         return res.status(400).json({ message: 'Shortened URL must be unique' });
       }
 
-      const result = await Url.findByIdAndUpdate(id, { shortenUrl }, { new: true });
+      const updateData = {
+        shortenUrl,
+        expirationDate: expirationDate ? new Date(expirationDate) : null,  // Optional expirationDate
+        scheduledDate: scheduledDate ? new Date(scheduledDate) : null,
+      };
+
+      // Perform the update operation
+
+      const result = await Url.findByIdAndUpdate(id, updateData, { new: true });
       if (!result) { return res.status(404).json({ message: 'URL not found' }); }
       return res.status(200).json({ message: 'URL updated successfully' });
     }

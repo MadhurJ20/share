@@ -36,6 +36,8 @@ const URLSchema = new mongoose.Schema(
         lastAccessed: [new Date()],
       }),
     },
+    expirationDate: { type: Date, default: undefined },
+    scheduledDate: { type: Date, default: null },
   },
   { timestamps: true, }
 );

@@ -16,6 +16,9 @@ export default function Home() {
   const [clickedButton, setClickedButton] = useState(null);
   const qrCodeRef = useRef(null);
 
+  const [expirationDate, setExpirationDate] = useState('');
+  const [scheduledDate, setScheduledDate] = useState('');
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
@@ -25,14 +28,31 @@ export default function Home() {
       ? originalUrl
       : `http://${originalUrl}`;
 
+    const formatDateToUTC = (date) => {
+      if (!date) return null;
+      const localDate = new Date(date);
+      return localDate.toISOString();
+    };
+
+    const formattedExpirationDate = formatDateToUTC(expirationDate);
+    console.log("Formatted Expiration Date:", formattedExpirationDate);
+    const formattedScheduledDate = formatDateToUTC(scheduledDate);
+
     try {
       const res = await fetch('/api/shorten', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ originalUrl, alias }),
+        body: JSON.stringify({
+          originalUrl,
+          alias,
+          // expirationDate: formattedExpirationDate,
+          expirationDate: expirationDate ? new Date(expirationDate) : null,
+          scheduledDate: formattedScheduledDate
+        }),
       });
 
       const data = await res.json();
+      console.log(data);
       if (!res.ok) throw new Error(data.message);
       setShortUrl(data.shortenUrl);
     } catch (err) {
@@ -77,6 +97,8 @@ export default function Home() {
     setOriginalUrl('');
     setCustomAlias('');
     setShortUrl('');
+    setExpirationDate('');
+    setScheduledDate('');
     setError('');
   };
 
@@ -112,9 +134,9 @@ export default function Home() {
     }
   };
 
-  console.log("Look at me: ", generateQRCodeValue(shortenUrl));
+  // console.log("Look at me: ", generateQRCodeValue(shortenUrl));
   return (
-    <main className="relative overflow-hidden flex flex-col items-center justify-center h-screen font-inter min-h-svh bg-zinc-50 dark:bg-[#09090b]">
+    <main className="relative overflow-x-hidden flex flex-col items-center justify-center h-screen font-inter min-h-svh bg-zinc-50 dark:bg-[#09090b]">
       {/* Gradients */}
       <div
         aria-hidden="true"
@@ -125,7 +147,7 @@ export default function Home() {
       </div>
       <Nav />
 
-      <div className="relative w-full py-24 overflow-hidden lg:py-32">
+      <div className="relative w-full py-24 overflow-x-hidden lg:py-32">
 
         <div className="relative z-10">
           <div className="container py-10 lg:py-16">
@@ -200,6 +222,28 @@ export default function Home() {
                       <Github /></a>
                   </Button>
                 </footer>
+                <section className='flex flex-col justify-start items-start gap-3 mt-2 md:flex-row *:flex-1 p-2 md:mx-6 mx-10'>
+                  <div className='flex flex-col items-start w-full gap-1'>
+                    <label className='text-xs font-medium text-muted-foreground ps-1'>Expiration Date</label>
+                    <Input
+                      type="datetime-local"
+                      placeholder="Expiration Date (Optional)"
+                      value={expirationDate}
+                      onFocus={(e) => e.target.type = 'datetime-local'}
+                      onChange={(e) => setExpirationDate(e.target.value)}
+                    />
+                  </div>
+                  <div className='flex flex-col items-start w-full gap-1 md:items-end'>
+                    <label className='text-xs font-medium text-muted-foreground pe-1'>Scheduled Date</label>
+                    <Input
+                      type="datetime-local"
+                      placeholder="Scheduled Date (Optional)"
+                      value={scheduledDate}
+                      onFocus={(e) => e.target.type = 'datetime-local'}
+                      onChange={(e) => setScheduledDate(e.target.value)}
+                    />
+                  </div>
+                </section>
               </form>
 
               <section className='mt-4'>

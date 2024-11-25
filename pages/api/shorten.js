@@ -4,7 +4,8 @@ import { nanoid } from 'nanoid';
 
 export default async function handler(req, res) {
   if (req.method !== 'POST') { return res.status(405).json({ message: 'Method not allowed' }); }
-  const { originalUrl, alias } = req.body;
+  const { originalUrl, alias, expirationDate, scheduledDate } = req.body;
+  console.log(req.body);
   if (!originalUrl) { return res.status(400).json({ message: 'Original URL is required' }); }
 
   const dotCount = (originalUrl.match(/\./g) || []).length;
@@ -26,7 +27,16 @@ export default async function handler(req, res) {
     }
 
     const shortenUrl = alias || nanoid(6);
-    const newUrl = await Url.create({ originalUrl, shortenUrl, alias: alias || undefined });
+    const newUrl = await Url.create({
+      originalUrl,
+      shortenUrl,
+      alias: alias || undefined,
+      expirationDate: expirationDate ? new Date(expirationDate) : undefined,
+      scheduledDate: scheduledDate ? new Date(scheduledDate) : null,
+    });
+
+    const createdUrl = await Url.findById(newUrl._id);
+    console.log(createdUrl);
 
     res.status(201).json({ shortenUrl: `${process.env.BASE_URL}/${shortenUrl}` });
   } catch (error) {

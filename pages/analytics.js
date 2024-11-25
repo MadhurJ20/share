@@ -65,19 +65,22 @@ export default function Analytics() {
     }
   };
 
-  const handleEdit = async (urlId, newShortenUrl) => {
+  const handleEdit = async (urlId, updatedFields) => {
     try {
       const res = await fetch(`/api/analytics?id=${urlId}`, {
-        method: 'PUT',  // PUT method to update the URL
+        method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ shortenUrl: newShortenUrl }),
+        body: JSON.stringify(updatedFields),
       });
+
       if (res.ok) {
-        setUrls(urls.map(url => url._id === urlId ? { ...url, shortenUrl: newShortenUrl } : url)); // Update the URL in state
+        // Update the URL in state with the new fields
+        setUrls(urls.map(url => url._id === urlId ? { ...url, ...updatedFields } : url));
         toast.success('URL updated successfully!');
       } else {
+        // Handle error from API response
         const { message } = await res.json();
         toast.error(message || 'Failed to update URL');
       }
@@ -85,6 +88,7 @@ export default function Analytics() {
       toast.error('Error updating URL');
     }
   };
+
 
   const handleDelete = async (urlId) => {
     try {
@@ -202,8 +206,10 @@ export default function Analytics() {
                 placeholder="Search by URL..."
                 className="flex-grow focus-visible:ring-0 focus-visible:ring-offset-0 dark:bg-[#0c0e0f] border-none"
               />
-              <kbd className="p-1 ml-2 font-mono text-xs bg-gray-100 rounded ring-1 ring-gray-900/10 dark:bg-zinc-800 dark:ring-gray-900/50 dark:text-zinc-300">
-                ALT+L
+              <kbd className="p-1 ml-2 font-mono text-xs bg-gray-100 rounded ring-1 ring-gray-900/10 dark:bg-zinc-800 dark:ring-gray-900/50 dark:text-zinc-300 whitespace-nowrap">
+                ALT<span className="text-[.25rem]">&nbsp;</span>
+                +<span className="text-[.25rem]">&nbsp;</span>
+                L
               </kbd>
             </section>
           </header>
@@ -248,7 +254,7 @@ export default function Analytics() {
                             <Trash2 />
                           </span>
                         </Button>
-                        <Button type="button" variant="outline" onClick={() => { setUrlToEdit(url._id); setOpenEdit(true) }}>
+                        <Button type="button" variant="outline" onClick={() => { console.log(url); setUrlToEdit(url); setOpenEdit(true) }}>
                           <span className="flex w-4 aspect-square">
                             <Pencil />
                           </span>
@@ -257,10 +263,10 @@ export default function Analytics() {
                     </h2>
                   </header>
                   <section className="flex justify-between gap-2">
-                    <article className="flex flex-col my-4 space-y-1 text-sm">
-                      <span className="flex items-center space-x-2"><Calendar className="w-4 h-4" /> <span className="text-muted-foreground">{new Date(url.createdAt).toLocaleString()}</span></span>
-                      <span className="flex items-center space-x-2"><Pencil className="w-4 h-4" /> <span className="text-muted-foreground">{new Date(url.updatedAt).toLocaleString()}</span></span>
-                      <span className="flex items-center space-x-2"><MousePointerClick className="w-4 h-4" /> <span className="text-muted-foreground">Clicks: {url.accesses.count}</span></span>
+                    <article className="flex flex-col my-4 space-y-1 text-sm *:flex *:items-center *:space-x-2">
+                      <span className=""><Calendar className="w-4 h-4" /> <span className="text-muted-foreground">{new Date(url.createdAt).toLocaleString()}</span></span>
+                      <span className=""><Pencil className="w-4 h-4" /> <span className="text-muted-foreground">{new Date(url.updatedAt).toLocaleString()}</span></span>
+                      <span className=""><MousePointerClick className="w-4 h-4" /> <span className="text-muted-foreground">Clicks: {url.accesses.count}</span></span>
                     </article>
                     <aside className="flex flex-col items-end space-y-2">
                       <Button type="button" className="mt-2" variant="outline" onClick={() => handleShowRecents(url)}>
