@@ -1,8 +1,9 @@
 import { useEffect } from "react";
 import { useState } from "react";
+import { useRef } from "react";
 
-import { Copy, Check, Mouse, Trash2, ImageDown, MousePointerClick } from "lucide-react";
-import { Calendar, Pencil, Link, ExternalLink } from "lucide-react";
+import { ChartSpline, Copy, Check, Mouse, Trash2, ImageDown, MousePointerClick } from "lucide-react";
+import { QrCode, Calendar, Pencil, Link, ExternalLink } from "lucide-react";
 
 import { Nav } from "@components/nav";
 import SearchUrls from "@components/searchURL";
@@ -13,8 +14,8 @@ import { Dialog, DialogContent, DialogFooter, DialogHeader } from "@components/u
 import { DeleteUrlDialog } from "@components/deleteUrl";
 import { EditUrlDialog } from "@components/editUrl";
 import QRCodeDialog from "@components/qrcodeDialog";
-import { QrCode } from "lucide-react";
 import RecentAccessesDialog from "@components/recentAccesses";
+import AccessGraphDialog from "@components/graphDialog";
 
 export default function Analytics() {
   const [urls, setUrls] = useState([]);
@@ -30,20 +31,26 @@ export default function Analytics() {
   const [urlToQRCode, setUrlToQRCode] = useState(null);
   const [openRecents, setOpenRecents] = useState(false);
   const [selectedUrl, setSelectedUrl] = useState(null);
+  const [openGraphDialog, setOpenGraphDialog] = useState(false);
+
+  const fetchUrls = async () => {
+    try {
+      const res = await fetch('/api/analytics');
+      const data = await res.json();
+      setUrls(data); // Store the fetched data in state
+    } catch (error) {
+      setError('Failed to fetch URLs');
+    }
+  };
 
   useEffect(() => {
-    const fetchUrls = async () => {
-      try {
-        const res = await fetch('/api/analytics');
-        const data = await res.json();
-        setUrls(data); // Store the fetched data in state
-      } catch (error) {
-        setError('Failed to fetch URLs');
-      }
-    };
-
     fetchUrls();
   }, []);
+
+  const refreshData = () => {
+    fetchUrls();
+    toast.success('Data refreshed successfully!');
+  };
 
   const handleCopy = (shortenUrl) => {
     if (shortenUrl) {
@@ -119,10 +126,55 @@ export default function Analytics() {
     }
   };
 
+  const handleOpenGraphDialog = (url) => {
+    if (url && url.accesses && Array.isArray(url.accesses.lastAccessed)) {
+      setSelectedUrl(url);
+      setOpenGraphDialog(true);
+    } else {
+      setSelectedUrl(null); // Clear selected URL
+      setOpenGraphDialog(false); // Close the dialog
+    }
+  };
+
   const filteredUrls = urls.filter((url) =>
     url.shortenUrl.toLowerCase().includes(searchTerm.toLowerCase()) ||
     url.originalUrl.toLowerCase().includes(searchTerm.toLowerCase())
   );
+
+  const inputRef = useRef(null);
+  useEffect(() => {
+    const handleShortcut = (e) => {
+      if (e.altKey && e.key === 'l') {
+        inputRef.current?.focus();
+      }
+    };
+    window.addEventListener('keydown', handleShortcut);
+    return () => {
+      window.removeEventListener('keydown', handleShortcut);
+    };
+  }, []);
+
+  const downloadCSV = async () => {
+    try {
+      const res = await fetch('/api/csvAnalytics');
+      if (!res.ok) throw new Error('Failed to fetch CSV');
+
+      // Create a blob from the response and trigger the download
+      const csvBlob = await res.blob();
+      const csvUrl = URL.createObjectURL(csvBlob);
+      const link = document.createElement('a');
+      link.href = csvUrl;
+      link.download = 'urls.csv';  // Set the file name for the CSV
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+
+      toast.success('CSV file downloaded!');
+    } catch (error) {
+      toast.error('Error downloading CSV');
+    }
+  };
+
   return (
     <main className="relative overflow-x-hidden flex flex-col items-center justify-center h-screen font-inter min-h-svh bg-zinc-50 dark:bg-[#09090b]">
       <Nav />
@@ -130,22 +182,36 @@ export default function Analytics() {
         <div className="container py-10 mx-auto lg:py-16">
 
           <header className="relative flex flex-col items-center justify-center w-full mb-10 space-y-10 overflow-hidden">
+            <Button variant="outline" className="-mb-8" onClick={downloadCSV}>
+              Export as CSV
+            </Button>
+            <Button variant="outline" className="-mb-5" onClick={refreshData}>
+              Refresh Data
+            </Button>
             <h1 className="text-4xl font-extrabold tracking-tight scroll-m-20 lg:text-5xl">
               Analytics
             </h1>
             {/* <SearchUrls /> */}
-            <Input
-              type="text"
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              placeholder="Search by URL..."
-              className="max-w-2xl focus-visible:ring-0 focus-visible:ring-offset-0" />
+            {/* //! Make this work somehow */}
+            <section className="flex items-center p-2 border rounded-lg dark:bg-[#0c0e0f] bg-white">
+              <Input
+                ref={inputRef}
+                type="text"
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                placeholder="Search by URL..."
+                className="flex-grow focus-visible:ring-0 focus-visible:ring-offset-0 dark:bg-[#0c0e0f] border-none"
+              />
+              <kbd className="p-1 ml-2 font-mono text-xs bg-gray-100 rounded ring-1 ring-gray-900/10 dark:bg-zinc-800 dark:ring-gray-900/50 dark:text-zinc-300">
+                ALT+L
+              </kbd>
+            </section>
           </header>
           {error && <p style={{ color: 'red' }}>{error}</p>}
           {urls.length > 0 ? (
             <ul className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-3">
               {filteredUrls.map((url) => (
-                <li key={url._id} id={url._id} className="p-4 rounded-lg shadow-lg url-card">
+                <li key={url._id} id={url._id} className="p-4 rounded-lg shadow-lg url-card dark:border dark:bg-[#0c0e0f]">
                   <header className="flex flex-col gap-0 !text-sm">
                     <h2 className="flex justify-between p-1 space-x-4">
                       <main className="flex items-center space-x-4">
@@ -173,7 +239,7 @@ export default function Analytics() {
                         <ExternalLink className="w-5 h-5" />
                         <a href={url.originalUrl}
                           target="_blank" rel="noopener noreferrer"
-                          className='inline-block px-3 py-1.5 font-mono border rounded-lg text-primary hover:underline'
+                          className='inline-block px-3 py-1.5 font-mono border rounded-lg text-primary hover:underline overflow-x-auto max-w-[150px] scrollbar-none whitespace-nowrap'
                         >{url.originalUrl}</a>
                       </main>
                       <aside className="flex gap-2">
@@ -196,10 +262,15 @@ export default function Analytics() {
                       <span className="flex items-center space-x-2"><Pencil className="w-4 h-4" /> <span className="text-muted-foreground">{new Date(url.updatedAt).toLocaleString()}</span></span>
                       <span className="flex items-center space-x-2"><MousePointerClick className="w-4 h-4" /> <span className="text-muted-foreground">Clicks: {url.accesses.count}</span></span>
                     </article>
-                    <aside>
+                    <aside className="flex flex-col items-end space-y-2">
                       <Button type="button" className="mt-2" variant="outline" onClick={() => handleShowRecents(url)}>
                         <span className="flex">
                           Recents
+                        </span>
+                      </Button>
+                      <Button type="button" className="w-max" variant="outline" onClick={() => handleOpenGraphDialog(url)}>
+                        <span className="flex w-4 aspect-square">
+                          <ChartSpline />
                         </span>
                       </Button>
                     </aside>
@@ -233,6 +304,13 @@ export default function Analytics() {
           <RecentAccessesDialog
             open={openRecents}
             setOpen={setOpenRecents}
+            recentAccesses={selectedUrl.accesses.lastAccessed}
+          />
+        )}
+        {selectedUrl && (
+          <AccessGraphDialog
+            open={openGraphDialog}
+            setOpen={setOpenGraphDialog}
             recentAccesses={selectedUrl.accesses.lastAccessed}
           />
         )}

@@ -81,10 +81,14 @@ const QRCodeDialog = ({ open, setOpen, shortenUrl }) => {
           <Button variant="outline" onClick={downloadQRCode}>
             Download QR Code
           </Button>
-          <DialogClose asChild> //! Works here but not in other two
-            <Button type="button" variant="secondary" onClick={handleCancel}>Close</Button>
+          <DialogClose asChild>
+            {/* //! Works as expected unlike others */}
+            <Button type="button" variant="outline" onClick={handleCancel}>
+              Cancel
+            </Button>
           </DialogClose>
         </DialogFooter>
+
       </DialogContent>
     </Dialog>
   );

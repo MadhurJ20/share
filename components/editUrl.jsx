@@ -19,7 +19,7 @@ export function EditUrlDialog({ open, setOpen, urlToEdit, handleEdit }) {
   };
 
   return (
-    <Dialog open={open} onClose={handleCancel}>
+    <Dialog open={open} onOpenChange={setOpen}>
       <DialogContent className="max-w-[90%] sm:max-w-md">
         <DialogHeader>
           <DialogTitle>Edit Shortened URL</DialogTitle>

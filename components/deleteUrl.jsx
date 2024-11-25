@@ -13,19 +13,13 @@ export function DeleteUrlDialog({ open, setOpen, urlToDelete, handleDelete }) {
   };
 
   return (
-    <Dialog open={open} onClose={handleCancel}>
+    <Dialog open={open} onOpenChange={setOpen}>
       <DialogContent className="max-w-[90%] sm:max-w-md">
         <DialogHeader>
           <DialogTitle>Confirm Deletion</DialogTitle>
           <p>Are you sure you want to delete this URL? This action cannot be undone.</p>
         </DialogHeader>
         <DialogFooter className="gap-2 mx-8 sm:ml-0 sm:justify-start">
-          <DialogClose asChild>
-            <Button type="button" variant="outline" onClick={handleCancel}>
-              Cancel
-            </Button>
-          </DialogClose>
-
           <Button
             type="button"
             variant="outline"
@@ -35,7 +29,14 @@ export function DeleteUrlDialog({ open, setOpen, urlToDelete, handleDelete }) {
               Delete
             </span>
           </Button>
+
+          <DialogClose asChild>
+            <Button type="button" variant="outline" onClick={handleCancel}>
+              Cancel
+            </Button>
+          </DialogClose>
         </DialogFooter>
+
       </DialogContent>
     </Dialog>
   );
