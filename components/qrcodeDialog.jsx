@@ -5,12 +5,14 @@ import { Button } from '@components/ui/button';
 
 const QRCodeDialog = ({ open, setOpen, shortenUrl }) => {
   const qrCodeRef = useRef(null);
-  const BASE_URL = process.env.BASE_URL;
+  const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL;
+  console.log(BASE_URL);
 
   const generateQRCodeValue = (url) => {
     if (url && !url.startsWith('http://') && !url.startsWith('https://')) {
       if (process.env.BASE_URL == '') return `http://${BASE_URL}`;
-      else return `${url}`;
+      else return `${BASE_URL}${url}`;
+      //? Coming as undefined?
     }
     return url;
   };
@@ -53,7 +55,7 @@ const QRCodeDialog = ({ open, setOpen, shortenUrl }) => {
           <DialogTitle className='flex space-x-2'>QR Code</DialogTitle>
         </DialogHeader>
         <div className='grid p-2 place-items-center'>
-          <section className="p-3 pb-6 bg-white rounded-lg shadow max-w" ref={qrCodeRef}>
+          <section className="p-3 bg-white rounded-lg shadow max-w" ref={qrCodeRef}>
             <QRCodeSVG
               value={generateQRCodeValue(shortenUrl)}
               title="Scan me!"
@@ -79,8 +81,8 @@ const QRCodeDialog = ({ open, setOpen, shortenUrl }) => {
           <Button variant="outline" onClick={downloadQRCode}>
             Download QR Code
           </Button>
-          <DialogClose asChild>
-            <Button variant="secondary" onClick={handleCancel}>Close</Button>
+          <DialogClose asChild> //! Works here but not in other two
+            <Button type="button" variant="secondary" onClick={handleCancel}>Close</Button>
           </DialogClose>
         </DialogFooter>
       </DialogContent>

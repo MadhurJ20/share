@@ -1,6 +1,6 @@
 import mongoose from 'mongoose';
 
-const MONGO_URI = process.env.mongo_url;
+const MONGO_URI = process.env.MONGO_URI;
 if (!MONGO_URI) throw new Error('url not recognized');
 let cached = global.mongoose;
 if (!cached) {

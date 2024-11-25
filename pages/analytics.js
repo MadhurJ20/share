@@ -14,6 +14,7 @@ import { DeleteUrlDialog } from "@components/deleteUrl";
 import { EditUrlDialog } from "@components/editUrl";
 import QRCodeDialog from "@components/qrcodeDialog";
 import { QrCode } from "lucide-react";
+import RecentAccessesDialog from "@components/recentAccesses";
 
 export default function Analytics() {
   const [urls, setUrls] = useState([]);
@@ -27,6 +28,8 @@ export default function Analytics() {
   const [urlToEdit, setUrlToEdit] = useState(null);
   const [openQR, setOpenQR] = useState(false);
   const [urlToQRCode, setUrlToQRCode] = useState(null);
+  const [openRecents, setOpenRecents] = useState(false);
+  const [selectedUrl, setSelectedUrl] = useState(null);
 
   useEffect(() => {
     const fetchUrls = async () => {
@@ -104,6 +107,16 @@ export default function Analytics() {
   const handleClickQRCode = (shortenUrl) => {
     setUrlToQRCode(shortenUrl);
     setOpenQR(true);
+  };
+
+  const handleShowRecents = (url) => {
+    if (url && url.accesses && Array.isArray(url.accesses.lastAccessed)) {
+      setSelectedUrl(url);
+      setOpenRecents(true);
+    } else {
+      setSelectedUrl(null); // Clear selected URL
+      setOpenRecents(false); // Close the dialog
+    }
   };
 
   const filteredUrls = urls.filter((url) =>
@@ -184,28 +197,13 @@ export default function Analytics() {
                       <span className="flex items-center space-x-2"><MousePointerClick className="w-4 h-4" /> <span className="text-muted-foreground">Clicks: {url.accesses.count}</span></span>
                     </article>
                     <aside>
-                      <Button type="button" className="mt-2" variant="outline" onClick={() => handleCopy(url.shortenUrl)}>
+                      <Button type="button" className="mt-2" variant="outline" onClick={() => handleShowRecents(url)}>
                         <span className="flex">
                           Recents
                         </span>
                       </Button>
                     </aside>
                   </section>
-                  {
-                    url.accesses.lastAccessed.length > 1 ? (
-                      <div>
-                        <strong>Last Accessed:</strong>
-                        <ul>
-                          {url.accesses.lastAccessed.map((date, index) => (
-                            <li key={index}>{new Date(date).toLocaleString()}</li>
-                          ))}
-                        </ul>
-                      </div>
-                    ) : (
-                      <div><strong>Last Accessed:</strong> Never accessed</div>
-                    )
-                  }
-
                 </li>
               ))}
             </ul>
@@ -231,6 +229,13 @@ export default function Analytics() {
           setOpen={setOpenQR}
           shortenUrl={urlToQRCode}
         />
+        {selectedUrl && (
+          <RecentAccessesDialog
+            open={openRecents}
+            setOpen={setOpenRecents}
+            recentAccesses={selectedUrl.accesses.lastAccessed}
+          />
+        )}
       </div>
     </main>
   );
