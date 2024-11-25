@@ -5,6 +5,7 @@ import Url from '../../models/url';
 export default async function handler(req, res) {
   try {
     await dbConnect();
+
     if (req.method === 'GET') {
       const urls = await Url.find({});
       return res.status(200).json(urls);
@@ -12,14 +13,26 @@ export default async function handler(req, res) {
 
     if (req.method === 'DELETE') {
       const { id } = req.query;  // Get the URL ID from the query parameters
-      if (!id) {
-        return res.status(400).json({ message: 'URL ID is required' });
-      }
+      if (!id) { return res.status(400).json({ message: 'URL ID is required' }); }
       const result = await Url.findByIdAndDelete(id);
-      if (!result) {
-        return res.status(404).json({ message: 'URL not found' });
-      }
+      if (!result) { return res.status(404).json({ message: 'URL not found' }); }
       return res.status(200).json({ message: 'URL deleted successfully' });
+    }
+
+    if (req.method === 'PUT') {
+      const { id } = req.query;  // Get the URL ID from the query parameters
+      if (!id) { return res.status(400).json({ message: 'URL ID is required' }); }
+      const { shortenUrl } = req.body;
+      if (!shortenUrl) { return res.status(400).json({ message: 'Shorten URL is required' }); }
+
+      const existingUrl = await Url.findOne({ shortenUrl });
+      if (existingUrl && existingUrl._id.toString() !== id) {
+        return res.status(400).json({ message: 'Shortened URL must be unique' });
+      }
+
+      const result = await Url.findByIdAndUpdate(id, { shortenUrl }, { new: true });
+      if (!result) { return res.status(404).json({ message: 'URL not found' }); }
+      return res.status(200).json({ message: 'URL updated successfully' });
     }
     return res.status(405).json({ message: 'Method Not Allowed' });
 

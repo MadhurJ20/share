@@ -11,6 +11,7 @@ import { Button } from "@components/ui/button";
 import { toast } from "sonner";
 import { Dialog, DialogContent, DialogFooter, DialogHeader } from "@components/ui/dialog";
 import { DeleteUrlDialog } from "@components/deleteUrl";
+import { EditUrlDialog } from "@components/editUrl";
 
 export default function Analytics() {
   const [urls, setUrls] = useState([]);
@@ -20,6 +21,8 @@ export default function Analytics() {
   const [copiedUrl, setCopiedUrl] = useState(null);
   const [open, setOpen] = useState(false);
   const [urlToDelete, setUrlToDelete] = useState(null);
+  const [openEdit, setOpenEdit] = useState(false);
+  const [urlToEdit, setUrlToEdit] = useState(null);
 
   useEffect(() => {
     const fetchUrls = async () => {
@@ -48,6 +51,26 @@ export default function Analytics() {
     }
   };
 
+  const handleEdit = async (urlId, newShortenUrl) => {
+    try {
+      const res = await fetch(`/api/analytics?id=${urlId}`, {
+        method: 'PUT',  // PUT method to update the URL
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ shortenUrl: newShortenUrl }),
+      });
+      if (res.ok) {
+        setUrls(urls.map(url => url._id === urlId ? { ...url, shortenUrl: newShortenUrl } : url)); // Update the URL in state
+        toast.success('URL updated successfully!');
+      } else {
+        const { message } = await res.json();
+        toast.error(message || 'Failed to update URL');
+      }
+    } catch (error) {
+      toast.error('Error updating URL');
+    }
+  };
 
   const handleDelete = async (urlId) => {
     try {
@@ -137,7 +160,7 @@ export default function Analytics() {
                             <Trash2 />
                           </span>
                         </Button>
-                        <Button type="button" variant="outline" onClick={() => handleCopy(url.shortenUrl)}>
+                        <Button type="button" variant="outline" onClick={() => { setUrlToEdit(url._id); setOpenEdit(true) }}>
                           <span className="flex w-4 aspect-square">
                             <Pencil />
                           </span>
@@ -187,6 +210,12 @@ export default function Analytics() {
           setOpen={setOpen}
           urlToDelete={urlToDelete}
           handleDelete={handleDelete}
+        />
+        <EditUrlDialog
+          open={openEdit}
+          setOpen={setOpenEdit}
+          urlToEdit={urlToEdit}
+          handleEdit={handleEdit}
         />
       </div>
     </main>
