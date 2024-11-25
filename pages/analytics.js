@@ -12,6 +12,8 @@ import { toast } from "sonner";
 import { Dialog, DialogContent, DialogFooter, DialogHeader } from "@components/ui/dialog";
 import { DeleteUrlDialog } from "@components/deleteUrl";
 import { EditUrlDialog } from "@components/editUrl";
+import QRCodeDialog from "@components/qrcodeDialog";
+import { QrCode } from "lucide-react";
 
 export default function Analytics() {
   const [urls, setUrls] = useState([]);
@@ -23,6 +25,8 @@ export default function Analytics() {
   const [urlToDelete, setUrlToDelete] = useState(null);
   const [openEdit, setOpenEdit] = useState(false);
   const [urlToEdit, setUrlToEdit] = useState(null);
+  const [openQR, setOpenQR] = useState(false);
+  const [urlToQRCode, setUrlToQRCode] = useState(null);
 
   useEffect(() => {
     const fetchUrls = async () => {
@@ -97,6 +101,11 @@ export default function Analytics() {
     }, 1000);
   };
 
+  const handleClickQRCode = (shortenUrl) => {
+    setUrlToQRCode(shortenUrl);
+    setOpenQR(true);
+  };
+
   const filteredUrls = urls.filter((url) =>
     url.shortenUrl.toLowerCase().includes(searchTerm.toLowerCase()) ||
     url.originalUrl.toLowerCase().includes(searchTerm.toLowerCase())
@@ -139,9 +148,9 @@ export default function Analytics() {
                             {copiedUrl === url.shortenUrl ? <Check /> : <Copy />}
                           </span>
                         </Button>
-                        <Button type="button" variant="outline" onClick={() => handleCopy(url.shortenUrl)}>
+                        <Button type="button" variant="outline" onClick={() => handleClickQRCode(url.shortenUrl)}>
                           <span className="flex w-4 aspect-square">
-                            <ImageDown />
+                            <QrCode />
                           </span>
                         </Button>
                       </aside>
@@ -216,6 +225,11 @@ export default function Analytics() {
           setOpen={setOpenEdit}
           urlToEdit={urlToEdit}
           handleEdit={handleEdit}
+        />
+        <QRCodeDialog
+          open={openQR}
+          setOpen={setOpenQR}
+          shortenUrl={urlToQRCode}
         />
       </div>
     </main>
