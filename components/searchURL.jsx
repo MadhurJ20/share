@@ -10,6 +10,7 @@ import {
 } from "@components/ui/command";
 import { LinkIcon, ExternalLinkIcon } from "lucide-react";
 import Link from "next/link";
+import { useRouter } from "next/router"; // Importing useRouter
 
 const SearchUrls = () => {
   const [error, setError] = useState('');
@@ -17,6 +18,7 @@ const SearchUrls = () => {
   const [open, setOpen] = useState(false);
   const [selectedIndex, setSelectedIndex] = useState(0); // Track the selected item index
   const [searchQuery, setSearchQuery] = useState('');
+  const router = useRouter(); // Router for programmatic navigation
 
   useEffect(() => {
     const fetchUrls = async () => {
@@ -40,7 +42,11 @@ const SearchUrls = () => {
 
   // Handle keydown events for navigation and selection
   const handleKeyDown = (e) => {
-    // Allow the input to focus and type freely
+    if (e.key === "Enter" && filteredUrls.length > 0) {
+      const selectedUrl = filteredUrls[selectedIndex];
+      // window.open(`/analytics?id=${selectedUrl._id}`, "_blank"); // Redirect to the selected URL's analytics page
+    }
+
     if (e.key === "k" && (e.metaKey || e.ctrlKey || e.altKey)) {
       e.preventDefault();
       setOpen((prev) => !prev);
@@ -70,8 +76,14 @@ const SearchUrls = () => {
           <CommandEmpty>{error ? error : "No URLs found"}</CommandEmpty>
         ) : (
           <CommandGroup heading="Search URLs">
-            {urls.map((url, index) => (
-              <CommandItem key={index}>
+            {filteredUrls.map((url, index) => (
+              <CommandItem
+                key={index}
+                onSelect={() => {
+                  // router.push(`/analytics?id=${url._id}`); // Redirect when item is selected
+                  window.open(`/analytics?id=${url._id}`, "_blank");
+                }}
+              >
                 <article className="flex items-center gap-2 p-1">
                   <section className="flex flex-col space-y-2">
                     <main className="flex items-center space-x-3 font-mono">
