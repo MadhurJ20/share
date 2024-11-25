@@ -1,21 +1,16 @@
 import { useEffect } from "react";
 import { useState } from "react";
 
-import { Copy, Check } from "lucide-react";
-import { Calendar } from "lucide-react";
-import { Pencil } from "lucide-react";
-import { Link } from "lucide-react";
-import { ExternalLink } from "lucide-react";
+import { Copy, Check, Mouse, Trash2, ImageDown, MousePointerClick } from "lucide-react";
+import { Calendar, Pencil, Link, ExternalLink } from "lucide-react";
 
 import { Nav } from "@components/nav";
 import SearchUrls from "@components/searchURL";
 import { Input } from "@components/ui/input";
 import { Button } from "@components/ui/button";
 import { toast } from "sonner";
-import { Mouse } from "lucide-react";
-import { MousePointerClick } from "lucide-react";
-import { Trash2 } from "lucide-react";
-import { ImageDown } from "lucide-react";
+import { Dialog, DialogContent, DialogFooter, DialogHeader } from "@components/ui/dialog";
+import { DeleteUrlDialog } from "@components/deleteUrl";
 
 export default function Analytics() {
   const [urls, setUrls] = useState([]);
@@ -23,6 +18,8 @@ export default function Analytics() {
   const [searchTerm, setSearchTerm] = useState('');
   const [clickedButton, setClickedButton] = useState(null);
   const [copiedUrl, setCopiedUrl] = useState(null);
+  const [open, setOpen] = useState(false);
+  const [urlToDelete, setUrlToDelete] = useState(null);
 
   useEffect(() => {
     const fetchUrls = async () => {
@@ -48,6 +45,24 @@ export default function Analytics() {
         .catch((err) => {
           toast.error('Failed to copy: ' + err);
         });
+    }
+  };
+
+
+  const handleDelete = async (urlId) => {
+    try {
+      const res = await fetch(`/api/analytics?id=${urlId}`, {
+        method: 'DELETE',
+      });
+      if (res.ok) {
+        setUrls(urls.filter((url) => url._id !== urlId));  // Remove the deleted URL from the state
+        toast.success('URL deleted successfully!');
+      } else {
+        const { message } = await res.json();
+        toast.error(message || 'Failed to delete URL');
+      }
+    } catch (error) {
+      toast.error('Error deleting URL');
     }
   };
 
@@ -117,7 +132,7 @@ export default function Analytics() {
                         >{url.originalUrl}</a>
                       </main>
                       <aside className="flex gap-2">
-                        <Button type="button" variant="outline" onClick={() => handleCopy(url.shortenUrl)}>
+                        <Button type="button" variant="outline" onClick={() => { setUrlToDelete(url._id); setOpen(true) }}>
                           <span className="flex w-4 aspect-square">
                             <Trash2 />
                           </span>
@@ -144,18 +159,21 @@ export default function Analytics() {
                       </Button>
                     </aside>
                   </section>
-                  {url.accesses.lastAccessed.length > 1 ? (
-                    <div>
-                      <strong>Last Accessed:</strong>
-                      <ul>
-                        {url.accesses.lastAccessed.map((date, index) => (
-                          <li key={index}>{new Date(date).toLocaleString()}</li>
-                        ))}
-                      </ul>
-                    </div>
-                  ) : (
-                    <div><strong>Last Accessed:</strong> Never accessed</div>
-                  )}
+                  {
+                    url.accesses.lastAccessed.length > 1 ? (
+                      <div>
+                        <strong>Last Accessed:</strong>
+                        <ul>
+                          {url.accesses.lastAccessed.map((date, index) => (
+                            <li key={index}>{new Date(date).toLocaleString()}</li>
+                          ))}
+                        </ul>
+                      </div>
+                    ) : (
+                      <div><strong>Last Accessed:</strong> Never accessed</div>
+                    )
+                  }
+
                 </li>
               ))}
             </ul>
@@ -164,6 +182,12 @@ export default function Analytics() {
             <p>No URLs found</p>
           )}
         </div>
+        <DeleteUrlDialog
+          open={open}
+          setOpen={setOpen}
+          urlToDelete={urlToDelete}
+          handleDelete={handleDelete}
+        />
       </div>
     </main>
   );
