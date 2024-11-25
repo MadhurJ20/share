@@ -12,6 +12,10 @@ import SearchUrls from "@components/searchURL";
 import { Input } from "@components/ui/input";
 import { Button } from "@components/ui/button";
 import { toast } from "sonner";
+import { Mouse } from "lucide-react";
+import { MousePointerClick } from "lucide-react";
+import { Trash2 } from "lucide-react";
+import { ImageDown } from "lucide-react";
 
 export default function Analytics() {
   const [urls, setUrls] = useState([]);
@@ -83,35 +87,63 @@ export default function Analytics() {
               {filteredUrls.map((url) => (
                 <li key={url._id} id={url._id} className="p-4 rounded-lg shadow-lg url-card">
                   <header className="flex flex-col gap-0 !text-sm">
-                    <h2 className="flex justify-between p-2 space-x-4">
+                    <h2 className="flex justify-between p-1 space-x-4">
                       <main className="flex items-center space-x-4">
                         <Link className="w-5 h-5" />
                         <a href={url.shortenUrl}
                           target="_blank" rel="noopener noreferrer"
-                          className='inline-block px-4 py-2 font-mono border rounded-lg text-primary hover:underline'
+                          className='inline-block px-3 py-1.5 font-mono border rounded-lg text-primary hover:underline'
                         >{url.shortenUrl}</a>
                       </main>
-                      <aside>
+                      <aside className="flex gap-2">
                         <Button type="button" variant="outline" onClick={() => handleCopy(url.shortenUrl)}>
                           <span className="flex w-4 aspect-square">
                             {copiedUrl === url.shortenUrl ? <Check /> : <Copy />}
                           </span>
                         </Button>
+                        <Button type="button" variant="outline" onClick={() => handleCopy(url.shortenUrl)}>
+                          <span className="flex w-4 aspect-square">
+                            <ImageDown />
+                          </span>
+                        </Button>
                       </aside>
                     </h2>
-                    <h2 className="flex items-center p-2 space-x-4">
-                      <ExternalLink className="w-5 h-5" />
-                      <a href={url.originalUrl}
-                        target="_blank" rel="noopener noreferrer"
-                        className='inline-block px-4 py-2 font-mono border rounded-lg text-primary hover:underline'
-                      >{url.originalUrl}</a>
+                    <h2 className="flex justify-between p-1 space-x-4">
+                      <main className="flex items-center space-x-4">
+                        <ExternalLink className="w-5 h-5" />
+                        <a href={url.originalUrl}
+                          target="_blank" rel="noopener noreferrer"
+                          className='inline-block px-3 py-1.5 font-mono border rounded-lg text-primary hover:underline'
+                        >{url.originalUrl}</a>
+                      </main>
+                      <aside className="flex gap-2">
+                        <Button type="button" variant="outline" onClick={() => handleCopy(url.shortenUrl)}>
+                          <span className="flex w-4 aspect-square">
+                            <Trash2 />
+                          </span>
+                        </Button>
+                        <Button type="button" variant="outline" onClick={() => handleCopy(url.shortenUrl)}>
+                          <span className="flex w-4 aspect-square">
+                            <Pencil />
+                          </span>
+                        </Button>
+                      </aside>
                     </h2>
                   </header>
-                  <section className="flex flex-col my-4 space-y-1 text-sm">
-                    <span className="flex items-center space-x-2"><Calendar className="w-4 h-4" /> <span className="text-muted-foreground">{new Date(url.createdAt).toLocaleString()}</span></span>
-                    <span className="flex items-center space-x-2"><Pencil className="w-4 h-4" /> <span className="text-muted-foreground">{new Date(url.updatedAt).toLocaleString()}</span></span>
+                  <section className="flex justify-between gap-2">
+                    <article className="flex flex-col my-4 space-y-1 text-sm">
+                      <span className="flex items-center space-x-2"><Calendar className="w-4 h-4" /> <span className="text-muted-foreground">{new Date(url.createdAt).toLocaleString()}</span></span>
+                      <span className="flex items-center space-x-2"><Pencil className="w-4 h-4" /> <span className="text-muted-foreground">{new Date(url.updatedAt).toLocaleString()}</span></span>
+                      <span className="flex items-center space-x-2"><MousePointerClick className="w-4 h-4" /> <span className="text-muted-foreground">Clicks: {url.accesses.count}</span></span>
+                    </article>
+                    <aside>
+                      <Button type="button" className="mt-2" variant="outline" onClick={() => handleCopy(url.shortenUrl)}>
+                        <span className="flex">
+                          Recents
+                        </span>
+                      </Button>
+                    </aside>
                   </section>
-                  <strong>Access Count:</strong> {url.accesses.count}
                   {url.accesses.lastAccessed.length > 1 ? (
                     <div>
                       <strong>Last Accessed:</strong>
