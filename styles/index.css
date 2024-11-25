@@ -69,3 +69,7 @@
 }
 
 .small-caps { font-variant: small-caps; }
+.highlighted {
+  background-color: rgba(255, 255, 0, 0.3); /* Light yellow background */
+  transition: background-color 0.3s ease-in-out;
+}

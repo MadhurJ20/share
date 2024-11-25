@@ -6,6 +6,7 @@ import { Nav } from '../components/nav'
 import { Input } from '../components/ui/input'
 import { Button } from '../components/ui/button'
 import { toast } from 'sonner';
+import { ImageDown } from 'lucide-react';
 
 export default function Home() {
   const [originalUrl, setOriginalUrl] = useState('');
@@ -13,6 +14,7 @@ export default function Home() {
   const [shortenUrl, setShortUrl] = useState('');
   const [error, setError] = useState('');
   const [clickedButton, setClickedButton] = useState(null);
+  const qrCodeRef = useRef(null);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -78,6 +80,38 @@ export default function Home() {
     setError('');
   };
 
+  const downloadQRCode = () => {
+    if (qrCodeRef.current) {
+      const svgElement = qrCodeRef.current.querySelector('svg');
+      if (svgElement) {
+        const svgData = new XMLSerializer().serializeToString(svgElement);
+        const canvas = document.createElement('canvas');
+        const ctx = canvas.getContext('2d');
+
+        // Create an image element to load the SVG as a source
+        const img = new Image();
+        const svgBlob = new Blob([svgData], { type: 'image/svg+xml' });
+        const svgUrl = URL.createObjectURL(svgBlob);
+        img.onload = function () {
+          canvas.width = img.width;
+          canvas.height = img.height;
+          // Draw the SVG image on the canvas
+          ctx.drawImage(img, 0, 0);
+
+          // Convert the canvas to a PNG data URL
+          const pngUrl = canvas.toDataURL('image/png');
+
+          // Create an anchor element to trigger the download
+          const a = document.createElement('a');
+          a.href = pngUrl;
+          a.download = `qr-code_${shortenUrl}.png`;
+          a.click();
+        };
+        img.src = svgUrl;
+      }
+    }
+  };
+
   console.log("Look at me: ", generateQRCodeValue(shortenUrl));
   return (
     <main className="relative overflow-hidden flex flex-col items-center justify-center h-screen font-inter min-h-svh bg-zinc-50 dark:bg-[#09090b]">
@@ -105,8 +139,8 @@ export default function Home() {
               </header>
 
               <article className="max-w-2xl mt-5">
-                <p className="text-lg text-muted-foreground">
-                  Enter your link below. In case you want to see analytics
+                <p className="text-base lg:text-lg text-muted-foreground">
+                  Enter your link below. In case you want to<br className='md:hidden' /> see analytics or manage links
                   head over to the <a href='/analytics' className='hover:underline hover:text-blue-500'><span>analytics page</span><Link className='inline-block w-6 ps-1 pe-1 aspect-square' /></a>. Each link can only be shortened once.
                 </p>
               </article>
@@ -151,9 +185,13 @@ export default function Home() {
                       {clickedButton === "copy" ? <Check /> : <Copy />}
                     </span>
                   </Button>
-                  <Button type="button" variant="outline">
+                  <Button type="button" variant="outline"
+                    onClick={() => {
+                      setClickedButton('share');
+                      downloadQRCode();
+                    }}>
                     <span className="flex w-4 aspect-square">
-                      {clickedButton === "share" ? <Check /> : <Share />}
+                      {clickedButton === "share" ? <Check /> : <ImageDown />}
                     </span>
                   </Button>
                   <Button type="button" variant="outline">
@@ -168,14 +206,14 @@ export default function Home() {
                 {error && <p style={{ color: 'red' }}>{error}</p>}
                 {shortenUrl && (
                   <div className='flex flex-col items-center justify-center gap-4'>
-                    <header className='flex flex-row items-center justify-center gap-4'>
-                      <h2 className='text-xl font-semibold small-caps text-muted-foreground'>Short URL:</h2>
+                    <header className='relative flex flex-col items-center justify-center gap-2 mt-6 mb-2 w-max'>
+                      <h2 className='absolute -top-[20%] font-mono pe-2 ps-2 bg-[#fafafa] dark:bg-[#09090b] font-light text-md text-muted-foreground small-caps'>Short url</h2>
                       <a href={shortenUrl}
                         target="_blank" rel="noopener noreferrer"
-                        className='font-mono font-thin text-primary hover:underline'
+                        className='inline-block px-6 py-4 font-mono border rounded-lg text-primary hover:underline'
                       >{shortenUrl}</a>
                     </header>
-                    <footer className='p-3 pb-6 bg-white rounded-lg shadow'>
+                    <footer className='p-3 pb-6 bg-white rounded-lg shadow' ref={qrCodeRef}>
                       <QRCodeSVG value={generateQRCodeValue(shortenUrl)}
                         title={"Scan me!"}
                         size={128}

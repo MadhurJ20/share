@@ -1,9 +1,9 @@
 import "../styles/index.css";
 import { Toaster } from "../components/ui/sonner"
 
-import { Inter, Roboto_Mono } from 'next/font/google'
+import { Inter, JetBrains_Mono } from 'next/font/google'
 const inter = Inter({ subsets: ['latin'] })
-export const roboto_mono = Roboto_Mono({
+export const jetBrainsMono = JetBrains_Mono({
   subsets: ['latin'],
   display: 'swap',
 })
