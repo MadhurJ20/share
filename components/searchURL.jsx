@@ -23,7 +23,7 @@ const SearchUrls = () => {
   }, []);
 
   const handleKeyDown = (e) => {
-    if (e.key === "k" && (e.metaKey || e.ctrlKey)) {
+    if (e.key === "k" && (e.metaKey || e.ctrlKey || e.altKey)) {
       e.preventDefault();
       setOpen((prev) => !prev);
     }

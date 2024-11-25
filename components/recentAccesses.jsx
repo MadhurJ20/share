@@ -39,8 +39,8 @@ const RecentAccessesDialog = ({ open, setOpen, recentAccesses }) => {
                 </thead>
                 <tbody>
                   {currentItems.map((date, index) => (
-                    <tr key={index} className="border-b hover:bg-gray-50">
-                      <td className="px-4 py-2 text-sm text-gray-700">{(currentPage - 1) * itemsPerPage + index + 1}</td>
+                    <tr key={index} className="border-b hover:bg-gray-50 dark:hover:bg-zinc-900/80">
+                      <td className="px-4 py-2 text-sm text-gray-700 dark:text-gray-400">{(currentPage - 1) * itemsPerPage + index + 1}</td>
                       <td className="px-4 py-2 text-sm text-muted-foreground">{new Date(date).toLocaleString()}</td>
                     </tr>
                   ))}

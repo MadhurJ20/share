@@ -7,6 +7,9 @@ import { Input } from '../components/ui/input'
 import { Button } from '../components/ui/button'
 import { toast } from 'sonner';
 import { ImageDown } from 'lucide-react';
+import SearchUrls from '@components/searchURL';
+import { Command } from 'lucide-react';
+import { GradientTop } from '@components/gradientTop';
 
 export default function Home() {
   const [originalUrl, setOriginalUrl] = useState('');
@@ -138,152 +141,145 @@ export default function Home() {
   return (
     <main className="relative overflow-x-hidden flex flex-col items-center justify-center h-screen font-inter min-h-svh bg-zinc-50 dark:bg-[#09090b]">
       {/* Gradients */}
-      <div
-        aria-hidden="true"
-        className="absolute flex transform -translate-x-1/2 -top-96 start-1/2"
-      >
-        <div className="bg-gradient-to-r from-background/50 to-background blur-3xl w-[25rem] h-[44rem] rotate-[-60deg] transform -translate-x-[10rem]" />
-        <div className="bg-gradient-to-tl blur-3xl w-[90rem] h-[50rem] rounded-full origin-top-left -rotate-12 -translate-x-[15rem] from-primary-foreground via-primary-foreground to-background" />
-      </div>
+      <GradientTop />
       <Nav />
+      <SearchUrls />
+      <div className="relative w-full py-24 overflow-x-hidden">
 
-      <div className="relative w-full py-24 overflow-x-hidden lg:py-32">
+        <div className="container relative py-10 lg:py-16">
+          <main className="max-w-2xl mx-auto text-center">
+            <p className="small-caps">URL Shortener + QR Code Generator</p>
 
-        <div className="relative z-10">
-          <div className="container py-10 lg:py-16">
-            <div className="max-w-2xl mx-auto text-center">
-              <p className="small-caps">URL Shortener + QR Code Generator</p>
+            <header className="max-w-2xl mt-5">
+              <h1 className="text-4xl font-extrabold tracking-tight scroll-m-20 lg:text-5xl">
+                Enter The Link!
+              </h1>
+            </header>
 
-              <header className="max-w-2xl mt-5">
-                <h1 className="text-4xl font-extrabold tracking-tight scroll-m-20 lg:text-5xl">
-                  Enter The Link!
-                </h1>
-              </header>
+            <article className="max-w-2xl mt-5">
+              <p className="text-base lg:text-lg text-muted-foreground">
+                Enter your link below. In case you want to<br className='md:hidden' /> see analytics or manage links
+                head over to the <a href='/analytics' className='hover:underline hover:text-blue-500'><span>analytics page</span><Link className='inline-block w-6 ps-1 pe-1 aspect-square' /></a>.<br className='md:hidden' /> Each link can only be shortened once <span className='hidden lg:inline-flex'>(Press <kbd className="inline-flex items-center p-1 ml-2 mr-2 font-mono text-xs bg-gray-100 rounded ring-1 ring-gray-900/10 dark:bg-zinc-800 dark:ring-gray-900/50 dark:text-zinc-300 whitespace-nowrap">
+                  <Command className="inline-block w-3 h-3" /><span className="text-[.25rem]">&nbsp;</span>+<span className="text-[.25rem]">&nbsp;</span>K
+                </kbd> to see all URLs).</span>
+              </p>
+            </article>
 
-              <article className="max-w-2xl mt-5">
-                <p className="text-base lg:text-lg text-muted-foreground">
-                  Enter your link below. In case you want to<br className='md:hidden' /> see analytics or manage links
-                  head over to the <a href='/analytics' className='hover:underline hover:text-blue-500'><span>analytics page</span><Link className='inline-block w-6 ps-1 pe-1 aspect-square' /></a>. Each link can only be shortened once.
-                </p>
-              </article>
-
-              {/* Buttons */}
-              <form className="flex flex-col justify-center gap-3 mt-8" onSubmit={handleSubmit}>
-                <section className='flex flex-col justify-center gap-3 mt-2 md:flex-row'>
-                  <Input
-                    type="text"
-                    placeholder="Enter original URL"
-                    value={originalUrl}
-                    onChange={(e) => setOriginalUrl(e.target.value)}
-                    required
-                  />
-                  <Input
-                    type="text"
-                    placeholder="Custom alias (optional)"
-                    value={alias}
-                    onChange={(e) => setCustomAlias(e.target.value)}
-                  />
-                </section>
-                <footer className="flex flex-row gap-3">
-                  <Button
-                    type="submit"
-                    className="flex-1"
-                    onClick={() => handleClick("shorten")}
-                  >
-                    {clickedButton === "shorten" ? <Check /> : "Shorten"}
-                  </Button>
-                  <Button
-                    type="button"
-                    className="flex flex-1 w-max"
-                    onClick={() => handleClick("clear", handleClear)}
-                  >
-                    {clickedButton === "clear" ? <Check /> : "Clear"}
-                  </Button>
-                  <Button type="button" variant="outline">
-                    <span
-                      className="flex w-4 aspect-square"
-                      onClick={() => handleClick("copy", handleCopy)}
-                    >
-                      {clickedButton === "copy" ? <Check /> : <Copy />}
-                    </span>
-                  </Button>
-                  <Button type="button" variant="outline"
-                    onClick={() => {
-                      setClickedButton('share');
-                      downloadQRCode();
-                    }}>
-                    <span className="flex w-4 aspect-square">
-                      {clickedButton === "share" ? <Check /> : <ImageDown />}
-                    </span>
-                  </Button>
-                  <Button type="button" variant="outline">
-                    <a className="flex w-4 aspect-square"
-                      href="https://github.com/ACES-RMDSSOE/qr-code-generator">
-                      <Github /></a>
-                  </Button>
-                </footer>
-                <section className='flex flex-col justify-start items-start gap-3 mt-2 md:flex-row *:flex-1 p-2 md:mx-6 mx-10'>
-                  <div className='flex flex-col items-start w-full gap-1'>
-                    <label className='text-xs font-medium text-muted-foreground ps-1'>Expiration Date</label>
-                    <Input
-                      type="datetime-local"
-                      placeholder="Expiration Date (Optional)"
-                      value={expirationDate}
-                      onFocus={(e) => e.target.type = 'datetime-local'}
-                      onChange={(e) => setExpirationDate(e.target.value)}
-                    />
-                  </div>
-                  <div className='flex flex-col items-start w-full gap-1 md:items-end'>
-                    <label className='text-xs font-medium text-muted-foreground pe-1'>Scheduled Date</label>
-                    <Input
-                      type="datetime-local"
-                      placeholder="Scheduled Date (Optional)"
-                      value={scheduledDate}
-                      onFocus={(e) => e.target.type = 'datetime-local'}
-                      onChange={(e) => setScheduledDate(e.target.value)}
-                    />
-                  </div>
-                </section>
-              </form>
-
-              <section className='mt-4'>
-                {error && <p style={{ color: 'red' }}>{error}</p>}
-                {shortenUrl && (
-                  <div className='flex flex-col items-center justify-center gap-4'>
-                    <header className='relative flex flex-col items-center justify-center gap-2 mt-6 mb-2 w-max'>
-                      <h2 className='absolute -top-[20%] font-mono pe-2 ps-2 bg-[#fafafa] dark:bg-[#09090b] font-light text-md text-muted-foreground small-caps'>Short url</h2>
-                      <a href={shortenUrl}
-                        target="_blank" rel="noopener noreferrer"
-                        className='inline-block px-6 py-4 font-mono border rounded-lg text-primary hover:underline'
-                      >{shortenUrl}</a>
-                    </header>
-                    <footer className='p-3 pb-6 bg-white rounded-lg shadow' ref={qrCodeRef}>
-                      <QRCodeSVG value={generateQRCodeValue(shortenUrl)}
-                        title={"Scan me!"}
-                        size={128}
-                        bgColor={"#ffffff"}
-                        fgColor={"#000000"}
-                        level={"H"}
-                        marginSize={1}
-                        imageSettings={{
-                          src: "https://raw.githubusercontent.com/ACES-RMDSSOE/Website/main/images/favicon.ico",
-                          x: undefined,
-                          y: undefined,
-                          height: 24,
-                          width: 24,
-                          opacity: 1,
-                          excavate: true,
-                        }} />
-                    </footer>
-                  </div>
-                )}
+            {/* Buttons */}
+            <form className="flex flex-col justify-center gap-3 mt-8" onSubmit={handleSubmit}>
+              <section className='flex flex-col justify-center gap-3 mt-2 md:flex-row'>
+                <Input
+                  type="text"
+                  placeholder="Enter original URL"
+                  value={originalUrl}
+                  onChange={(e) => setOriginalUrl(e.target.value)}
+                  required
+                />
+                <Input
+                  type="text"
+                  placeholder="Custom alias (optional)"
+                  value={alias}
+                  onChange={(e) => setCustomAlias(e.target.value)}
+                />
               </section>
-              {/* End Buttons */}
-            </div>
-          </div>
+              <footer className="flex flex-row gap-3">
+                <Button
+                  type="submit"
+                  className="flex-1"
+                  onClick={() => handleClick("shorten")}
+                >
+                  {clickedButton === "shorten" ? <Check /> : "Shorten"}
+                </Button>
+                <Button
+                  type="button"
+                  className="flex flex-1 w-max"
+                  onClick={() => handleClick("clear", handleClear)}
+                >
+                  {clickedButton === "clear" ? <Check /> : "Clear"}
+                </Button>
+                <Button type="button" variant="outline">
+                  <span
+                    className="flex w-4 aspect-square"
+                    onClick={() => handleClick("copy", handleCopy)}
+                  >
+                    {clickedButton === "copy" ? <Check /> : <Copy />}
+                  </span>
+                </Button>
+                <Button type="button" variant="outline"
+                  onClick={() => {
+                    setClickedButton('share');
+                    downloadQRCode();
+                  }}>
+                  <span className="flex w-4 aspect-square">
+                    {clickedButton === "share" ? <Check /> : <ImageDown />}
+                  </span>
+                </Button>
+                <Button type="button" variant="outline">
+                  <a className="flex w-4 aspect-square"
+                    href="https://github.com/ACES-RMDSSOE/qr-code-generator">
+                    <Github /></a>
+                </Button>
+              </footer>
+              <section className='flex flex-col justify-start items-start gap-3 mt-2 md:flex-row *:flex-1 p-2 md:mx-6 mx-10'>
+                <div className='flex flex-col items-start w-full gap-1'>
+                  <label className='text-xs font-medium text-muted-foreground ps-1'>Expiration Date</label>
+                  <Input
+                    type="datetime-local"
+                    placeholder="Expiration Date (Optional)"
+                    value={expirationDate}
+                    onFocus={(e) => e.target.type = 'datetime-local'}
+                    onChange={(e) => setExpirationDate(e.target.value)}
+                  />
+                </div>
+                <div className='flex flex-col items-start w-full gap-1 md:items-end'>
+                  <label className='text-xs font-medium text-muted-foreground pe-1'>Scheduled Date</label>
+                  <Input
+                    type="datetime-local"
+                    placeholder="Scheduled Date (Optional)"
+                    value={scheduledDate}
+                    onFocus={(e) => e.target.type = 'datetime-local'}
+                    onChange={(e) => setScheduledDate(e.target.value)}
+                  />
+                </div>
+              </section>
+            </form>
+
+            <section className='mt-4'>
+              {error && <p style={{ color: 'red' }}>{error}</p>}
+              {shortenUrl && (
+                <div className='flex flex-col items-center justify-center gap-4'>
+                  <header className='relative flex flex-col items-center justify-center gap-2 mt-6 mb-2 w-max'>
+                    <h2 className='absolute -top-[20%] font-mono pe-2 ps-2 bg-[#fafafa] dark:bg-[#09090b] font-light text-md text-muted-foreground small-caps'>Short url</h2>
+                    <a href={shortenUrl}
+                      target="_blank" rel="noopener noreferrer"
+                      className='inline-block px-6 py-4 font-mono border rounded-lg text-primary hover:underline'
+                    >{shortenUrl}</a>
+                  </header>
+                  <footer className='p-3 bg-white rounded-lg shadow' ref={qrCodeRef}>
+                    <QRCodeSVG value={generateQRCodeValue(shortenUrl)}
+                      title={"Scan me!"}
+                      size={128}
+                      bgColor={"#ffffff"}
+                      fgColor={"#000000"}
+                      level={"H"}
+                      marginSize={1}
+                      imageSettings={{
+                        src: "https://raw.githubusercontent.com/ACES-RMDSSOE/Website/main/images/favicon.ico",
+                        x: undefined,
+                        y: undefined,
+                        height: 24,
+                        width: 24,
+                        opacity: 1,
+                        excavate: true,
+                      }} />
+                  </footer>
+                </div>
+              )}
+            </section>
+          </main>
         </div>
       </div>
 
-    </main>
+    </main >
   );
 }

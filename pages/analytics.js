@@ -16,6 +16,9 @@ import { EditUrlDialog } from "@components/editUrl";
 import QRCodeDialog from "@components/qrcodeDialog";
 import RecentAccessesDialog from "@components/recentAccesses";
 import AccessGraphDialog from "@components/graphDialog";
+import { Database } from "lucide-react";
+import { RefreshCcw } from "lucide-react";
+import { GradientTop } from "@components/gradientTop";
 
 export default function Analytics() {
   const [urls, setUrls] = useState([]);
@@ -180,17 +183,20 @@ export default function Analytics() {
   };
 
   return (
-    <main className="relative overflow-x-hidden flex flex-col items-center justify-center h-screen font-inter min-h-svh bg-zinc-50 dark:bg-[#09090b]">
+    <main className="relative overflow-hidden flex flex-col items-center justify-center h-screen font-inter min-h-svh bg-zinc-50 dark:bg-[#09090b]">
+      <div className="absolute bottom-0 scrollbar-none">
+        <GradientTop />
+      </div>
       <Nav />
-      <div className="relative w-full py-24 overflow-x-hidden lg:py-32">
+      <div className="relative w-full py-24 overflow-x-hidden">
         <div className="container py-10 mx-auto lg:py-16">
 
           <header className="relative flex flex-col items-center justify-center w-full mb-10 space-y-10 overflow-hidden">
-            <Button variant="outline" className="-mb-8" onClick={downloadCSV}>
-              Export as CSV
+            <Button variant="outline" className="-mb-8 group" onClick={downloadCSV}>
+              <Database className="w-4 h-4 mr-2 group-hover:animate-pulse" /> Export as CSV
             </Button>
-            <Button variant="outline" className="-mb-5" onClick={refreshData}>
-              Refresh Data
+            <Button variant="outline" className="-mb-5 group" onClick={refreshData}>
+              <RefreshCcw className="w-4 h-4 mr-2 group-hover:animate-spin" /> Refresh Data
             </Button>
             <h1 className="text-4xl font-extrabold tracking-tight scroll-m-20 lg:text-5xl">
               Analytics
@@ -220,7 +226,7 @@ export default function Analytics() {
                 <li key={url._id} id={url._id} className="p-4 rounded-lg shadow-lg url-card dark:border dark:bg-[#0c0e0f]">
                   <header className="flex flex-col gap-0 !text-sm">
                     <h2 className="flex justify-between p-1 space-x-4">
-                      <main className="flex items-center space-x-4">
+                      <main className="flex items-center ml-1 space-x-4">
                         <Link className="w-5 h-5" />
                         <a href={url.shortenUrl}
                           target="_blank" rel="noopener noreferrer"
@@ -235,13 +241,13 @@ export default function Analytics() {
                         </Button>
                         <Button type="button" variant="outline" onClick={() => handleClickQRCode(url.shortenUrl)}>
                           <span className="flex w-4 aspect-square">
-                            <QrCode />
+                            <QrCode className="text-gray-600 dark:text-gray-400" />
                           </span>
                         </Button>
                       </aside>
                     </h2>
                     <h2 className="flex justify-between p-1 space-x-4">
-                      <main className="flex items-center space-x-4">
+                      <main className="flex items-center ml-1 space-x-4">
                         <ExternalLink className="w-5 h-5" />
                         <a href={url.originalUrl}
                           target="_blank" rel="noopener noreferrer"
@@ -251,12 +257,12 @@ export default function Analytics() {
                       <aside className="flex gap-2">
                         <Button type="button" variant="outline" onClick={() => { setUrlToDelete(url._id); setOpen(true) }}>
                           <span className="flex w-4 aspect-square">
-                            <Trash2 />
+                            <Trash2 className="text-red-400" />
                           </span>
                         </Button>
                         <Button type="button" variant="outline" onClick={() => { console.log(url); setUrlToEdit(url); setOpenEdit(true) }}>
                           <span className="flex w-4 aspect-square">
-                            <Pencil />
+                            <Pencil className="text-yellow-600 dark:text-yellow-400" />
                           </span>
                         </Button>
                       </aside>
@@ -276,11 +282,20 @@ export default function Analytics() {
                       </Button>
                       <Button type="button" className="w-max" variant="outline" onClick={() => handleOpenGraphDialog(url)}>
                         <span className="flex w-4 aspect-square">
-                          <ChartSpline />
+                          <ChartSpline className="text-green-600 dark:text-green-400" />
                         </span>
                       </Button>
                     </aside>
                   </section>
+                  {/* <section className="flex justify-between gap-2">
+                  <article className="flex flex-col my-4 space-y-1 text-sm *:flex *:items-center *:space-x-2">
+                    <span className=""><b>Expiration:</b> <span className="text-muted-foreground">{new Date(url.expirationDate).toLocaleString()}</span></span>
+                    <span className=""><b>Scheduled:</b> <span className="text-muted-foreground">{new Date(url.scheduledDate).toLocaleString()}</span></span>
+                  </article>
+                  <aside>
+                    Tags:
+                  </aside>
+                  </section> */}
                 </li>
               ))}
             </ul>
