@@ -5,9 +5,8 @@ import { nanoid } from 'nanoid';
 export default async function handler(req, res) {
   if (req.method !== 'POST') { return res.status(405).json({ message: 'Method not allowed' }); }
   const { originalUrl, alias, expirationDate, scheduledDate } = req.body;
-  console.log(req.body);
+  // console.log(req.body);
   if (!originalUrl) { return res.status(400).json({ message: 'Original URL is required' }); }
-
   const dotCount = (originalUrl.match(/\./g) || []).length;
   if (dotCount <= 0) { return res.status(400).json({ message: 'Invalid URL or Domain' }); }
 
@@ -26,6 +25,21 @@ export default async function handler(req, res) {
       }
     }
 
+    if (expirationDate && new Date(expirationDate) > new Date(Date.now() + 2 * 365 * 24 * 60 * 60 * 1000)) {
+      return res.status(400).json({ message: 'Expiration date cannot be more than 2 years from the current date' });
+    }
+
+    const expiration = expirationDate;
+    const scheduled = scheduledDate;
+
+    let isActive = true;
+    const now = new Date();
+
+    // If there is a scheduledDate and it's in the past, set isActive to false
+    if (scheduled && scheduled <= now) {
+      isActive = false;
+    }
+
     const shortenUrl = alias || nanoid(6);
     const newUrl = await Url.create({
       originalUrl,
@@ -33,6 +47,7 @@ export default async function handler(req, res) {
       alias: alias || undefined,
       expirationDate: expirationDate ? new Date(expirationDate) : undefined,
       scheduledDate: scheduledDate ? new Date(scheduledDate) : null,
+      isActive: isActive,
     });
 
     const createdUrl = await Url.findById(newUrl._id);

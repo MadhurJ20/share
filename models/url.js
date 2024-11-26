@@ -14,7 +14,8 @@ const URLSchema = new mongoose.Schema(
       required: true,
       set(value) {
         // If no protocol is provided, prepend http://
-        if (!/^https?:\/\//i.test(value)) value = `http://${value}`;
+        if (!/^https?:\/\//i.test(value))
+          value = `http://${value}`;
         return value;
       },
     },
@@ -43,6 +44,10 @@ const URLSchema = new mongoose.Schema(
       type: Date,
       default: null
     },
+    isActive: {
+      type: Boolean,
+      default: true
+    }
   },
   { timestamps: true }
 );
@@ -50,22 +55,39 @@ const URLSchema = new mongoose.Schema(
 // TTL index on expirationDate, expires after the date specified in the field
 URLSchema.index({ expirationDate: 1 }, { expireAfterSeconds: 0 });
 
-// Pre-save hook to limit expirationDate
+URLSchema.index({ originalUrl: 1 });
+URLSchema.index({ shortenUrl: 1 });
+
 URLSchema.pre('save', function (next) {
   const TWO_YEARS = 2 * 365 * 24 * 60 * 60 * 1000; // Milliseconds
   const now = new Date();
 
+  console.log("Pre-save hook triggered");
+  console.log("Document being saved:", this);
+
   if (this.expirationDate) {
-    // If expirationDate is set, check if it's more than 2 years from now
+    if (this.expirationDate <= now) {
+      console.log('Expiration date in past');
+      this.expirationDate = now;
+    }
     if (this.expirationDate > new Date(now.getTime() + TWO_YEARS)) {
+      console.log('Expiration date too far');
       this.expirationDate = new Date(now.getTime() + TWO_YEARS);
     }
   }
 
+  if (this.scheduledDate) {
+    if (this.scheduledDate <= now) {
+      console.log('Scheduled date in past');
+      this.scheduledDate = now;
+      this.isActive = false;
+    }
+  } else {
+    this.isActive = true;
+  }
+
+  console.log('Active status:', this.isActive);
   next();
 });
-
-URLSchema.index({ originalUrl: 1 });
-URLSchema.index({ shortenUrl: 1 });
 
 export default mongoose.models.Url || mongoose.model('Url', URLSchema);

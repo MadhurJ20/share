@@ -27,30 +27,36 @@ export default function Home() {
     setError('');
     setShortUrl('');
 
-    const formattedUrl = originalUrl.startsWith('http://') || originalUrl.startsWith('https://')
+    const formattedUrl = originalUrl.startsWith('http://') || originalUrl.startsWith('https://') || originalUrl.startsWith('BASE_URL')
       ? originalUrl
       : `http://${originalUrl}`;
 
-    const formatDateToUTC = (date) => {
-      if (!date) return null;
-      const localDate = new Date(date);
-      return localDate.toISOString();
-    };
+    if (expirationDate && new Date(expirationDate) > new Date(Date.now() + 2 * 365 * 24 * 60 * 60 * 1000)) {
+      return toast.error('Expiration date cannot be more than 2 years from the current date');
+    }
 
-    const formattedExpirationDate = formatDateToUTC(expirationDate);
-    console.log("Formatted Expiration Date:", formattedExpirationDate);
-    const formattedScheduledDate = formatDateToUTC(scheduledDate);
+    if (scheduledDate && new Date(scheduledDate) < new Date(Date.now())) {
+      return toast.error('Scheduled date cannot be in the past');
+    }
+
+    if (expirationDate && scheduledDate && new Date(expirationDate) <= new Date(scheduledDate)) {
+      return toast.error('Expiration date cannot be before or equal to scheduled date');
+    }
+
+    if (expirationDate && expirationDate <= new Date(Date.now())) {
+      return toast.error('Expiration date cannot be in the past');
+    }
 
     try {
       const res = await fetch('/api/shorten', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          originalUrl,
+          originalUrl: formattedUrl,
           alias,
           // expirationDate: formattedExpirationDate,
           expirationDate: expirationDate ? new Date(expirationDate) : null,
-          scheduledDate: formattedScheduledDate
+          scheduledDate: scheduledDate ? new Date(scheduledDate) : null
         }),
       });
 
@@ -166,10 +172,10 @@ export default function Home() {
             </article>
 
             {/* Buttons */}
-            <form tabIndex={2} className="flex flex-col justify-center gap-3 mt-8" onSubmit={handleSubmit}>
+            <form className="flex flex-col justify-center gap-3 mt-8" onSubmit={handleSubmit}>
               <section className='flex flex-col justify-center gap-3 mt-2 md:flex-row'>
                 <Input
-                  tabIndex={5}
+                  tabIndex={1}
                   type="text"
                   placeholder="Enter original URL"
                   value={originalUrl}
@@ -177,6 +183,7 @@ export default function Home() {
                   required
                 />
                 <Input
+                  tabIndex={1}
                   type="text"
                   placeholder="Custom alias (optional)"
                   value={alias}
@@ -185,6 +192,7 @@ export default function Home() {
               </section>
               <footer className="flex flex-row gap-3">
                 <Button
+                  tabIndex={2}
                   type="submit"
                   className="flex-1"
                   onClick={() => handleClick("shorten")}
@@ -192,13 +200,14 @@ export default function Home() {
                   {clickedButton === "shorten" ? <Check /> : "Shorten"}
                 </Button>
                 <Button
+                  tabIndex={2}
                   type="button"
                   className="flex flex-1 w-max"
                   onClick={() => handleClick("clear", handleClear)}
                 >
                   {clickedButton === "clear" ? <Check /> : "Clear"}
                 </Button>
-                <Button type="button" variant="outline">
+                <Button type="button" tabIndex={2} variant="outline">
                   <span
                     className="flex w-4 aspect-square"
                     onClick={() => handleClick("copy", handleCopy)}
@@ -207,6 +216,7 @@ export default function Home() {
                   </span>
                 </Button>
                 <Button type="button" variant="outline"
+                  tabIndex={2}
                   onClick={() => {
                     setClickedButton('share');
                     downloadQRCode();
@@ -225,6 +235,7 @@ export default function Home() {
                 <div className='flex flex-col items-start w-full gap-1'>
                   <label className='text-xs font-medium text-muted-foreground ps-1'>Expiration Date</label>
                   <Input
+                    tabIndex={3}
                     type="datetime-local"
                     placeholder="Expiration Date (Optional)"
                     value={expirationDate}
@@ -235,6 +246,7 @@ export default function Home() {
                 <div className='flex flex-col items-start w-full gap-1 md:items-end'>
                   <label className='text-xs font-medium text-muted-foreground pe-1'>Scheduled Date</label>
                   <Input
+                    tabIndex={3}
                     type="datetime-local"
                     placeholder="Scheduled Date (Optional)"
                     value={scheduledDate}

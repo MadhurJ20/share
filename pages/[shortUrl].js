@@ -9,6 +9,15 @@ export async function getServerSideProps(context) {
     // Query
     const urlDocument = await Url.findOne({ shortenUrl: shortUrl });
     if (urlDocument) {
+      if (!urlDocument.isActive) {
+        return {
+          notFound: true,
+          // redirect: {
+          //   destination: '/waiting',
+          //   permanent: false,
+          // }
+        };
+      }
       const currentTime = new Date();
       await Url.updateOne(
         { shortenUrl: shortUrl },

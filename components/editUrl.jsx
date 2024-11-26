@@ -16,12 +16,25 @@ export function EditUrlDialog({ open, setOpen, urlToEdit, handleEdit }) {
     if (urlToEdit?.scheduledDate) {
       setNewScheduledDate(formatDateForInput(urlToEdit.scheduledDate));
     }
+    if (urlToEdit?.shortenUrl) {
+      setNewShortenUrl(urlToEdit.shortenUrl);
+    }
   }, [urlToEdit]);
+
+  // const formatDateForInput = (date) => {
+  //   if (!date) return "";
+  //   const formattedDate = new Date(date);
+  //   return formattedDate.toISOString().slice(0, 16); // Convert to "YYYY-MM-DDTHH:MM"
+  // };
 
   const formatDateForInput = (date) => {
     if (!date) return "";
-    const formattedDate = new Date(date);
-    return formattedDate.toISOString().slice(0, 16); // Convert to "YYYY-MM-DDTHH:MM"
+    const localDate = new Date(date);
+    // Adjust to local timezone using toLocaleString and format it back to input format
+    return localDate.toLocaleString('sv-SE', {
+      timeZoneName: 'short',
+      hour12: false,
+    }).replace(' ', 'T').slice(0, 16); // Convert to "YYYY-MM-DDTHH:MM" format
   };
 
   const handleCancel = () => {
@@ -56,7 +69,7 @@ export function EditUrlDialog({ open, setOpen, urlToEdit, handleEdit }) {
         <DialogHeader>
           <DialogTitle>Edit Shortened URL</DialogTitle>
           <DialogDescription>
-            Modify the shortened URL and expiration/scheduled dates.
+            Modify the shortened URL and expiration/scheduled dates. Make sure shortened URL field isn't empty
           </DialogDescription>
         </DialogHeader>
 
@@ -67,26 +80,26 @@ export function EditUrlDialog({ open, setOpen, urlToEdit, handleEdit }) {
             id="shortenUrl"
             value={newShortenUrl}
             onChange={(e) => setNewShortenUrl(e.target.value)}
-            className="w-full p-2 mt-2 border rounded-md focus-visible:ring-0 focus-visible:ring-offset-0"
+            className="w-full p-2 mt-0.5 border rounded-md focus-visible:ring-0 focus-visible:ring-offset-0"
             placeholder="Enter new shortened URL"
           />
 
-          <label htmlFor="expirationDate" className="block text-sm font-medium text-gray-700">Expiration Date</label>
+          <label htmlFor="expirationDate" className="block mt-2 text-sm font-medium text-gray-700">Expiration Date</label>
           <Input
             type="datetime-local"
             id="expirationDate"
             value={newExpirationDate}
             onChange={(e) => setNewExpirationDate(e.target.value)}
-            className="w-full p-2 mt-2 border rounded-md focus-visible:ring-0 focus-visible:ring-offset-0"
+            className="w-full p-2 mt-0.5 border rounded-md focus-visible:ring-0 focus-visible:ring-offset-0"
           />
 
-          <label htmlFor="scheduledDate" className="block text-sm font-medium text-gray-700">Scheduled Date</label>
+          <label htmlFor="scheduledDate" className="block mt-2 text-sm font-medium text-gray-700">Scheduled Date</label>
           <Input
             type="datetime-local"
             id="scheduledDate"
             value={newScheduledDate}
             onChange={(e) => setNewScheduledDate(e.target.value)}
-            className="w-full p-2 mt-2 border rounded-md focus-visible:ring-0 focus-visible:ring-offset-0"
+            className="w-full p-2 mt-0.5 border rounded-md focus-visible:ring-0 focus-visible:ring-offset-0"
           />
         </div>
 
