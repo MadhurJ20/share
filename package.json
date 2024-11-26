@@ -28,7 +28,7 @@
     "start": "next start",
     "lint": "next lint"
   },
-  "name": "qr-code-generator",
+  "name": "share",
   "version": "1.0.0",
   "description": "This is a repository to be used by us to shorten URLs",
   "main": "index.js",
@@ -36,7 +36,7 @@
     "doc": "docs"
   },
   "keywords": [],
-  "author": "",
+  "author": "Eshan N, Vishvaraj D, Madhur J",
   "license": "ISC",
   "devDependencies": {
     "@types/node": "22.9.3",
