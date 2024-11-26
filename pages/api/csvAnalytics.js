@@ -1,6 +1,6 @@
 import dbConnect from "../../utils/db";
 import Url from "../../models/url";
-import { Parser } from "json2csv";
+import { createObjectCsvStringifier } from "csv-writer";
 
 export default async function handler(req, res) {
   try {
@@ -8,8 +8,16 @@ export default async function handler(req, res) {
 
     if (req.method === "GET") {
       const urls = await Url.find({});
-      const json2csvParser = new Parser();
-      const csv = json2csvParser.parse(urls);
+      const csvStringifier = createObjectCsvStringifier({
+        header: [
+          { id: "_id", title: "ID" },
+          { id: "url", title: "URL" },
+          // Add other fields as necessary
+        ],
+      });
+      const csv =
+        csvStringifier.getHeaderString() +
+        csvStringifier.stringifyRecords(urls);
 
       // Set the content type for the response as CSV
       res.setHeader("Content-Type", "text/csv");
@@ -23,4 +31,3 @@ export default async function handler(req, res) {
     res.status(500).json({ message: "Server error" });
   }
 }
-export const runtime = "edge";
