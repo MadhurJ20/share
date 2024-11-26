@@ -69,7 +69,7 @@ const SearchUrls = () => {
       <CommandInput
         placeholder="Search for a link..."
         onChange={handleSearchChange}
-        className="z-10 px-4 py-2"
+        className="z-10 px-4 pb-2"
       />
       <CommandList className="px-2 py-4">
         {urls.length === 0 ? (
@@ -80,11 +80,18 @@ const SearchUrls = () => {
               <CommandItem
                 key={index}
                 onSelect={() => {
-                  // router.push(`/analytics?id=${url._id}`); // Redirect when item is selected
-                  window.open(`/analytics?id=${url._id}`, "_blank");
+                  router.push(`/analytics?id=${url._id}`); // Redirect when item is selected
+                  // window.open(`/analytics?id=${url._id}`, "_blank");
                 }}
+                className="border-b last:border-b-0"
               >
-                <article className="flex items-center gap-2 p-1">
+                <article className="flex items-center gap-2 p-1 space-x-1">
+                  <img
+                    src={`http://www.google.com/s2/favicons?sz=64&domain=${url.originalUrl}`}
+                    width="32" height="32"
+                    alt="L"
+                    className='block rounded aspect-square '
+                  />
                   <section className="flex flex-col space-y-2">
                     <main className="flex items-center space-x-3 font-mono">
                       <ExternalLinkIcon className="w-4 h-4" />
@@ -102,7 +109,7 @@ const SearchUrls = () => {
                       <Link
                         href={`/analytics?id=${url._id}`}
                         target="_blank"
-                        className="text-[.85rem] hover:underline"
+                        className="text-[.75rem] hover:underline"
                         passHref
                       >
                         {url.shortenUrl}

@@ -1,23 +1,19 @@
 import { useRouter } from 'next/router';
-import { useEffect } from "react";
-import { useState } from "react";
-import { useRef } from "react";
+import { useEffect, useState, useRef } from "react";
 
 import { ChartSpline, Copy, Check, Mouse, Trash2, ImageDown, MousePointerClick, Database } from "lucide-react";
 import { QrCode, Calendar, Pencil, Link, ExternalLink, RefreshCcw } from "lucide-react";
 
 import { Nav } from "@components/nav";
-import SearchUrls from "@components/searchURL";
 import { Input } from "@components/ui/input";
 import { Button } from "@components/ui/button";
 import { toast } from "sonner";
-import { Dialog, DialogContent, DialogFooter, DialogHeader } from "@components/ui/dialog";
 import { DeleteUrlDialog } from "@components/deleteUrl";
 import { EditUrlDialog } from "@components/editUrl";
 import QRCodeDialog from "@components/qrcodeDialog";
 import RecentAccessesDialog from "@components/recentAccesses";
 import AccessGraphDialog from "@components/graphDialog";
-import { GradientTop } from "@components/gradientTop";
+import { GradientTop } from '@components/gradientTop';
 
 export default function Analytics() {
   const [urls, setUrls] = useState([]);
@@ -130,8 +126,8 @@ export default function Analytics() {
       setSelectedUrl(url);
       setOpenRecents(true);
     } else {
-      setSelectedUrl(null); // Clear selected URL
-      setOpenRecents(false); // Close the dialog
+      setSelectedUrl(null);
+      setOpenRecents(false);
     }
   };
 
@@ -140,8 +136,8 @@ export default function Analytics() {
       setSelectedUrl(url);
       setOpenGraphDialog(true);
     } else {
-      setSelectedUrl(null); // Clear selected URL
-      setOpenGraphDialog(false); // Close the dialog
+      setSelectedUrl(null);
+      setOpenGraphDialog(false);
     }
   };
 
@@ -208,10 +204,13 @@ export default function Analytics() {
     }, 500);
   }, [query.id]);
 
-
   return (
-    <main className="relative flex flex-col items-center justify-center h-screen font-inter min-h-svh bg-zinc-50 dark:bg-[#09090b]">
+    <main className="relative overflow-x-hidden flex flex-col items-center justify-center h-screen font-inter min-h-svh bg-zinc-50 dark:bg-[#09090b]">
+      <div className='relative'>
+        <GradientTop />
+      </div>
       <Nav />
+
       <div className="relative w-full py-24 overflow-x-hidden">
         <div className="container py-10 mx-auto lg:py-16">
 
@@ -246,95 +245,111 @@ export default function Analytics() {
           {error && <p style={{ color: 'red' }}>{error}</p>}
           {urls.length > 0 ? (
             <ul className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-3">
-              {filteredUrls.map((url) => (
-                // url._id
-                <li key={url._id} id={url._id} className="p-4 rounded-lg shadow-lg url-card dark:border dark:bg-[#0c0e0f88] dark:backdrop-blur">
-                  <header className="flex flex-col gap-0 !text-sm">
-                    <h2 className="flex justify-between p-1 space-x-4">
-                      <main className="flex items-center ml-1 space-x-4">
-                        <Link className="w-5 h-5 short-link" />
-                        <a href={url.shortenUrl}
-                          target="_blank" rel="noopener noreferrer"
-                          className='inline-block px-3 py-1.5 font-mono border rounded-lg text-primary hover:underline'
-                        >{url.shortenUrl}</a>
-                      </main>
-                      <aside className="flex gap-2">
-                        <Button type="button" variant="outline" onClick={() => handleCopy(url.shortenUrl)}>
-                          <span className="flex w-4 aspect-square">
-                            {copiedUrl === url.shortenUrl ? <Check /> : <Copy />}
+              {filteredUrls.map((url) => {
+                // const [favicon, isReady, isError] = useFavicon(url.originalUrl);
+                return (
+                  // url._id
+                  <li key={url._id} id={url._id} className="p-4 rounded-lg shadow-lg url-card dark:border dark:bg-[#0c0e0f88] dark:backdrop-blur">
+                    <header className="flex flex-col gap-0 !text-sm">
+                      <h2 className="flex justify-between p-1 space-x-4">
+                        <main className="flex items-center ml-1 space-x-4">
+                          <Link className="w-5 h-5 short-link" />
+                          <a href={url.shortenUrl}
+                            target="_blank" rel="noopener noreferrer"
+                            className='inline-block px-3 py-1.5 font-mono border rounded-lg text-primary hover:underline'
+                          >{url.shortenUrl}</a>
+                        </main>
+                        <aside className="flex gap-2">
+                          <Button type="button" variant="outline" onClick={() => handleCopy(url.shortenUrl)}>
+                            <span className="flex w-4 aspect-square">
+                              {copiedUrl === url.shortenUrl ? <Check /> : <Copy />}
+                            </span>
+                          </Button>
+
+                          <img
+                            src={`http://www.google.com/s2/favicons?sz=64&domain=${url.originalUrl}`}
+                            width="35" height="35"
+                            alt="L"
+                            className='block rounded aspect-square'
+                            loading='lazy'
+                          />
+                        </aside>
+                      </h2>
+                      <h2 className="flex justify-between p-1 space-x-4">
+                        <main className="flex items-center ml-1 space-x-4">
+                          <ExternalLink className="w-5 h-5" />
+                          <a href={url.originalUrl}
+                            target="_blank" rel="noopener noreferrer"
+                            className='inline-block px-3 py-1.5 font-mono border rounded-lg text-primary hover:underline overflow-x-auto max-w-[150px] scrollbar-none whitespace-nowrap'
+                          >{url.originalUrl}</a>
+                        </main>
+                        <aside className="flex gap-2">
+                          <Button type="button" variant="outline" onClick={() => { setUrlToDelete(url._id); setOpen(true) }}>
+                            <span className="flex w-4 aspect-square">
+                              <Trash2 className="text-red-400" />
+                            </span>
+                          </Button>
+                          <Button type="button" variant="outline" onClick={() => { console.log(url); setUrlToEdit(url); setOpenEdit(true) }}>
+                            <span className="flex w-4 aspect-square">
+                              <Pencil className="text-yellow-600 dark:text-yellow-400" />
+                            </span>
+                          </Button>
+                        </aside>
+                      </h2>
+                    </header>
+                    <section className="flex justify-between gap-2">
+                      <article className="flex flex-col my-4 space-y-1 text-sm *:flex *:items-center *:space-x-2">
+                        <span className=""><Calendar className="w-4 h-4" /> <span className="text-muted-foreground">{new Date(url.createdAt).toLocaleString()}</span></span>
+                        <span className=""><Pencil className="w-4 h-4" /> <span className="text-muted-foreground">{new Date(url.updatedAt).toLocaleString()}</span></span>
+                        <span className=""><MousePointerClick className="w-4 h-4" /> <span className="text-muted-foreground">Clicks: {url.accesses.count}</span></span>
+                      </article>
+                      <aside className="flex flex-col items-end space-y-2">
+                        <Button type="button" className="mt-2" variant="outline" onClick={() => handleShowRecents(url)}>
+                          <span className="flex">
+                            Recents
                           </span>
                         </Button>
-                        <Button type="button" variant="outline" onClick={() => handleClickQRCode(url.shortenUrl)}>
-                          <span className="flex w-4 aspect-square">
-                            <QrCode className="text-gray-600 dark:text-gray-400" />
-                          </span>
-                        </Button>
+                        <div className='flex items-center mt-2 space-x-2'>
+                          <Button type="button" variant="outline" onClick={() => handleClickQRCode(url.shortenUrl)}>
+                            <span className="flex w-4 aspect-square">
+                              <QrCode className="text-gray-600 dark:text-gray-400" />
+                            </span>
+                          </Button>
+                          <Button type="button" className="w-max" variant="outline" onClick={() => handleOpenGraphDialog(url)}>
+                            <span className="flex w-4 aspect-square">
+                              <ChartSpline className="text-green-600 dark:text-green-400" />
+                            </span>
+                          </Button>
+                        </div>
                       </aside>
-                    </h2>
-                    <h2 className="flex justify-between p-1 space-x-4">
-                      <main className="flex items-center ml-1 space-x-4">
-                        <ExternalLink className="w-5 h-5" />
-                        <a href={url.originalUrl}
-                          target="_blank" rel="noopener noreferrer"
-                          className='inline-block px-3 py-1.5 font-mono border rounded-lg text-primary hover:underline overflow-x-auto max-w-[150px] scrollbar-none whitespace-nowrap'
-                        >{url.originalUrl}</a>
-                      </main>
-                      <aside className="flex gap-2">
-                        <Button type="button" variant="outline" onClick={() => { setUrlToDelete(url._id); setOpen(true) }}>
-                          <span className="flex w-4 aspect-square">
-                            <Trash2 className="text-red-400" />
-                          </span>
-                        </Button>
-                        <Button type="button" variant="outline" onClick={() => { console.log(url); setUrlToEdit(url); setOpenEdit(true) }}>
-                          <span className="flex w-4 aspect-square">
-                            <Pencil className="text-yellow-600 dark:text-yellow-400" />
-                          </span>
-                        </Button>
+                    </section>
+                    <section className="flex justify-between gap-2">
+                      <article className="flex flex-col mb-4 mt-2 space-y-1 text-sm *:flex *:items-center *:space-x-2">
+                        <span className="">
+                          {
+                            new Date(url.expirationDate) < new Date()
+                              ? <span className='px-2 py-.5 font-bold rounded-lg bg-red-400/20 small-caps text-red-500/80'>Expired</span>
+                              : <span><b>Expiration: </b> <span className="text-muted-foreground">
+                                {isNaN(new Date(url.expirationDate).getTime())
+                                  ? "Not set"
+                                  : new Date(url.expirationDate).toLocaleString()}</span>
+                              </span>
+                          }
+                        </span>
+                        <span className="">
+                          {
+                            new Date(url.scheduledDate) <= new Date()
+                              ? <span className='px-2 py-.5 mt-1 font-bold rounded-lg bg-green-400/20 small-caps text-green-500/80'>Live</span>
+                              : <span><b>Scheduled: </b><span class="text-muted-foreground">{new Date(url.scheduledDate).toLocaleString()}</span></span>
+                          }
+                        </span>
+                      </article>
+                      <aside>
                       </aside>
-                    </h2>
-                  </header>
-                  <section className="flex justify-between gap-2">
-                    <article className="flex flex-col my-4 space-y-1 text-sm *:flex *:items-center *:space-x-2">
-                      <span className=""><Calendar className="w-4 h-4" /> <span className="text-muted-foreground">{new Date(url.createdAt).toLocaleString()}</span></span>
-                      <span className=""><Pencil className="w-4 h-4" /> <span className="text-muted-foreground">{new Date(url.updatedAt).toLocaleString()}</span></span>
-                      <span className=""><MousePointerClick className="w-4 h-4" /> <span className="text-muted-foreground">Clicks: {url.accesses.count}</span></span>
-                    </article>
-                    <aside className="flex flex-col items-end space-y-2">
-                      <Button type="button" className="mt-2" variant="outline" onClick={() => handleShowRecents(url)}>
-                        <span className="flex">
-                          Recents
-                        </span>
-                      </Button>
-                      <Button type="button" className="w-max" variant="outline" onClick={() => handleOpenGraphDialog(url)}>
-                        <span className="flex w-4 aspect-square">
-                          <ChartSpline className="text-green-600 dark:text-green-400" />
-                        </span>
-                      </Button>
-                    </aside>
-                  </section>
-                  <section className="flex justify-between gap-2">
-                    <article className="flex flex-col my-4 space-y-1 text-sm *:flex *:items-center *:space-x-2">
-                      <span className="">
-                        {
-                          new Date(url.expirationDate) < new Date()
-                            ? <span className='px-2 py-.5 font-bold rounded-lg bg-red-400/20 small-caps text-red-500/80'>Expired</span>
-                            : <span><b>Expiration: </b> <span className="text-muted-foreground">{new Date(url.expirationDate).toLocaleString()}</span></span>
-                        }
-                      </span>
-                      <span className="">
-                        {
-                          new Date(url.scheduledDate) <= new Date()
-                            ? <span className='px-2 py-.5 mt-1 font-bold rounded-lg bg-green-400/20 small-caps text-green-500/80'>Live</span>
-                            : <span><b>Scheduled: </b><span class="text-muted-foreground">{new Date(url.scheduledDate).toLocaleString()}</span></span>
-                        }
-                      </span>
-                    </article>
-                    <aside>
-                      Tags:
-                    </aside>
-                  </section>
-                </li>
-              ))}
+                    </section>
+                  </li>
+                )
+              })}
             </ul>
 
           ) : (

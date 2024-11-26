@@ -15,7 +15,7 @@ const URLSchema = new mongoose.Schema(
       set(value) {
         // If no protocol is provided, prepend http://
         if (!/^https?:\/\//i.test(value))
-          value = `http://${value}`;
+          value = `https://${value}`;
         return value;
       },
     },
