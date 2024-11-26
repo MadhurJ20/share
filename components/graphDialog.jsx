@@ -1,8 +1,15 @@
-import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle, DialogClose } from '@components/ui/dialog';
-import { Button } from '@components/ui/button';
-import dynamic from 'next/dynamic';
+import {
+  Dialog,
+  DialogContent,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogClose,
+} from "@components/ui/dialog";
+import { Button } from "@components/ui/button";
+import dynamic from "next/dynamic";
 
-const Chart = dynamic(() => import('react-apexcharts'), { ssr: false });
+const Chart = dynamic(() => import("react-apexcharts"), { ssr: false });
 
 const AccessGraphDialog = ({ open, setOpen, recentAccesses }) => {
   const groupByWeek = (accesses) => {
@@ -10,17 +17,32 @@ const AccessGraphDialog = ({ open, setOpen, recentAccesses }) => {
 
     accesses.forEach((access) => {
       const date = new Date(access);
-      const startOfWeek = new Date(date.setDate(date.getDate() - date.getDay())); // Start of the week (Sunday)
-
-      const weekKey = `${startOfWeek.getFullYear()}-W${Math.ceil((startOfWeek.getDate() - 1) / 7)}`;
+      // (Monday)
+      const startOfWeek = new Date(date);
+      startOfWeek.setDate(date.getDate() - date.getDay() + 1);
+      const year = startOfWeek.getFullYear();
+      const month = startOfWeek.getMonth();
+      const firstDayOfYear = new Date(year, 0, 1);
+      const dayOfYear = Math.floor(
+        (startOfWeek - firstDayOfYear) / (24 * 60 * 60 * 1000)
+      );
+      const weekNumber = Math.ceil((dayOfYear + 1) / 7);
+      const weekKey = `${year}-W${
+        weekNumber < 10 ? "0" + weekNumber : weekNumber
+      }`;
       if (!weeks[weekKey]) {
-        weeks[weekKey] = { week: weekKey, count: 0 };
+        weeks[weekKey] = { week: weekKey, count: -1 };
       }
       weeks[weekKey].count += 1;
     });
 
     // Convert the object to an array and sort by week
-    return Object.values(weeks).sort((a, b) => new Date(a.week) - new Date(b.week));
+    return Object.values(weeks).sort((a, b) => {
+      const [aYear, aWeek] = a.week.split("-W").map(Number);
+      const [bYear, bWeek] = b.week.split("-W").map(Number);
+      // Sort by year first, then by week number
+      return aYear === bYear ? aWeek - bWeek : aYear - bYear;
+    });
   };
 
   // Group accesses by week
@@ -29,43 +51,45 @@ const AccessGraphDialog = ({ open, setOpen, recentAccesses }) => {
   const graphData = {
     series: [
       {
-        name: 'Accesses',
-        data: weeklyAccesses.map((weekData) => ({
-          x: weekData.week,
-          y: weekData.count,
-        })),
+        name: "Accesses",
+        data: weeklyAccesses.map((weekData, index) => {
+          return {
+            x: index + 1,
+            y: weekData.count,
+          };
+        }),
       },
     ],
     options: {
       chart: {
-        type: 'line', // Line chart type
+        type: "line", // Line chart type
         height: 350,
       },
       xaxis: {
-        type: 'category',
+        type: "category",
         categories: weeklyAccesses.map((weekData) => weekData.week),
         title: {
-          text: 'Week',
+          text: "Week",
         },
       },
       yaxis: {
         title: {
-          text: 'Accesses',
+          text: "Accesses",
         },
         stepSize: 10,
         min: 0,
       },
       title: {
-        text: 'Weekly Accesses',
-        align: 'center',
+        text: "Weekly Accesses",
+        align: "center",
       },
       stroke: {
-        curve: 'smooth',
+        curve: "smooth",
       },
       markers: {
         size: 5,
-        colors: ['#FF4560'],
-        strokeColors: '#fff',
+        colors: ["#FF4560"],
+        strokeColors: "#fff",
         strokeWidth: 1,
       },
       dataLabels: {
@@ -82,18 +106,17 @@ const AccessGraphDialog = ({ open, setOpen, recentAccesses }) => {
         </DialogHeader>
 
         <section className="h-full p-3 overflow-auto">
-          <div className="w-full mt-3 bg-gray-100 dark:bg-[#0c0e0f] rounded-lg">
+          <div className="w-full mt-3 bg-gray-100 dark:bg-[#0c0e0f] rounded-lg p-1">
             <Chart
               options={graphData.options}
               series={graphData.series}
               type="line"
-              height="350"
+              height="380"
             />
           </div>
         </section>
         <DialogFooter>
-          <DialogClose asChild>
-          </DialogClose>
+          <DialogClose asChild></DialogClose>
         </DialogFooter>
       </DialogContent>
     </Dialog>

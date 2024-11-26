@@ -1,3 +1,5 @@
+import Link from "next/link";
+import { useRouter } from "next/router";
 import { useState, useEffect } from "react";
 import {
   Command,
@@ -6,28 +8,26 @@ import {
   CommandInput,
   CommandItem,
   CommandList,
-  CommandDialog
+  CommandDialog,
 } from "@components/ui/command";
 import { LinkIcon, ExternalLinkIcon } from "lucide-react";
-import Link from "next/link";
-import { useRouter } from "next/router"; // Importing useRouter
 
 const SearchUrls = () => {
-  const [error, setError] = useState('');
+  const [error, setError] = useState("");
   const [urls, setUrls] = useState([]);
   const [open, setOpen] = useState(false);
   const [selectedIndex, setSelectedIndex] = useState(0); // Track the selected item index
-  const [searchQuery, setSearchQuery] = useState('');
-  const router = useRouter(); // Router for programmatic navigation
+  const [searchQuery, setSearchQuery] = useState("");
+  const router = useRouter();
 
   useEffect(() => {
     const fetchUrls = async () => {
       try {
-        const res = await fetch('/api/analytics');
+        const res = await fetch("/api/analytics");
         const data = await res.json();
-        setUrls(data); // Store the fetched data in state
+        setUrls(data);
       } catch (error) {
-        setError('Failed to fetch URLs');
+        setError("Failed to fetch URLs");
       }
     };
 
@@ -35,16 +35,16 @@ const SearchUrls = () => {
   }, []);
 
   // Filter URLs based on search query
-  const filteredUrls = urls.filter((url) =>
-    url.originalUrl.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    url.shortenUrl.toLowerCase().includes(searchQuery.toLowerCase())
+  const filteredUrls = urls.filter(
+    (url) =>
+      url.originalUrl.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      url.shortenUrl.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
-  // Handle keydown events for navigation and selection
   const handleKeyDown = (e) => {
     if (e.key === "Enter" && filteredUrls.length > 0) {
       const selectedUrl = filteredUrls[selectedIndex];
-      // window.open(`/analytics?id=${selectedUrl._id}`, "_blank"); // Redirect to the selected URL's analytics page
+      // window.open(`/analytics?id=${selectedUrl._id}`, "_blank");
     }
 
     if (e.key === "k" && (e.metaKey || e.ctrlKey || e.altKey)) {
@@ -65,11 +65,15 @@ const SearchUrls = () => {
   }, [filteredUrls, selectedIndex]);
 
   return (
-    <CommandDialog open={open} onOpenChange={setOpen} className="border rounded-lg max-w-3/4 lg:w-1/4">
+    <CommandDialog
+      open={open}
+      onOpenChange={setOpen}
+      className="border rounded-lg max-w-3/4 lg:w-1/4"
+    >
       <CommandInput
         placeholder="Search for a link..."
         onChange={handleSearchChange}
-        className="z-10 px-4 pb-2"
+        className="px-4 pb-2 "
       />
       <CommandList className="px-2 py-4">
         {urls.length === 0 ? (
@@ -88,9 +92,10 @@ const SearchUrls = () => {
                 <article className="flex items-center gap-2 p-1 space-x-1">
                   <img
                     src={`http://www.google.com/s2/favicons?sz=64&domain=${url.originalUrl}`}
-                    width="32" height="32"
+                    width="32"
+                    height="32"
                     alt="L"
-                    className='block rounded aspect-square '
+                    className="block rounded aspect-square "
                   />
                   <section className="flex flex-col space-y-2">
                     <main className="flex items-center space-x-3 font-mono">
@@ -101,7 +106,7 @@ const SearchUrls = () => {
                         rel="noopener noreferrer"
                         className="text-sm font-normal hover:text-blue-400 hover:underline"
                       >
-                        {url.originalUrl.replace(/^https?:\/\//, '')}
+                        {url.originalUrl.replace(/^https?:\/\//, "")}
                       </a>
                     </main>
                     <div className="flex items-center space-x-3 font-mono text-muted-foreground">
