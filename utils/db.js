@@ -1,18 +1,17 @@
-import mongoose from "mongoose";
+import mongoose from 'mongoose';
 
-const connection = {};
-
-async function dbConnect() {
-  if (connection.isConnected) {
-    return;
-  }
-
-  const db = await mongoose.connect(process.env.MONGO_URI, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-  });
-
-  connection.isConnected = db.connections[0].readyState;
+const MONGO_URI = process.env.MONGO_URI;
+if (!MONGO_URI) throw new Error('url not recognized');
+let cached = global.mongoose;
+if (!cached) {
+  cached = global.mongoose = { conn: null, promise: null };
 }
 
-export default dbConnect;
+export default async function dbConnect(req, res) {
+  if (cached.conn) return cached.conn;
+  if (!cached.promise) {
+    cached.promise = mongoose.connect(MONGO_URI).then((mongoose) => mongoose);
+  }
+  cached.conn = await cached.promise;
+  return cached.conn;
+}

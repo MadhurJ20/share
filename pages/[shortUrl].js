@@ -1,5 +1,5 @@
-import dbConnect from "../utils/db";
-import Url from "../models/url";
+import dbConnect from '../utils/db';
+import Url from '../models/url';
 
 export async function getServerSideProps(context) {
   const { shortUrl } = context.params;
@@ -22,13 +22,13 @@ export async function getServerSideProps(context) {
       await Url.updateOne(
         { shortenUrl: shortUrl },
         {
-          $inc: { "accesses.count": 1 },
+          $inc: { 'accesses.count': 1 },
           $push: {
-            "accesses.lastAccessed": {
+            'accesses.lastAccessed': {
               $each: [currentTime],
               $slice: -100,
             },
-          },
+          }
         }
       );
 
@@ -45,7 +45,7 @@ export async function getServerSideProps(context) {
 
       let originalUrl = urlDocument.originalUrl;
       if (!/^https?:\/\//i.test(originalUrl)) {
-        originalUrl = `http://${originalUrl}`; // Prepend http:// if missing
+        originalUrl = `http://${originalUrl}`;  // Prepend http:// if missing
       }
 
       return {
@@ -61,7 +61,7 @@ export async function getServerSideProps(context) {
       };
     }
   } catch (error) {
-    console.error("Error fetching the shortened:", error);
+    console.error('Error fetching the shortened:', error);
     return {
       notFound: true,
     };
