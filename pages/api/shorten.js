@@ -38,12 +38,10 @@ export default async function handler(req, res) {
       new Date(expirationDate) >
         new Date(Date.now() + 2 * 365 * 24 * 60 * 60 * 1000)
     ) {
-      return res
-        .status(400)
-        .json({
-          message:
-            "Expiration date cannot be more than 2 years from the current date",
-        });
+      return res.status(400).json({
+        message:
+          "Expiration date cannot be more than 2 years from the current date",
+      });
     }
 
     const expiration = expirationDate;

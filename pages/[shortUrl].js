@@ -73,4 +73,4 @@ const ShortUrlRedirect = () => {
 };
 
 export default ShortUrlRedirect;
-export const runtime = "edge";
+export const runtime = "experimental-edge";
