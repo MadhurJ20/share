@@ -30,7 +30,7 @@
   },
   "name": "share",
   "version": "1.0.0",
-  "description": "This is a repository to be used by us to shorten URLs",
+  "description": "This is a repository to be used by ACES to shorten URLs & track them.",
   "main": "index.js",
   "directories": {
     "doc": "docs"
