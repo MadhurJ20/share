@@ -166,9 +166,10 @@ export default function Home() {
             </article>
 
             {/* Buttons */}
-            <form className="flex flex-col justify-center gap-3 mt-8" onSubmit={handleSubmit}>
+            <form tabIndex={2} className="flex flex-col justify-center gap-3 mt-8" onSubmit={handleSubmit}>
               <section className='flex flex-col justify-center gap-3 mt-2 md:flex-row'>
                 <Input
+                  tabIndex={5}
                   type="text"
                   placeholder="Enter original URL"
                   value={originalUrl}
