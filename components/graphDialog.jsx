@@ -16,7 +16,7 @@ const AccessGraphDialog = ({ open, setOpen, recentAccesses }) => {
     const weeks = {};
 
     accesses.forEach((access) => {
-      const date = new Date(access);
+      const date = new Date(access.date);
       // (Monday)
       const startOfWeek = new Date(date);
       startOfWeek.setDate(date.getDate() - date.getDay() + 1);
@@ -24,7 +24,7 @@ const AccessGraphDialog = ({ open, setOpen, recentAccesses }) => {
       const month = startOfWeek.getMonth();
       const firstDayOfYear = new Date(year, 0, 1);
       const dayOfYear = Math.floor(
-        (startOfWeek - firstDayOfYear) / (24 * 60 * 60 * 1000),
+        (startOfWeek - firstDayOfYear) / (24 * 60 * 60 * 1000)
       );
       const weekNumber = Math.ceil((dayOfYear + 1) / 7);
       const weekKey = `${year}-W${
