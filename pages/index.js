@@ -303,10 +303,22 @@ export default function Home() {
                   <Button
                     tabIndex={2}
                     type="button"
-                    className="flex flex-1 w-max"
+                    className="flex-1 hidden lg:flex w-max"
                     onClick={() => handleClick("clear", handleClear)}
                   >
                     {clickedButton === "clear" ? <Check /> : "Clear"}
+                  </Button>
+                  <Button
+                    tabIndex={2}
+                    type="button"
+                    className="flex lg:hidden w-max"
+                  >
+                    <span
+                      className="flex w-4 aspect-square"
+                      onClick={() => handleClick("clear", handleClear)}
+                    >
+                      {clickedButton === "clear" ? <Check /> : <Trash2Icon />}
+                    </span>
                   </Button>
                   <Button type="button" tabIndex={2} variant="outline">
                     <span
@@ -329,13 +341,27 @@ export default function Home() {
                       {clickedButton === "share" ? <Check /> : <ImageDown />}
                     </span>
                   </Button>
-                  <Button type="button" variant="outline">
+                  <Button
+                    type="button"
+                    variant="outline"
+                    className="hidden lg:block"
+                  >
                     <a
                       className="flex w-4 aspect-square"
                       href="https://github.com/ACES-RMDSSOE/share"
                     >
                       <Github />
                     </a>
+                  </Button>
+                  <Button
+                    type="button"
+                    variant="outline"
+                    className="flex lg:hidden"
+                    onClick={handleSearchMobile}
+                  >
+                    <span className="flex w-4 aspect-square">
+                      <SearchIcon />
+                    </span>
                   </Button>
                 </footer>
                 <section className="flex flex-col justify-start items-start gap-3 mt-2 md:flex-row *:flex-1 p-2 md:mx-6 mx-10">
@@ -367,7 +393,6 @@ export default function Home() {
                   </div>
                 </section>
               </form>
-
               <section className="mt-4">
                 {error && <p style={{ color: "red" }}>{error}</p>}
                 {shortenUrl && (
