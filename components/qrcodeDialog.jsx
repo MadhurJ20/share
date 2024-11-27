@@ -49,7 +49,7 @@ const QRCodeDialog = ({ open, setOpen, shortenUrl }) => {
             // Replace the image URL with Base64 data in the SVG
             const updatedSvgData = svgData.replace(
               imageUrl,
-              `data:image/png;base64,${base64Image}`
+              `data:image/png;base64,${base64Image}`,
             );
             // Create a new Blob with the updated SVG content
             const updatedSvgBlob = new Blob([updatedSvgData], {

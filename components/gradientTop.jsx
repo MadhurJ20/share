@@ -8,4 +8,4 @@ export const GradientTop = () => {
       <div className="bg-gradient-to-tl blur-3xl w-[90rem] h-[50rem] rounded-full origin-top-left -rotate-12 -translate-x-[15rem] from-primary-foreground via-primary-foreground to-background" />
     </aside>
   );
-}
+};

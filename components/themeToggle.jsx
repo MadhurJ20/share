@@ -1,4 +1,4 @@
-import { Button } from '../components/ui/button'
+import { Button } from "../components/ui/button";
 import { useState, useEffect } from "react";
 import { Sun, Moon } from "lucide-react";
 
@@ -10,7 +10,6 @@ export const ThemeToggle = () => {
     return false;
   });
 
-
   useEffect(() => {
     // Apply theme on body tag and save it to localStorage
     if (isDarkMode) {
@@ -21,7 +20,6 @@ export const ThemeToggle = () => {
       localStorage.setItem("theme", "light");
     }
   }, [isDarkMode]);
-
 
   const [isClient, setIsClient] = useState(false);
 
@@ -39,7 +37,11 @@ export const ThemeToggle = () => {
       size="icon"
       className="w-5 h-5 transition-all duration-200 hover:bg-transparent !bg-transparent"
     >
-      {isDarkMode ? <Moon size={20} className='dark:text-white' /> : <Sun size={20} />}
+      {isDarkMode ? (
+        <Moon size={20} className="dark:text-white" />
+      ) : (
+        <Sun size={20} />
+      )}
     </Button>
   );
 };

@@ -1,7 +1,7 @@
-import mongoose from 'mongoose';
+import mongoose from "mongoose";
 
 const MONGO_URI = process.env.MONGO_URI;
-if (!MONGO_URI) throw new Error('url not recognized');
+if (!MONGO_URI) throw new Error("url not recognized");
 let cached = global.mongoose;
 if (!cached) {
   cached = global.mongoose = { conn: null, promise: null };

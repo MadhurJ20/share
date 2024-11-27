@@ -1,18 +1,24 @@
-import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle, DialogClose } from '@components/ui/dialog';
-import { Button } from '@components/ui/button';
-import { useState } from 'react';
-import { ChevronRight } from 'lucide-react';
-import { ChevronLeft } from 'lucide-react';
+import {
+  Dialog,
+  DialogContent,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogClose,
+} from "@components/ui/dialog";
+import { Button } from "@components/ui/button";
+import { useState } from "react";
+import { ChevronRight } from "lucide-react";
+import { ChevronLeft } from "lucide-react";
 
 const RecentAccessesDialog = ({ open, setOpen, recentAccesses }) => {
-
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 10;
   const totalPages = Math.ceil(recentAccesses.length / itemsPerPage);
 
   const currentItems = recentAccesses.slice(
     (currentPage - 1) * itemsPerPage,
-    currentPage * itemsPerPage
+    currentPage * itemsPerPage,
   );
 
   const goToPage = (page) => {
@@ -33,15 +39,26 @@ const RecentAccessesDialog = ({ open, setOpen, recentAccesses }) => {
               <table className="min-w-full border-collapse table-auto">
                 <thead>
                   <tr className="">
-                    <th className="px-4 py-2 text-sm font-semibold text-left text-gray-700">#</th>
-                    <th className="px-4 py-2 text-sm font-semibold text-left text-gray-700">Access Date</th>
+                    <th className="px-4 py-2 text-sm font-semibold text-left text-gray-700">
+                      #
+                    </th>
+                    <th className="px-4 py-2 text-sm font-semibold text-left text-gray-700">
+                      Access Date
+                    </th>
                   </tr>
                 </thead>
                 <tbody>
                   {currentItems.map((date, index) => (
-                    <tr key={index} className="border-b hover:bg-gray-50 dark:hover:bg-zinc-900/80">
-                      <td className="px-4 py-2 text-sm text-gray-700 dark:text-gray-400">{(currentPage - 1) * itemsPerPage + index + 1}</td>
-                      <td className="px-4 py-2 text-sm text-muted-foreground">{new Date(date).toLocaleString()}</td>
+                    <tr
+                      key={index}
+                      className="border-b hover:bg-gray-50 dark:hover:bg-zinc-900/80"
+                    >
+                      <td className="px-4 py-2 text-sm text-gray-700 dark:text-gray-400">
+                        {(currentPage - 1) * itemsPerPage + index + 1}
+                      </td>
+                      <td className="px-4 py-2 text-sm text-muted-foreground">
+                        {new Date(date).toLocaleString()}
+                      </td>
                     </tr>
                   ))}
                 </tbody>

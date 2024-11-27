@@ -11,4 +11,4 @@
 1. Always do a simple `git pull` before anything and check `.env`
 2. Any issues in home form: Drop the `urls` Database and try again
 3. Some unexpected behavior occurs then you can try deleting `.next` and restarting the server
-4. If still there are issues then as last resort just delete `node_modules`, `package-lock.json` and `pnpm-lock.yaml` and then reinstall and see if it persists 
+4. If still there are issues then as last resort just delete `node_modules`, `package-lock.json` and `pnpm-lock.yaml` and then reinstall and see if it persists

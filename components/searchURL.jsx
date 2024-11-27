@@ -38,7 +38,7 @@ const SearchUrls = () => {
   const filteredUrls = urls.filter(
     (url) =>
       url.originalUrl.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      url.shortenUrl.toLowerCase().includes(searchQuery.toLowerCase())
+      url.shortenUrl.toLowerCase().includes(searchQuery.toLowerCase()),
   );
 
   const handleKeyDown = (e) => {
