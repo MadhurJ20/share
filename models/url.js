@@ -9,6 +9,7 @@ const AccessSchema = new mongoose.Schema({
         date: { type: Date, default: Date.now },
         userAgent: { type: String, default: "Unknown" },
         referrer: { type: String, default: "Unknown" },
+        country: { type: String, default: "Unknown" },
       },
     ],
     default: [],
@@ -19,7 +20,6 @@ const URLSchema = new mongoose.Schema(
   {
     originalUrl: {
       type: String,
-      unique: true,
       required: true,
       set(value) {
         // If no protocol is provided, prepend https://
