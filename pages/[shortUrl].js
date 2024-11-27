@@ -29,7 +29,7 @@ export async function getServerSideProps(context) {
               $slice: -100,
             },
           },
-        },
+        }
       );
 
       // if (!urlDocument.accesses) {
@@ -45,7 +45,7 @@ export async function getServerSideProps(context) {
 
       let originalUrl = urlDocument.originalUrl;
       if (!/^https?:\/\//i.test(originalUrl)) {
-        originalUrl = `http://${originalUrl}`; // Prepend http:// if missing
+        originalUrl = `https://${originalUrl}`; // Prepend https:// if missing
       }
 
       return {

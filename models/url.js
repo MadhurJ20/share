@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 
-const BASE_URL = process.env.BASE_URL || "http://";
+const BASE_URL = process.env.BASE_URL || "https://";
 const AccessSchema = new mongoose.Schema({
   count: { type: Number, default: 0 },
   lastAccessed: { type: [Date], default: [] },
@@ -13,7 +13,7 @@ const URLSchema = new mongoose.Schema(
       unique: true,
       required: true,
       set(value) {
-        // If no protocol is provided, prepend http://
+        // If no protocol is provided, prepend https://
         if (!/^https?:\/\//i.test(value)) value = `https://${value}`;
         return value;
       },
@@ -48,7 +48,7 @@ const URLSchema = new mongoose.Schema(
       default: true,
     },
   },
-  { timestamps: true },
+  { timestamps: true }
 );
 
 // TTL index on expirationDate, expires after the date specified in the field
