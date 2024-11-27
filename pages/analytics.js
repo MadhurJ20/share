@@ -242,26 +242,51 @@ export default function Analytics() {
 
         <div className="relative w-full py-24 overflow-x-hidden">
           <div className="container py-10 mx-auto lg:py-16">
-            <header className="relative flex flex-col items-center justify-center w-full mb-10 space-y-10 overflow-hidden">
-              <Button
-                variant="outline"
-                className="-mb-8 group"
-                onClick={downloadCSV}
-              >
-                <Database className="w-4 h-4 mr-2 group-hover:animate-pulse" />{" "}
-                Export as CSV
-              </Button>
-              <Button
-                variant="outline"
-                className="-mb-5 group"
-                onClick={refreshData}
-              >
-                <RefreshCcw className="w-4 h-4 mr-2 group-hover:animate-spin" />{" "}
-                Refresh Data
-              </Button>
-              <h1 className="text-4xl font-extrabold tracking-tight scroll-m-20 lg:text-5xl">
-                Analytics
+            <div class="header">
+              <div className="flex justify-center items-center">
+                <a href="https://aces-rmdssoe.tech">
+                  <img
+                    src="https://raw.githubusercontent.com/ACES-RMDSSOE/Website/main/images/logo.png"
+                    alt="ACES Logo"
+                    border="0"
+                    className="w-[7em] h-[7em] rounded-[50%] mt-3"
+                  />
+                </a>
+              </div>
+              <h1 class="pt-4 pb-3 text-3xl font-bold xl:text-5xl md:text-4xl text-center">
+                <a
+                  class="text-4xl font-extrabold tracking-tight scroll-m-20 lg:text-5xl"
+                  href="/"
+                >
+                  Share
+                </a>
               </h1>
+              <p className="small-caps text-center">
+                URL Shortener + QR Code Generator
+              </p>
+            </div>
+            <header className="relative flex flex-col items-center justify-center w-full mb-10 space-y-8 overflow-hidden">
+              <h2 className="text-3xl font-extrabold tracking-tight scroll-m-20 lg:text-4xl">
+                Analytics
+              </h2>
+              <div className="flex space-x-4">
+                <Button
+                  variant="outline"
+                  className="-mb-8 group"
+                  onClick={downloadCSV}
+                >
+                  <Database className="w-4 h-4 mr-2 group-hover:animate-pulse" />{" "}
+                  Export as CSV
+                </Button>
+                <Button
+                  variant="outline"
+                  className="-mb-5 group"
+                  onClick={refreshData}
+                >
+                  <RefreshCcw className="w-4 h-4 mr-2 group-hover:animate-spin" />{" "}
+                  Refresh Data
+                </Button>
+              </div>
               {/* <SearchUrls /> */}
               {/* //! Make this work somehow */}
               <section className="flex items-center p-2 border rounded-lg dark:bg-[#0c0e0f] bg-white">

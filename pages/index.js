@@ -190,12 +190,33 @@ export default function Home() {
         <div className="relative w-full py-24 overflow-x-hidden">
           <div className="container relative py-10 lg:py-16">
             <main className="max-w-2xl mx-auto text-center">
-              <p className="small-caps">URL Shortener + QR Code Generator</p>
-
-              <header className="max-w-2xl mt-5">
-                <h1 className="text-4xl font-extrabold tracking-tight scroll-m-20 lg:text-5xl">
-                  Enter The Link!
+              <div class="header">
+                <div className="flex justify-center items-center">
+                  <a href="https://aces-rmdssoe.tech">
+                    <img
+                      src="https://raw.githubusercontent.com/ACES-RMDSSOE/Website/main/images/logo.png"
+                      alt="ACES Logo"
+                      border="0"
+                      className="w-[7em] h-[7em] rounded-[50%] mt-3"
+                    />
+                  </a>
+                </div>
+                <h1 class="pt-4 pb-3 text-3xl font-bold xl:text-5xl md:text-4xl text-center">
+                  <a
+                    class="text-4xl font-extrabold tracking-tight scroll-m-20 lg:text-5xl"
+                    href="/"
+                  >
+                    Share
+                  </a>
                 </h1>
+                <p className="small-caps text-center">
+                  URL Shortener + QR Code Generator
+                </p>
+              </div>
+              <header className="max-w-2xl mt-5">
+                <h2 className="text-3xl font-extrabold tracking-tight scroll-m-20 lg:text-4xl">
+                  Enter The Link!
+                </h2>
               </header>
 
               <article className="max-w-2xl mt-5">
