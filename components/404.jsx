@@ -10,22 +10,19 @@ export const Custom404 = () => {
           name="description"
           content="Whoops, looks like you took a wrong turn. Let's get you back home."
         />
+        <link
+          rel="shortcut icon"
+          href="https://raw.githubusercontent.com/ACES-RMDSSOE/Website/main/images/favicon.ico"
+        />{" "}
       </Head>
       <div className="flex flex-col items-center justify-center min-h-[100dvh] bg-gray-950 dark:bg-gray-950 text-gray-50 p-4">
         <div className="max-w-md w-full space-y-6 text-center">
-          {/* <img
-            src="https://raw.githubusercontent.com/ACES-RMDSSOE/Website/main/images/logo.png"
-            width={320}
-            height={240}
-            alt="ACES Logo"
-            className="mx-auto aspect-video rounded-lg object-cover"
-          /> */}
-          <div class="avatar-container">
+          <div className="avatar-container">
             <a href="https://aces-rmdssoe.tech">
               <img
                 src="https://raw.githubusercontent.com/MadhurJ20/Invoice/master/assets/ACES_Logo.png"
                 alt="ACES Logo"
-                class="avatar"
+                className="avatar"
               />
             </a>
           </div>

@@ -21,6 +21,7 @@ const SortSelect = ({ sortOption, onSortChange }) => {
           <SelectItem value="dateDesc">Date (Descending)</SelectItem>
           <SelectItem value="clicksAsc">Clicks (Ascending)</SelectItem>
           <SelectItem value="clicksDesc">Clicks (Descending)</SelectItem>
+          <SelectItem value="duplicateAsc">Duplicates Only</SelectItem>
         </SelectGroup>
       </SelectContent>
     </Select>

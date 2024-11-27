@@ -51,14 +51,28 @@ export default function Analytics() {
   const [openGraphDialog, setOpenGraphDialog] = useState(false);
   const [sortOption, setSortOption] = useState("dateAsc");
 
+  const inputRef = useRef(null);
   const router = useRouter();
   const { query } = router;
+  const [authenticated, setAuthenticated] = useState(false);
+
+  const addDuplicateCounts = (urls) => {
+    const urlCountMap = urls.reduce((acc, url) => {
+      acc[url.originalUrl] = (acc[url.originalUrl] || 0) + 1;
+      return acc;
+    }, {});
+    return urls.map((url) => {
+      const count = urlCountMap[url.originalUrl] || 0;
+      return { ...url, duplicateCount: count };
+    });
+  };
 
   const fetchUrls = async () => {
     try {
       const res = await fetch("/api/analytics");
       const data = await res.json();
-      setUrls(data); // Store the fetched data in state
+      const processedData = addDuplicateCounts(data);
+      setUrls(processedData); // Store the fetched data in state
     } catch (error) {
       setError("Failed to fetch URLs");
     }
@@ -66,6 +80,18 @@ export default function Analytics() {
 
   useEffect(() => {
     fetchUrls();
+  }, []);
+
+  useEffect(() => {
+    const handleShortcut = (e) => {
+      if (e.altKey && e.key === "l") {
+        inputRef.current?.focus();
+      }
+    };
+    window.addEventListener("keydown", handleShortcut);
+    return () => {
+      window.removeEventListener("keydown", handleShortcut);
+    };
   }, []);
 
   const refreshData = () => {
@@ -157,19 +183,6 @@ export default function Analytics() {
     }
   };
 
-  const inputRef = useRef(null);
-  useEffect(() => {
-    const handleShortcut = (e) => {
-      if (e.altKey && e.key === "l") {
-        inputRef.current?.focus();
-      }
-    };
-    window.addEventListener("keydown", handleShortcut);
-    return () => {
-      window.removeEventListener("keydown", handleShortcut);
-    };
-  }, []);
-
   const downloadCSV = async () => {
     try {
       const res = await fetch("/api/csvAnalytics");
@@ -227,6 +240,10 @@ export default function Analytics() {
         return [...urls].sort((a, b) => a.accesses.count - b.accesses.count);
       case "clicksDesc":
         return [...urls].sort((a, b) => b.accesses.count - a.accesses.count);
+      case "duplicateAsc":
+        return [...urls]
+          .filter((url) => url.duplicateCount > 1)
+          .sort((a, b) => a.duplicateCount - b.duplicateCount);
       default:
         return urls;
     }
@@ -238,6 +255,21 @@ export default function Analytics() {
         url.originalUrl.toLowerCase().includes(searchTerm.toLowerCase())
     )
   );
+
+  useEffect(() => {
+    const cookies = document.cookie.split("; ");
+    const authCookie = cookies.find((cookie) =>
+      cookie.startsWith("authenticated=")
+    );
+    if (authCookie && authCookie.split("=")[1] === "true") {
+      setAuthenticated(true);
+    } else {
+      router.push("/");
+    }
+  }, [router]);
+  if (!authenticated) {
+    return null;
+  }
 
   return (
     <>
