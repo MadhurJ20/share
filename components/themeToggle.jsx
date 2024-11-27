@@ -11,7 +11,6 @@ export const ThemeToggle = () => {
   });
 
   useEffect(() => {
-    // Apply theme on body tag and save it to localStorage
     if (isDarkMode) {
       document.body.classList.add("dark");
       localStorage.setItem("theme", "dark");
@@ -25,6 +24,16 @@ export const ThemeToggle = () => {
 
   useEffect(() => {
     setIsClient(true);
+    const handleShortcut = (event) => {
+      if ((event.ctrlKey || event.metaKey) && event.key === "m") {
+        setIsDarkMode((prev) => !prev);
+      }
+    };
+
+    window.addEventListener("keydown", handleShortcut);
+    return () => {
+      window.removeEventListener("keydown", handleShortcut);
+    };
   }, []);
 
   if (!isClient) return null;

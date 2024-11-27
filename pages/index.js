@@ -10,6 +10,9 @@ import {
   Link,
   Share,
 } from "lucide-react";
+import { LinkIcon } from "lucide-react";
+import { Trash2Icon } from "lucide-react";
+import { SearchIcon } from "lucide-react";
 import Head from "next/head";
 
 import { Nav } from "../components/nav";
@@ -140,6 +143,14 @@ export default function Home() {
     setError("");
   };
 
+  const handleSearchMobile = () => {
+    const event = new KeyboardEvent("keydown", {
+      key: "k",
+      metaKey: true,
+    });
+    document.dispatchEvent(event);
+  };
+
   const downloadQRCode = () => {
     if (qrCodeRef.current) {
       const svgElement = qrCodeRef.current.querySelector("svg");
@@ -228,9 +239,9 @@ export default function Home() {
                     className="hover:underline hover:text-blue-500"
                   >
                     <span>analytics page</span>
-                    <Link className="inline-block w-6 ps-1 pe-1 aspect-square" />
+                    <LinkIcon className="inline-block w-6 ps-1 pe-1 aspect-square" />
                   </a>
-                  .<br className="md:hidden" /> Each link can only be shortened
+                  <br className="md:hidden" /> Each link can only be shortened
                   once{" "}
                   <span className="hidden lg:inline-flex">
                     (Press{" "}
