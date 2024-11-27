@@ -30,7 +30,7 @@ export async function getServerSideProps(context) {
               $slice: -100,
             },
           },
-        }
+        },
       );
 
       // if (!urlDocument.accesses) {

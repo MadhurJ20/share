@@ -99,8 +99,8 @@ export default function Analytics() {
         // Update the URL in state with the new fields
         setUrls(
           urls.map((url) =>
-            url._id === urlId ? { ...url, ...updatedFields } : url
-          )
+            url._id === urlId ? { ...url, ...updatedFields } : url,
+          ),
         );
         toast.success("URL updated successfully!");
       } else {
@@ -166,7 +166,7 @@ export default function Analytics() {
   const filteredUrls = urls.filter(
     (url) =>
       url.shortenUrl.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      url.originalUrl.toLowerCase().includes(searchTerm.toLowerCase())
+      url.originalUrl.toLowerCase().includes(searchTerm.toLowerCase()),
   );
 
   const inputRef = useRef(null);
@@ -463,7 +463,7 @@ export default function Analytics() {
                                   {isNaN(new Date(url.expirationDate).getTime())
                                     ? "Not set"
                                     : new Date(
-                                        url.expirationDate
+                                        url.expirationDate,
                                       ).toLocaleString()}
                                 </span>
                               </span>
