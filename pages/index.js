@@ -1,4 +1,5 @@
 import { useRef, useState } from "react";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 import { QRCodeCanvas, QRCodeSVG } from "qrcode.react";
 import {
   ChartArea,
@@ -201,9 +202,9 @@ export default function Home() {
                     />
                   </a>
                 </div>
-                <h1 class="pt-4 pb-3 text-3xl font-bold xl:text-5xl md:text-4xl text-center">
+                <h1 className="pt-4 pb-3 text-3xl font-bold xl:text-5xl md:text-4xl text-center">
                   <a
-                    class="text-4xl font-extrabold tracking-tight scroll-m-20 lg:text-5xl"
+                    className="text-4xl font-extrabold tracking-tight scroll-m-20 lg:text-5xl"
                     href="/"
                   >
                     Share
@@ -390,6 +391,7 @@ export default function Home() {
             </main>
           </div>
         </div>
+        <SpeedInsights />
       </main>
     </>
   );

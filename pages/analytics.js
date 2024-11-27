@@ -1,6 +1,7 @@
 import { useRouter } from "next/router";
 import { useEffect, useState, useRef } from "react";
 import Head from "next/head";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 
 import {
   ChartSpline,
@@ -253,9 +254,9 @@ export default function Analytics() {
                   />
                 </a>
               </div>
-              <h1 class="pt-4 pb-3 text-3xl font-bold xl:text-5xl md:text-4xl text-center">
+              <h1 className="pt-4 pb-3 text-3xl font-bold xl:text-5xl md:text-4xl text-center">
                 <a
-                  class="text-4xl font-extrabold tracking-tight scroll-m-20 lg:text-5xl"
+                  className="text-4xl font-extrabold tracking-tight scroll-m-20 lg:text-5xl"
                   href="/"
                 >
                   Share
@@ -525,6 +526,7 @@ export default function Analytics() {
             />
           )}
         </div>
+        <SpeedInsights />
       </main>
     </>
   );
