@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 
-const BASE_URL = process.env.BASE_URL || "https://";
+// const BASE_URL = process.env.BASE_URL || "https://";
 const AccessSchema = new mongoose.Schema({
   count: { type: Number, default: 0 },
   lastAccessed: { type: [Date], default: [] },
@@ -48,7 +48,7 @@ const URLSchema = new mongoose.Schema(
       default: true,
     },
   },
-  { timestamps: true, collection: "Links" },
+  { timestamps: true, collection: "Links" }
 );
 
 // TTL index on expirationDate, expires after the date specified in the field

@@ -13,13 +13,13 @@ import { Button } from "@components/ui/button";
 const QRCodeDialog = ({ open, setOpen, shortenUrl }) => {
   const qrCodeRef = useRef(null);
   const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL;
-  console.log(BASE_URL);
 
   const generateQRCodeValue = (url) => {
     if (url && !url.startsWith("http://") && !url.startsWith("https://")) {
-      if (process.env.BASE_URL == "") return `http://${BASE_URL}`;
-      else return `${BASE_URL}${url}`;
+      if (process.env.BASE_URL == "") return `https://${BASE_URL}/${url}`;
+      else return `${BASE_URL}/${url}`;
     }
+    console.log("url: ", url);
     return url;
   };
 
@@ -49,7 +49,7 @@ const QRCodeDialog = ({ open, setOpen, shortenUrl }) => {
             // Replace the image URL with Base64 data in the SVG
             const updatedSvgData = svgData.replace(
               imageUrl,
-              `data:image/png;base64,${base64Image}`,
+              `data:image/png;base64,${base64Image}`
             );
             // Create a new Blob with the updated SVG content
             const updatedSvgBlob = new Blob([updatedSvgData], {

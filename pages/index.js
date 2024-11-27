@@ -51,7 +51,7 @@ export default function Home() {
         new Date(Date.now() + 2 * 365 * 24 * 60 * 60 * 1000)
     ) {
       return toast.error(
-        "Expiration date cannot be more than 2 years from the current date",
+        "Expiration date cannot be more than 2 years from the current date"
       );
     }
 
@@ -65,7 +65,7 @@ export default function Home() {
       new Date(expirationDate) <= new Date(scheduledDate)
     ) {
       return toast.error(
-        "Expiration date cannot be before or equal to scheduled date",
+        "Expiration date cannot be before or equal to scheduled date"
       );
     }
 
@@ -87,7 +87,6 @@ export default function Home() {
       });
 
       const data = await res.json();
-      console.log(data);
       if (!res.ok) throw new Error(data.message);
       setShortUrl(data.shortenUrl);
     } catch (err) {
@@ -102,10 +101,10 @@ export default function Home() {
     }
   };
 
-  const BASE_URL = process.env.BASE_URL || originalUrl;
+  // const BASE_URL = process.env.BASE_URL || originalUrl;
   const generateQRCodeValue = (url) => {
     if (url && !url.startsWith("http://") && !url.startsWith("https://")) {
-      if (process.env.BASE_URL == "") return `https://${BASE_URL}`;
+      if (process.env.BASE_URL == "") return `https://${BASE_URL}/`;
       else return `${url}`;
     }
     return url;
@@ -238,9 +237,8 @@ export default function Home() {
                     (Press{" "}
                     <kbd className="inline-flex items-center p-1 ml-2 mr-2 font-mono text-xs bg-gray-100 rounded ring-1 ring-gray-900/10 dark:bg-zinc-800 dark:ring-gray-900/50 dark:text-zinc-300 whitespace-nowrap">
                       <Command className="inline-block w-3 h-3" />
-                      <span className="text-[.25rem]">
-                        &nbsp;
-                      </span>+<span className="text-[.25rem]">&nbsp;</span>K
+                      <span className="text-[.25rem]">&nbsp;</span>+
+                      <span className="text-[.25rem]">&nbsp;</span>K
                     </kbd>{" "}
                     to see all URLs).
                   </span>
