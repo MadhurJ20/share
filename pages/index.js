@@ -101,7 +101,7 @@ export default function Home() {
     }
   };
 
-  // const BASE_URL = process.env.BASE_URL || originalUrl;
+  const BASE_URL = process.env.BASE_URL || originalUrl;
   const generateQRCodeValue = (url) => {
     if (url && !url.startsWith("http://") && !url.startsWith("https://")) {
       if (process.env.BASE_URL == "") return `https://${BASE_URL}/`;
@@ -172,7 +172,6 @@ export default function Home() {
     }
   };
 
-  // console.log("Look at me: ", generateQRCodeValue(shortenUrl));
   return (
     <>
       <Head>
@@ -353,7 +352,7 @@ export default function Home() {
                         Short url
                       </h2>
                       <a
-                        href={shortenUrl}
+                        href={"https://" + shortenUrl}
                         target="_blank"
                         rel="noopener noreferrer"
                         className="inline-block px-6 py-4 font-mono border rounded-lg text-primary hover:underline"

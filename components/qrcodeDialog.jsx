@@ -19,7 +19,6 @@ const QRCodeDialog = ({ open, setOpen, shortenUrl }) => {
       if (process.env.BASE_URL == "") return `https://${BASE_URL}/${url}`;
       else return `${BASE_URL}/${url}`;
     }
-    console.log("url: ", url);
     return url;
   };
 
