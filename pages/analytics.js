@@ -32,22 +32,31 @@ import QRCodeDialog from "@components/qrcodeDialog";
 import RecentAccessesDialog from "@components/recentAccesses";
 import AccessGraphDialog from "@components/graphDialog";
 import { GradientTop } from "@components/gradientTop";
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectLabel,
+  SelectTrigger,
+  SelectValue,
+} from "@components/ui/select";
 
 export default function Analytics() {
   const [urls, setUrls] = useState([]);
   const [error, setError] = useState("");
   const [searchTerm, setSearchTerm] = useState("");
-  const [clickedButton, setClickedButton] = useState(null);
   const [copiedUrl, setCopiedUrl] = useState(null);
   const [open, setOpen] = useState(false);
   const [urlToDelete, setUrlToDelete] = useState(null);
-  const [openEdit, setOpenEdit] = useState(false);
   const [urlToEdit, setUrlToEdit] = useState(null);
-  const [openQR, setOpenQR] = useState(false);
   const [urlToQRCode, setUrlToQRCode] = useState(null);
-  const [openRecents, setOpenRecents] = useState(false);
   const [selectedUrl, setSelectedUrl] = useState(null);
+  const [openEdit, setOpenEdit] = useState(false);
+  const [openQR, setOpenQR] = useState(false);
+  const [openRecents, setOpenRecents] = useState(false);
   const [openGraphDialog, setOpenGraphDialog] = useState(false);
+  const [sortOption, setSortOption] = useState("dateAsc");
 
   const router = useRouter();
   const { query } = router;
@@ -99,8 +108,8 @@ export default function Analytics() {
         // Update the URL in state with the new fields
         setUrls(
           urls.map((url) =>
-            url._id === urlId ? { ...url, ...updatedFields } : url,
-          ),
+            url._id === urlId ? { ...url, ...updatedFields } : url
+          )
         );
         toast.success("URL updated successfully!");
       } else {
@@ -130,14 +139,6 @@ export default function Analytics() {
     }
   };
 
-  const handleClick = (buttonName, action = () => {}) => {
-    action();
-    setClickedButton(buttonName);
-    setTimeout(() => {
-      setClickedButton(null);
-    }, 1000);
-  };
-
   const handleClickQRCode = (shortenUrl) => {
     setUrlToQRCode(shortenUrl);
     setOpenQR(true);
@@ -162,12 +163,6 @@ export default function Analytics() {
       setOpenGraphDialog(false);
     }
   };
-
-  const filteredUrls = urls.filter(
-    (url) =>
-      url.shortenUrl.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      url.originalUrl.toLowerCase().includes(searchTerm.toLowerCase()),
-  );
 
   const inputRef = useRef(null);
   useEffect(() => {
@@ -225,6 +220,31 @@ export default function Analytics() {
       }
     }, 500);
   }, [query.id]);
+  const sortUrls = (urls) => {
+    switch (sortOption) {
+      case "dateAsc":
+        return [...urls].sort(
+          (a, b) => new Date(a.createdAt) - new Date(b.createdAt)
+        );
+      case "dateDesc":
+        return [...urls].sort(
+          (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
+        );
+      case "clicksAsc":
+        return [...urls].sort((a, b) => a.accesses.count - b.accesses.count);
+      case "clicksDesc":
+        return [...urls].sort((a, b) => b.accesses.count - a.accesses.count);
+      default:
+        return urls;
+    }
+  };
+  const filteredUrls = sortUrls(
+    urls.filter(
+      (url) =>
+        url.shortenUrl.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        url.originalUrl.toLowerCase().includes(searchTerm.toLowerCase())
+    )
+  );
 
   return (
     <>
@@ -242,7 +262,7 @@ export default function Analytics() {
         <Nav />
 
         <div className="relative w-full py-24 overflow-x-hidden">
-          <div className="container py-10 mx-auto lg:py-16">
+          <div className="w-full px-[1.15rem] py-10 mx-auto lg:px-8 lg:py-16">
             <div className="header">
               <div className="flex justify-center items-center">
                 <a href="https://aces-rmdssoe.tech">
@@ -270,7 +290,7 @@ export default function Analytics() {
               <h2 className="text-3xl font-extrabold tracking-tight scroll-m-20 lg:text-4xl">
                 Analytics
               </h2>
-              <div className="flex space-x-4">
+              <div className="flex space-x-2">
                 <Button
                   variant="outline"
                   className="-mb-8 group"
@@ -306,6 +326,26 @@ export default function Analytics() {
               </section>
             </header>
             {error && <p style={{ color: "red" }}>{error}</p>}
+            <section className="flex items-center my-4 ml-4 space-x-4">
+              <Select value={sortOption} onValueChange={setSortOption}>
+                <SelectTrigger className="w-[180px]">
+                  <SelectValue placeholder="Sort by" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectGroup>
+                    <SelectLabel>Sort Options</SelectLabel>
+                    <SelectItem value="dateAsc">Date (Ascending)</SelectItem>
+                    <SelectItem value="dateDesc">Date (Descending)</SelectItem>
+                    <SelectItem value="clicksAsc">
+                      Clicks (Ascending)
+                    </SelectItem>
+                    <SelectItem value="clicksDesc">
+                      Clicks (Descending)
+                    </SelectItem>
+                  </SelectGroup>
+                </SelectContent>
+              </Select>
+            </section>
             {urls.length > 0 ? (
               <ul className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-3">
                 {filteredUrls.map((url) => {
@@ -347,10 +387,8 @@ export default function Analytics() {
 
                             <img
                               src={`http://www.google.com/s2/favicons?sz=64&domain=${url.originalUrl}`}
-                              width="35"
-                              height="35"
                               alt="L"
-                              className="block rounded aspect-square"
+                              className="block rounded !aspect-square h-10"
                               loading="lazy"
                             />
                           </aside>
@@ -362,7 +400,7 @@ export default function Analytics() {
                               href={url.originalUrl}
                               target="_blank"
                               rel="noopener noreferrer"
-                              className="inline-block px-3 py-1.5 font-mono border rounded-lg text-primary hover:underline overflow-x-auto max-w-[150px] scrollbar-none whitespace-nowrap"
+                              className="inline-block px-3 py-1.5 font-mono border rounded-lg text-primary hover:underline overflow-x-auto max-w-[128px] scrollbar-none whitespace-nowrap"
                             >
                               {url.originalUrl}
                             </a>
@@ -384,7 +422,6 @@ export default function Analytics() {
                               type="button"
                               variant="outline"
                               onClick={() => {
-                                console.log(url);
                                 setUrlToEdit(url);
                                 setOpenEdit(true);
                               }}
@@ -397,7 +434,7 @@ export default function Analytics() {
                         </h2>
                       </header>
                       <section className="flex justify-between gap-2">
-                        <article className="flex flex-col my-4 space-y-1 text-sm *:flex *:items-center *:space-x-2">
+                        <article className="flex flex-col my-4 space-y-1 text-sm *:flex *:items-center *:space-x-2 *:truncate">
                           <span className="">
                             <Calendar className="w-4 h-4" />{" "}
                             <span className="text-muted-foreground">
@@ -420,13 +457,13 @@ export default function Analytics() {
                         <aside className="flex flex-col items-end space-y-2">
                           <Button
                             type="button"
-                            className="mt-2"
+                            className="mt-1"
                             variant="outline"
                             onClick={() => handleShowRecents(url)}
                           >
                             <span className="flex">Recents</span>
                           </Button>
-                          <div className="flex items-center mt-2 space-x-2">
+                          <div className="flex items-center gap-2 mt-2">
                             <Button
                               type="button"
                               variant="outline"
@@ -463,7 +500,7 @@ export default function Analytics() {
                                   {isNaN(new Date(url.expirationDate).getTime())
                                     ? "Not set"
                                     : new Date(
-                                        url.expirationDate,
+                                        url.expirationDate
                                       ).toLocaleString()}
                                 </span>
                               </span>
