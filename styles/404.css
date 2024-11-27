@@ -1,0 +1,24 @@
+.avatar-container {
+  position: absolute;
+  top: 5%; /* Adjust this value as needed to position the image on top of the header */
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%; /* Ensure the container spans the full width of the header */
+  height: auto;
+}
+
+.avatar {
+  width: 10vw; /* Use viewport width for responsiveness */
+  height: auto; /* Maintain aspect ratio */
+  max-width: 150px; /* Set a maximum size */
+  border-radius: 50%;
+}
+@media (max-width: 600px) {
+  .avatar {
+    width: 40vw; /* Adjust size for smaller screens */
+    max-width: 150px; /* Adjust maximum size */
+  }
+}
