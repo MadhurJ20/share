@@ -242,7 +242,7 @@ export default function Analytics() {
 
         <div className="relative w-full py-24 overflow-x-hidden">
           <div className="container py-10 mx-auto lg:py-16">
-            <div class="header">
+            <div className="header">
               <div className="flex justify-center items-center">
                 <a href="https://aces-rmdssoe.tech">
                   <img

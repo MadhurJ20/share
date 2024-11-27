@@ -190,7 +190,7 @@ export default function Home() {
         <div className="relative w-full py-24 overflow-x-hidden">
           <div className="container relative py-10 lg:py-16">
             <main className="max-w-2xl mx-auto text-center">
-              <div class="header">
+              <div className="header">
                 <div className="flex justify-center items-center">
                   <a href="https://aces-rmdssoe.tech">
                     <img

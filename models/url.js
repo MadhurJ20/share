@@ -48,7 +48,7 @@ const URLSchema = new mongoose.Schema(
       default: true,
     },
   },
-  { timestamps: true }
+  { timestamps: true, collection: "Links" }
 );
 
 // TTL index on expirationDate, expires after the date specified in the field
