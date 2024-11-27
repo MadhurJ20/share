@@ -7,12 +7,12 @@ import {
   Copy,
   Github,
   HomeIcon,
-  Link,
   Share,
+  LinkIcon,
+  Trash2Icon,
+  SearchIcon,
+  Command,
 } from "lucide-react";
-import { LinkIcon } from "lucide-react";
-import { Trash2Icon } from "lucide-react";
-import { SearchIcon } from "lucide-react";
 import Head from "next/head";
 
 import { Nav } from "../components/nav";
@@ -21,9 +21,7 @@ import { Button } from "../components/ui/button";
 import { toast } from "sonner";
 import { ImageDown } from "lucide-react";
 import SearchUrls from "@components/searchURL";
-import { Command } from "lucide-react";
 import { GradientTop } from "@components/gradientTop";
-import { title } from "process";
 
 export default function Home() {
   const [originalUrl, setOriginalUrl] = useState("");
@@ -108,7 +106,7 @@ export default function Home() {
   const generateQRCodeValue = (url) => {
     if (url && !url.startsWith("http://") && !url.startsWith("https://")) {
       if (process.env.BASE_URL == "") return `https://${BASE_URL}/`;
-      else return `${url}`;
+      else return `https://${url}`;
     }
     return url;
   };
@@ -379,10 +377,10 @@ export default function Home() {
                         Short url
                       </h2>
                       <a
-                        href={"https://" + shortenUrl}
+                        href={generateQRCodeValue(shortenUrl)}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="inline-block px-6 py-4 font-mono border rounded-lg text-primary hover:underline"
+                        className="z-10 inline-block px-6 py-4 font-mono border rounded-lg text-primary hover:underline"
                       >
                         {shortenUrl}
                       </a>

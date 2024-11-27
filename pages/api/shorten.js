@@ -66,7 +66,7 @@ export default async function handler(req, res) {
     });
 
     const createdUrl = await Url.findById(newUrl._id);
-    console.log(createdUrl);
+    // console.log(createdUrl);
 
     res
       .status(201)
