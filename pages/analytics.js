@@ -22,18 +22,20 @@ import {
   RefreshCcw,
 } from "lucide-react";
 
-import { Nav } from "@components/nav";
-import { Input } from "@components/ui/input";
-import { Button } from "@components/ui/button";
 import { toast } from "sonner";
-import { DeleteUrlDialog } from "@components/deleteUrl";
-import { EditUrlDialog } from "@components/editUrl";
-import QRCodeDialog from "@components/qrcodeDialog";
-import RecentAccessesDialog from "@components/recentAccesses";
-import AccessGraphDialog from "@components/graphDialog";
-import { GradientTop } from "@components/gradientTop";
-import { URLStatus } from "@components/linkStatus";
-import SortSelect from "@components/analyticsSort";
+import {
+  Nav,
+  Input,
+  Button,
+  SortSelect,
+  URLStatus,
+  GradientTop,
+  DeleteUrlDialog,
+  EditUrlDialog,
+  QRCodeDialog,
+  RecentAccessesDialog,
+  AccessGraphDialog,
+} from "@components/index";
 
 export default function Analytics() {
   const [urls, setUrls] = useState([]);
@@ -302,7 +304,7 @@ export default function Analytics() {
               <h1 className="pt-4 pb-3 text-3xl font-bold xl:text-5xl md:text-4xl text-center">
                 <a
                   className="text-4xl font-extrabold tracking-tight scroll-m-20 lg:text-5xl"
-                  href="/"
+                  href="/share"
                 >
                   Share
                 </a>

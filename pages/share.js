@@ -249,7 +249,7 @@ export default function Home() {
                 <h1 className="pt-4 pb-3 text-3xl font-bold xl:text-5xl md:text-4xl text-center">
                   <a
                     className="text-4xl font-extrabold tracking-tight scroll-m-20 lg:text-5xl"
-                    href="/"
+                    href="/share"
                   >
                     Share
                   </a>
