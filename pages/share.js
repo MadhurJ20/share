@@ -1,4 +1,5 @@
-import { useRef, useState } from "react";
+import { useRouter } from "next/router";
+import { useRef, useState, useEffect } from "react";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import { QRCodeCanvas, QRCodeSVG } from "qrcode.react";
 import {
@@ -12,6 +13,7 @@ import {
   Trash2Icon,
   SearchIcon,
   Command,
+  ImageDown,
 } from "lucide-react";
 import Head from "next/head";
 
@@ -19,11 +21,8 @@ import { Nav } from "../components/nav";
 import { Input } from "../components/ui/input";
 import { Button } from "../components/ui/button";
 import { toast } from "sonner";
-import { ImageDown } from "lucide-react";
 import SearchUrls from "@components/searchURL";
 import { GradientTop } from "@components/gradientTop";
-import { useRouter } from "next/router";
-import { useEffect } from "react";
 
 export default function Home() {
   const [originalUrl, setOriginalUrl] = useState("");
