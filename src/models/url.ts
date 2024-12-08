@@ -35,6 +35,7 @@ const URLSchema = new mongoose.Schema(
       type: String,
       unique: true,
       sparse: true,
+      trim: true,
     },
     accesses: {
       type: AccessSchema,
@@ -46,12 +47,15 @@ const URLSchema = new mongoose.Schema(
     expirationDate: { type: Date, default: undefined },
     scheduledDate: { type: Date, default: null },
     isActive: { type: Boolean, default: true },
+    isDeleted: { type: Boolean, default: false },
+    deletedAt: { type: Date, default: null },
   },
   { timestamps: true, collection: "Links" }
 );
 
 // TTL index on expirationDate, expires after the date specified in the field
 URLSchema.index({ expirationDate: 1 }, { expireAfterSeconds: 0 });
+URLSchema.index({ deletedAt: 1 }, { expireAfterSeconds: 3600 });
 
 URLSchema.index({ originalUrl: 1 });
 URLSchema.index({ shortenUrl: 1 });
