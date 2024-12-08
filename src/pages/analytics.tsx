@@ -291,7 +291,8 @@ export default function Analytics() {
         <Nav />
         <Button
           size="icon"
-          className="fixed backdrop-blur bg-[#fffa] z-10 shadow rounded-full bottom-4 dark:border left-4 dark:bg-[#09090b]"
+          variant="secondary"
+          className="fixed backdrop-blur bg-[#fffa] z-10 shadow rounded-full bottom-4 border left-4 dark:bg-[#09090b]"
           onClick={refreshData}
         >
           <RefreshCcw className="w-4 h-4 text-black dark:text-white" />
