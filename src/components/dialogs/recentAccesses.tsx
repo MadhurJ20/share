@@ -18,8 +18,18 @@ import {
   FaLaptop,
 } from "react-icons/fa";
 import { PiDevicesLight } from "react-icons/pi";
+import { Access } from "@/types/types";
 
-const RecentAccessesDialog = ({ open, setOpen, recentAccesses }) => {
+interface RecentAccessesDialogProps {
+  open: boolean;
+  setOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  recentAccesses: Access[];
+}
+const RecentAccessesDialog = ({
+  open,
+  setOpen,
+  recentAccesses,
+}: RecentAccessesDialogProps) => {
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 10;
   const totalPages = Math.ceil(recentAccesses.length / itemsPerPage);
@@ -29,13 +39,13 @@ const RecentAccessesDialog = ({ open, setOpen, recentAccesses }) => {
     currentPage * itemsPerPage
   );
 
-  const goToPage = (page) => {
+  const goToPage = (page: number) => {
     if (page < 1 || page > totalPages) return;
     setCurrentPage(page);
   };
 
   // Detect Browser Icon based on the userAgent
-  const getBrowserIcon = (userAgent) => {
+  const getBrowserIcon = (userAgent: string) => {
     if (/Chrome/i.test(userAgent)) {
       return <FaChrome className="" />;
     } else if (/Firefox/i.test(userAgent)) {
@@ -47,7 +57,7 @@ const RecentAccessesDialog = ({ open, setOpen, recentAccesses }) => {
     }
     return <FaChrome className="" />;
   };
-  const getDeviceType = (userAgent) => {
+  const getDeviceType = (userAgent: string) => {
     if (/mobile/i.test(userAgent)) return <FaMobileAlt className="" />;
     return <FaLaptop className="" />;
   };

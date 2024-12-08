@@ -13,7 +13,7 @@ export const Custom404 = () => {
         <link
           rel="shortcut icon"
           href="https://raw.githubusercontent.com/ACES-RMDSSOE/Website/main/images/favicon.ico"
-        />{" "}
+        />
       </Head>
       <div className="flex flex-col items-center justify-center min-h-[100dvh] bg-gray-950 dark:bg-gray-950 text-gray-50 p-4">
         <div className="max-w-md w-full space-y-6 text-center">

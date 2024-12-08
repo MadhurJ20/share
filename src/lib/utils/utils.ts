@@ -1,8 +1,10 @@
 import { toast } from "sonner";
+
 export const downloadCSV = async (): Promise<void> => {
   try {
     const res = await fetch("/api/csvAnalytics");
     if (!res.ok) throw new Error("Failed to fetch CSV");
+
     // Create a blob from the response and trigger the download
     const csvBlob = await res.blob();
     const csvUrl = URL.createObjectURL(csvBlob);
@@ -12,11 +14,13 @@ export const downloadCSV = async (): Promise<void> => {
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
+
     toast.success("CSV file downloaded!");
   } catch (error) {
     toast.error("Error downloading CSV");
   }
 };
+
 export const downloadQRCode = async (
   qrCodeRef: React.RefObject<HTMLElement>,
   shortenUrl: string
@@ -25,14 +29,17 @@ export const downloadQRCode = async (
     const svgElement = qrCodeRef.current.querySelector("svg");
     if (svgElement) {
       const svgData: string = new XMLSerializer().serializeToString(svgElement);
+
       // Find the image tag within the SVG and fetch the image as a Blob
       const imageElement = svgElement.querySelector("image");
       if (imageElement && imageElement.href.baseVal) {
-        Url: string = imageElement.href.baseVal;
+        const imageUrl: string = imageElement.href.baseVal;
+
         // Fetch the image and convert it to Base64
         const imageResponse = await fetch(imageUrl);
         const imageBlob = await imageResponse.blob();
         const reader = new FileReader();
+
         reader.onloadend = () => {
           if (!reader.result || typeof reader.result !== "string") return;
           // Get the Base64 encoded image data
@@ -44,19 +51,20 @@ export const downloadQRCode = async (
             `data:image/png;base64,${base64Image}`
           );
           // Create a new Blob with the updated SVG content
-          const updatedSvgData: string = svgData.replace(
-            imageUrl,
-            `data:image/png;base64,${base64Image}`
-          );
+          const updatedSvgBlob: Blob = new Blob([updatedSvgData], {
+            type: "image/svg+xml",
+          });
           // Create a canvas to draw the SVG
           const canvas: HTMLCanvasElement = document.createElement("canvas");
           const ctx: CanvasRenderingContext2D | null = canvas.getContext("2d");
           const img: HTMLImageElement = new Image();
+
           img.onload = function () {
             canvas.width = img.width;
             canvas.height = img.height;
             // @ts-ignore
             ctx.drawImage(img, 0, 0);
+
             // Convert to PNG and trigger download
             const pngUrl: string = canvas.toDataURL("image/png");
             const a: HTMLAnchorElement = document.createElement("a");
@@ -64,8 +72,10 @@ export const downloadQRCode = async (
             a.download = `qr-code_${shortenUrl}.png`;
             a.click();
           };
+
           img.src = URL.createObjectURL(updatedSvgBlob);
         };
+
         reader.readAsDataURL(imageBlob);
       }
     }

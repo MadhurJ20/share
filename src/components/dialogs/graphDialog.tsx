@@ -9,6 +9,7 @@ import {
 import { Button } from "@components/ui/button";
 import dynamic from "next/dynamic";
 import { Access, Accesses } from "@/types/types";
+import { ApexOptions } from "apexcharts";
 
 const Chart = dynamic(() => import("react-apexcharts"), { ssr: false });
 
@@ -22,8 +23,8 @@ const AccessGraphDialog = ({
   setOpen,
   recentAccesses,
 }: AccessGraphDialogProps) => {
-  const groupByWeek = (accesses) => {
-    const weeks = {};
+  const groupByWeek = (accesses: Access[]) => {
+    const weeks: { [key: string]: { week: string; count: number } } = {};
 
     accesses.forEach((access) => {
       const date = new Date(access.date);
@@ -34,7 +35,8 @@ const AccessGraphDialog = ({
       const month = startOfWeek.getMonth();
       const firstDayOfYear = new Date(year, 0, 1);
       const dayOfYear = Math.floor(
-        (startOfWeek - firstDayOfYear) / (24 * 60 * 60 * 1000)
+        (startOfWeek.getTime() - firstDayOfYear.getTime()) /
+          (24 * 60 * 60 * 1000)
       );
       const weekNumber = Math.ceil((dayOfYear + 1) / 7);
       const weekKey = `${year}-W${
@@ -105,10 +107,11 @@ const AccessGraphDialog = ({
       dataLabels: {
         enabled: true,
       },
-    },
+    } as ApexOptions,
   };
 
   return (
+    // @ts-ignore
     <Dialog open={open} onOpenChange={setOpen} className="w-full md:w-1/2">
       <DialogContent className="rounded max-w-[80%]">
         <DialogHeader>
