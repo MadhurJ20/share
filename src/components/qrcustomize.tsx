@@ -12,7 +12,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@components/ui/select";
-import { DownloadIcon } from "lucide-react";
+import { ChevronDown, DownloadIcon } from "lucide-react";
+import { SelectIcon } from "@radix-ui/react-select";
 
 export const CustomQR = ({ url }: { url: string }) => {
   const [options, setOptions] = useState<Options>({
@@ -94,6 +95,9 @@ export const CustomQR = ({ url }: { url: string }) => {
           <Select value={fileExt} onValueChange={onExtensionChange}>
             <SelectTrigger className="min-w-24">
               <SelectValue placeholder="Select file format" />
+              <SelectIcon asChild>
+                <ChevronDown className="w-4 h-4 opacity-50" />
+              </SelectIcon>
             </SelectTrigger>
             <SelectContent className="text-sm">
               <SelectGroup>
@@ -197,6 +201,9 @@ export const CustomQR = ({ url }: { url: string }) => {
             >
               <SelectTrigger>
                 <SelectValue placeholder="Choose Dot Type" />
+                <SelectIcon asChild>
+                  <ChevronDown className="w-4 h-4 opacity-50" />
+                </SelectIcon>
               </SelectTrigger>
               <SelectContent>
                 <SelectItem value="square">Square</SelectItem>
@@ -222,6 +229,9 @@ export const CustomQR = ({ url }: { url: string }) => {
             >
               <SelectTrigger>
                 <SelectValue placeholder="Select Corner Type" />
+                <SelectIcon asChild>
+                  <ChevronDown className="w-4 h-4 opacity-50" />
+                </SelectIcon>
               </SelectTrigger>
               <SelectContent>
                 <SelectItem value="square">Square</SelectItem>
@@ -244,6 +254,9 @@ export const CustomQR = ({ url }: { url: string }) => {
             >
               <SelectTrigger>
                 <SelectValue placeholder="Select Corner Dot Type" />
+                <SelectIcon asChild>
+                  <ChevronDown className="w-4 h-4 opacity-50" />
+                </SelectIcon>
               </SelectTrigger>
               <SelectContent>
                 <SelectItem value="square">Square</SelectItem>
