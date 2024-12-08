@@ -1,13 +1,16 @@
 import { PiStackDuotone } from "react-icons/pi";
+
 // Update the URL type to allow `undefined` for expirationDate and scheduledDate
 type URL = {
   expirationDate?: Date;
   scheduledDate: Date | null;
   duplicateCount: number;
 };
+
 interface URLStatusProps {
   url: URL;
 }
+
 export const URLStatus = ({ url }: URLStatusProps) => {
   let expirationStatus;
   if (url.expirationDate) {
@@ -38,12 +41,15 @@ export const URLStatus = ({ url }: URLStatusProps) => {
       </span>
     );
   }
+
+  const isScheduledLive =
+    !url.scheduledDate || new Date(url.scheduledDate) <= new Date();
   return (
     <section className="flex justify-between gap-2">
       <article className="flex flex-col mb-4 mt-2 space-y-1 text-sm *:flex *:items-center *:space-x-2">
         <span className="">{expirationStatus}</span>
         <span className="">
-          {url.scheduledDate && new Date(url.scheduledDate) <= new Date() ? (
+          {isScheduledLive ? (
             <span className="px-2 py-.5 mt-1 font-bold rounded-lg bg-green-400/20 small-caps text-green-500/80">
               Live
             </span>

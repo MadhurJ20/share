@@ -17,6 +17,7 @@ import {
 } from "lucide-react";
 import Head from "next/head";
 import Link from "next/link";
+import { CustomQR } from "@/components/qrcustomize";
 
 import { Nav } from "@components/nav";
 import { Input } from "@components/ui/input";
@@ -377,24 +378,7 @@ export default function Home() {
                       className="p-3 bg-white rounded-lg shadow"
                       ref={qrCodeRef}
                     >
-                      <QRCodeSVG
-                        value={generateQRCodeValue(shortenUrl)}
-                        title={"Scan me!"}
-                        size={128}
-                        bgColor={"#ffffff"}
-                        fgColor={"#000000"}
-                        level={"H"}
-                        marginSize={1}
-                        imageSettings={{
-                          src: "https://raw.githubusercontent.com/ACES-RMDSSOE/Website/main/images/favicon.ico",
-                          x: undefined,
-                          y: undefined,
-                          height: 24,
-                          width: 24,
-                          opacity: 1,
-                          excavate: true,
-                        }}
-                      />
+                      <CustomQR url={generateQRCodeValue(shortenUrl)} />
                     </footer>
                   </div>
                 )}

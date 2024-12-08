@@ -275,7 +275,7 @@ export default function Analytics() {
               <div className="flex space-x-2">
                 <Button
                   variant="outline"
-                  className="-mb-8 group"
+                  className="-mb-8 dark:bg-transparent group"
                   onClick={downloadCSV}
                 >
                   <Database className="w-4 h-4 mr-2 group-hover:animate-pulse" />{" "}
@@ -283,7 +283,7 @@ export default function Analytics() {
                 </Button>
                 <Button
                   variant="outline"
-                  className="-mb-5 group"
+                  className="-mb-5 group dark:bg-transparent"
                   onClick={refreshData}
                 >
                   <RefreshCcw className="w-4 h-4 mr-2 group-hover:animate-spin" />{" "}
