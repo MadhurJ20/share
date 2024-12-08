@@ -63,7 +63,7 @@ export default function Home() {
             value={passcode}
             onChange={(e) => setPasscode(e.target.value)}
             placeholder="Enter passcode"
-            className="text-base"
+            className="text-base winter:bg-background/80 winter:border-winter-300/50"
           />
           <section className="flex space-x-3">
             <Button

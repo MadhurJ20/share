@@ -214,13 +214,13 @@ export default function Home() {
                   </Link>
                   <br className="md:hidden" />
                   <span className="hidden lg:inline-flex">
-                    (Press{" "}
+                    (Press
                     <kbd className="inline-flex items-center p-1 ml-2 mr-2 font-mono text-xs bg-gray-100 rounded ring-1 ring-gray-900/10 dark:bg-zinc-800 dark:ring-gray-900/50 dark:text-zinc-300 whitespace-nowrap">
                       <Command className="inline-block w-3 h-3" />
                       <span className="text-[.25rem]">&nbsp;</span>+
                       <span className="text-[.25rem]">&nbsp;</span>K
-                    </kbd>{" "}
-                    to see all URLs).
+                    </kbd>
+                    to search for existing URLs).
                   </span>
                 </p>
               </article>
