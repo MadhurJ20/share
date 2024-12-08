@@ -1,0 +1,61 @@
+{
+  "compilerOptions": {
+    "target": "ES2020",
+    "module": "ESNext",
+    "moduleResolution": "bundler",
+    "lib": ["dom", "dom.iterable", "esnext"],
+    "jsx": "preserve",
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "strict": true,
+    "noImplicitAny": true,
+    "strictNullChecks": true,
+    "resolveJsonModule": true,
+    "baseUrl": ".",
+    "paths": {
+      "@/*": [
+        "./src/*",
+        "./src/components/*",
+        "./src/components/ui/*",
+        "./src/models/*",
+        "./src/pages/*",
+        "./src/styles/*",
+        "./src/lib/utils/*",
+        "./src/hooks/*",
+        "./src/types/*"
+      ],
+      "@components/*": ["src/components/*"],
+      "@components/ui/*": ["src/components/ui/*"],
+      "@models/*": ["src/models/*"],
+      "@pages/*": ["src/pages/*"],
+      "@styles/*": ["src/styles/*"],
+      "@utils/*": ["src/lib/utils/*"],
+      "@lib/*": ["src/lib/*"],
+      "@hooks/*": ["src/hooks/*"],
+      "types/*": ["src/types/*"]
+    },
+    "forceConsistentCasingInFileNames": true,
+    // "noUnusedLocals": true,
+    // "noUnusedParameters": true,
+    "noImplicitReturns": true,
+    "noFallthroughCasesInSwitch": true,
+    "noEmitOnError": true,
+    "allowJs": true,
+    "checkJs": true,
+    "noEmit": true,
+    "isolatedModules": true,
+    "incremental": true,
+    "tsBuildInfoFile": "./.tsbuildinfo"
+  },
+  "include": [
+    "src/components/**/*",
+    "src/models/**/*",
+    "src/pages/**/*",
+    "src/hooks/**/*",
+    "src/styles/**/*",
+    "src/lib/utils/**/*",
+    "docs/**/*",
+    "next-env.d.ts"
+  ],
+  "exclude": ["node_modules", "dist", ".next", ".vercel", "public", "build"]
+}
