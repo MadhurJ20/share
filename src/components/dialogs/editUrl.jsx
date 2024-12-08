@@ -35,13 +35,10 @@ export function EditUrlDialog({ open, setOpen, urlToEdit, handleEdit }) {
     if (!date) return "";
     const localDate = new Date(date);
     // Adjust to local timezone using toLocaleString and format it back to input format
-    return localDate
-      .toLocaleString("sv-SE", {
-        timeZoneName: "short",
-        hour12: false,
-      })
-      .replace(" ", "T")
-      .slice(0, 16); // Convert to "YYYY-MM-DDTHH:MM" format
+    return localDate.toLocaleString("sv-SE", {
+      timeZoneName: "short",
+      hour12: false,
+    }); // Convert to "YYYY-MM-DDTHH:MM" format
   };
 
   const handleCancel = () => {
