@@ -77,7 +77,7 @@ export function EditUrlDialog({ open, setOpen, urlToEdit, handleEdit }) {
           <DialogTitle>Edit Shortened URL</DialogTitle>
           <DialogDescription>
             Modify the shortened URL and expiration/scheduled dates. Make sure
-            shortened URL field isn't empty
+            shortened URL field isn&apos;t empty
           </DialogDescription>
         </DialogHeader>
 

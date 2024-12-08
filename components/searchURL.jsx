@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { useState, useEffect } from "react";
+import { useCallback, useMemo, useState, useEffect } from "react";
 import {
   Command,
   CommandEmpty,
@@ -10,48 +10,54 @@ import {
   CommandList,
   CommandDialog,
 } from "@components/ui/command";
+import { DialogDescription, DialogTitle } from "./ui/dialog";
 import { LinkIcon, ExternalLinkIcon } from "lucide-react";
 
 const SearchUrls = () => {
   const [error, setError] = useState("");
   const [urls, setUrls] = useState([]);
   const [open, setOpen] = useState(false);
-  const [selectedIndex, setSelectedIndex] = useState(0); // Track the selected item index
+  const [selectedIndex, setSelectedIndex] = useState(0);
   const [searchQuery, setSearchQuery] = useState("");
   const router = useRouter();
 
-  useEffect(() => {
-    const fetchUrls = async () => {
-      try {
-        const res = await fetch("/api/analytics");
-        const data = await res.json();
-        setUrls(data);
-      } catch (error) {
-        setError("Failed to fetch URLs");
-      }
-    };
-
-    fetchUrls();
-  }, []);
-
-  // Filter URLs based on search query
-  const filteredUrls = urls.filter(
-    (url) =>
-      url.originalUrl.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      url.shortenUrl.toLowerCase().includes(searchQuery.toLowerCase()),
-  );
-
-  const handleKeyDown = (e) => {
-    if (e.key === "Enter" && filteredUrls.length > 0) {
-      const selectedUrl = filteredUrls[selectedIndex];
-      // window.open(`/analytics?id=${selectedUrl._id}`, "_blank");
-    }
-
-    if (e.key === "k" && (e.metaKey || e.ctrlKey || e.altKey)) {
-      e.preventDefault();
-      setOpen((prev) => !prev);
+  const fetchUrls = async () => {
+    try {
+      const res = await fetch("/api/analytics");
+      const data = await res.json();
+      setUrls(data);
+    } catch (error) {
+      setError("Failed to fetch URLs");
     }
   };
+
+  useEffect(() => {
+    if (open) fetchUrls();
+  }, [open]);
+
+  const filteredUrls = useMemo(
+    () =>
+      urls.filter(
+        (url) =>
+          url.originalUrl.toLowerCase().includes(searchQuery.toLowerCase()) ||
+          url.shortenUrl.toLowerCase().includes(searchQuery.toLowerCase())
+      ),
+    [urls, searchQuery]
+  );
+
+  const handleKeyDown = useCallback(
+    (e) => {
+      if (e.key === "Enter" && filteredUrls.length > 0) {
+        const selectedUrl = filteredUrls[selectedIndex];
+      }
+
+      if (e.key === "k" && (e.metaKey || e.ctrlKey || e.altKey)) {
+        e.preventDefault();
+        setOpen((prev) => !prev);
+      }
+    },
+    [filteredUrls, selectedIndex]
+  );
 
   const handleSearchChange = (e) => {
     setSearchQuery(e.target.value);
@@ -62,14 +68,17 @@ const SearchUrls = () => {
     return () => {
       document.removeEventListener("keydown", handleKeyDown);
     };
-  }, [filteredUrls, selectedIndex]);
+  }, [filteredUrls, selectedIndex, handleKeyDown]);
 
   return (
     <CommandDialog
       open={open}
       onOpenChange={setOpen}
       className="border rounded-lg max-w-3/4 lg:w-1/4"
+      aria-describedby={undefined}
     >
+      <DialogTitle className="hidden"></DialogTitle>
+      <DialogDescription className="hidden"></DialogDescription>
       <CommandInput
         placeholder="Search for a link..."
         onChange={handleSearchChange}
@@ -84,8 +93,7 @@ const SearchUrls = () => {
               <CommandItem
                 key={index}
                 onSelect={() => {
-                  router.push(`/analytics?id=${url._id}`); // Redirect when item is selected
-                  // window.open(`/analytics?id=${url._id}`, "_blank");
+                  router.push(`/analytics?id=${url._id}`);
                 }}
                 className="border-b last:border-b-0"
               >
@@ -95,7 +103,8 @@ const SearchUrls = () => {
                     width="32"
                     height="32"
                     alt="L"
-                    className="block rounded aspect-square "
+                    loading="lazy"
+                    className="block rounded aspect-square"
                   />
                   <section className="flex flex-col space-y-2">
                     <main className="flex items-center space-x-3 font-mono">
@@ -113,11 +122,11 @@ const SearchUrls = () => {
                       <LinkIcon className="w-4 h-4" />
                       <Link
                         href={`/analytics?id=${url._id}`}
+                        passHref
                         target="_blank"
                         className="text-[.75rem] hover:underline"
-                        passHref
                       >
-                        {url.shortenUrl}
+                        {url.shortenUrl}{" "}
                       </Link>
                     </div>
                   </section>
