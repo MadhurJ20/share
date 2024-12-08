@@ -16,6 +16,7 @@ import {
   ImageDown,
 } from "lucide-react";
 import Head from "next/head";
+import Link from "next/link";
 
 import { Nav } from "@components/nav";
 import { Input } from "@components/ui/input";
@@ -178,22 +179,22 @@ export default function Home() {
             <main className="max-w-2xl mx-auto text-center">
               <div className="header">
                 <div className="flex justify-center items-center">
-                  <a href="https://aces-rmdssoe.tech">
+                  <Link href="https://aces-rmdssoe.tech">
                     <img
                       src="https://raw.githubusercontent.com/ACES-RMDSSOE/Website/main/images/logo.png"
                       alt="ACES Logo"
                       border="0"
                       className="w-[7em] h-[7em] rounded-[50%] mt-3"
                     />
-                  </a>
+                  </Link>
                 </div>
                 <h1 className="pt-4 pb-3 text-3xl font-bold xl:text-5xl md:text-4xl text-center">
-                  <a
+                  <Link
                     className="text-4xl font-extrabold tracking-tight scroll-m-20 lg:text-5xl"
                     href="/share"
                   >
                     Share
-                  </a>
+                  </Link>
                 </h1>
                 <p className="small-caps text-center">
                   URL Shortener + QR Code Generator
@@ -307,12 +308,12 @@ export default function Home() {
                     variant="outline"
                     className="hidden lg:block"
                   >
-                    <a
+                    <Link
                       className="flex w-4 aspect-square"
                       href="https://github.com/ACES-RMDSSOE/share"
                     >
                       <Github />
-                    </a>
+                    </Link>
                   </Button>
                   <Button
                     type="button"

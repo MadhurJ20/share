@@ -1,6 +1,7 @@
 import { useRouter } from "next/router";
 import { useEffect, useState, useRef } from "react";
 import Head from "next/head";
+import { Link as NextLink } from "next/link";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 
 import { toast } from "sonner";
@@ -33,7 +34,7 @@ import {
   AccessGraphDialog,
 } from "@components/index";
 import { Checkbox } from "@components/ui/checkbox";
-import { useHandleDialogs } from "@/hooks/useHandleDialogs";
+import { useHandleDialogs } from "@hooks/useHandleDialogs";
 import { downloadCSV } from "@utils/utils";
 import { useAuthen } from "@hooks/useAuthen";
 import Image from "next/image";
@@ -248,12 +249,12 @@ export default function Analytics() {
                 </a>
               </div>
               <h1 className="pt-4 pb-3 text-3xl font-bold xl:text-5xl md:text-4xl text-center">
-                <a
+                <NextLink
                   className="text-4xl font-extrabold tracking-tight scroll-m-20 lg:text-5xl"
                   href="/share"
                 >
                   Share
-                </a>
+                </NextLink>
               </h1>
               <p className="small-caps text-center">
                 URL Shortener + QR Code Generator
@@ -326,14 +327,14 @@ export default function Analytics() {
                         <h2 className="flex justify-between p-1 space-x-4">
                           <main className="flex items-center ml-1 space-x-4">
                             <Link className="w-5 h-5 short-link" />
-                            <a
+                            <NextLink
                               href={url.shortenUrl}
                               target="_blank"
                               rel="noopener noreferrer"
                               className="inline-block px-3 py-1.5 font-mono border rounded-lg text-primary hover:underline"
                             >
                               {url.shortenUrl}
-                            </a>
+                            </NextLink>
                           </main>
                           <aside className="flex gap-2">
                             <Button
@@ -361,14 +362,14 @@ export default function Analytics() {
                         <h2 className="flex justify-between p-1 space-x-4">
                           <main className="flex items-center ml-1 space-x-4">
                             <ExternalLink className="w-5 h-5" />
-                            <a
+                            <NextLink
                               href={url.originalUrl}
                               target="_blank"
                               rel="noopener noreferrer"
                               className="inline-block px-3 py-1.5 font-mono border rounded-lg text-primary hover:underline overflow-x-auto max-w-[128px] scrollbar-none whitespace-nowrap"
                             >
                               {url.originalUrl}
-                            </a>
+                            </NextLink>
                           </main>
                           <aside className="flex gap-2">
                             <Button

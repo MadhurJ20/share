@@ -29,7 +29,8 @@ export const Custom404 = () => {
           <div className="space-y-2">
             <h1 className="text-4xl font-bold">Oops! Page Not Found</h1>
             <p className="text-gray-400">
-              The page you're looking for doesn't exist or has been moved.
+              The page you&apos;re looking for doesn&apos;t exist or has been
+              moved.
             </p>
           </div>
           <Link

@@ -1,5 +1,5 @@
 import "@styles/index.css";
-import "@/styles/404.css";
+import "@styles/404.css";
 import { Toaster } from "@components/ui/sonner";
 
 import { Inter, JetBrains_Mono } from "next/font/google";
