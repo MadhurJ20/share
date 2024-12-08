@@ -1,7 +1,7 @@
 import { useRouter } from "next/router";
 import { useEffect, useState, useRef } from "react";
 import Head from "next/head";
-import { Link as NextLink } from "next/link";
+import Link from "next/link";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 
 import { toast } from "sonner";
@@ -10,7 +10,7 @@ import {
   QrCode,
   Calendar,
   Pencil,
-  Link,
+  Link as LinkIcon,
   ExternalLink,
   RefreshCcw,
   ChartSpline,
@@ -252,18 +252,17 @@ export default function Analytics() {
                   <img
                     src="https://raw.githubusercontent.com/ACES-RMDSSOE/Website/main/images/logo.png"
                     alt="ACES Logo"
-                    border="0"
                     className="w-[7em] h-[7em] rounded-[50%] mt-3"
                   />
                 </a>
               </div>
-              <h1 className="pt-4 pb-3 text-3xl font-bold xl:text-5xl md:text-4xl text-center">
-                <NextLink
+              <h1 className="pt-4 pb-3 text-3xl font-bold xl:text-5xl md:text-4xl text-center c-beige:text-beige-800">
+                <Link
                   className="text-4xl font-extrabold tracking-tight scroll-m-20 lg:text-5xl"
                   href="/share"
                 >
                   Share
-                </NextLink>
+                </Link>
               </h1>
               <p className="mb-2 font-mono text-center small-caps c-beige:text-beige-800">
                 URL Shortener + QR Code Generator
@@ -335,15 +334,15 @@ export default function Analytics() {
                       <header className="flex flex-col gap-0 !text-sm">
                         <h2 className="flex justify-between p-1 space-x-4">
                           <main className="flex items-center ml-1 space-x-4">
-                            <Link className="w-5 h-5 short-link" />
-                            <NextLink
+                            <LinkIcon className="w-5 h-5 short-link" />
+                            <Link
                               href={url.shortenUrl}
                               target="_blank"
                               rel="noopener noreferrer"
                               className="inline-block px-3 py-1.5 font-mono border rounded-lg text-primary c-beige:text-beige-700 hover:underline"
                             >
                               {url.shortenUrl}
-                            </NextLink>
+                            </Link>
                           </main>
                           <aside className="flex gap-2">
                             <Button
@@ -371,14 +370,14 @@ export default function Analytics() {
                         <h2 className="flex justify-between p-1 space-x-4">
                           <main className="flex items-center ml-1 space-x-4">
                             <ExternalLink className="w-5 h-5" />
-                            <NextLink
+                            <Link
                               href={url.originalUrl}
                               target="_blank"
                               rel="noopener noreferrer"
                               className="inline-block px-3 py-1.5 font-mono border rounded-lg text-primary hover:underline overflow-x-auto max-w-[128px] scrollbar-none whitespace-nowrap c-beige:text-beige-700"
                             >
                               {url.originalUrl}
-                            </NextLink>
+                            </Link>
                           </main>
                           <aside className="flex gap-2">
                             <Button

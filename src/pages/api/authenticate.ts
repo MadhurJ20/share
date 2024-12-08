@@ -9,7 +9,7 @@ export default async function handler(
   if (req.method === "POST") {
     const { passcode } = req.body;
     try {
-      await dbConnect();
+      await dbConnect(req, res);
 
       const url = await Url.findOne({ q: passcode });
 

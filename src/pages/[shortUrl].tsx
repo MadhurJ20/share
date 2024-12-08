@@ -1,3 +1,4 @@
+"use server";
 import dbConnect from "@/lib/utils/db";
 import Url from "@models/url";
 import { SpeedInsights } from "@vercel/speed-insights/next";
@@ -36,7 +37,7 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
   }
   const { shortUrl } = context.params;
   const { req } = context;
-  await dbConnect();
+  await dbConnect(context.req, context.res);
 
   try {
     // Query

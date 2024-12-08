@@ -86,11 +86,7 @@ const SearchUrls = () => {
 
   return (
     // ts-ignore
-    <CommandDialog
-      open={open}
-      onOpenChange={setOpen}
-      className="border rounded-lg max-w-3/4 lg:w-1/4"
-    >
+    <CommandDialog open={open} onOpenChange={setOpen}>
       <DialogTitle className="hidden"></DialogTitle>
       <DialogDescription className="hidden"></DialogDescription>
       {/* <CommandInput

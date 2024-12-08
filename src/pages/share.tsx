@@ -185,7 +185,6 @@ export default function Home() {
                     <img
                       src="https://raw.githubusercontent.com/ACES-RMDSSOE/Website/main/images/logo.png"
                       alt="ACES Logo"
-                      border="0"
                       className="w-[7em] h-[7em] rounded-[50%] mt-3"
                     />
                   </Link>

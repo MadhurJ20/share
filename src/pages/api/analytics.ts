@@ -7,7 +7,7 @@ export default async function handler(
   res: NextApiResponse
 ) {
   try {
-    await dbConnect();
+    await dbConnect(req, res);
 
     if (req.method === "GET") {
       const urls = await Url.find({ q: { $exists: false } });

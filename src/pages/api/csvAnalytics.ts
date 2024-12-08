@@ -8,7 +8,7 @@ export default async function handler(
   res: NextApiResponse
 ) {
   try {
-    await dbConnect();
+    await dbConnect(req, res);
     // Fetch all the URLs
     if (req.method === "GET") {
       const urls = await Url.find({});

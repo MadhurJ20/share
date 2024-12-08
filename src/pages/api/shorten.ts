@@ -20,7 +20,7 @@ export default async function handler(
     return res.status(400).json({ message: "Invalid URL or Domain" });
   }
 
-  await dbConnect();
+  await dbConnect(req, res);
   try {
     // const existingUrl = await Url.findOne({ originalUrl });
     // if (existingUrl) {

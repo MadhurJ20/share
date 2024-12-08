@@ -7,7 +7,7 @@ export default async function handler(
   res: NextApiResponse
 ) {
   try {
-    await dbConnect();
+    await dbConnect(req, res);
     if (req.method === "GET") {
       const { search } = req.query;
       // If there's a search query, perform a case-insensitive search by originalUrl or shortenUrl
