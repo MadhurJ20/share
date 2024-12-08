@@ -1,3 +1,4 @@
+"use client";
 import { useState } from "react";
 import { useRouter } from "next/router";
 import { SpeedInsights } from "@vercel/speed-insights/next";

@@ -1,3 +1,4 @@
+"use client";
 import { useRouter } from "next/router";
 import {
   useEffect,
@@ -107,6 +108,7 @@ export default function Analytics() {
   }, [fetchUrls]);
 
   const refreshData = () => {
+    setLoading(true);
     fetchUrls();
     toast.success("Data refreshed successfully!");
   };
@@ -192,7 +194,7 @@ export default function Analytics() {
   useEffect(() => {
     if (!(typeof query.id === "string")) return;
     const id = query.id as string;
-    if (!id) return;
+    if (!id || loading) return;
     setTimeout(() => {
       const element = document.getElementById(id);
       if (element) {
@@ -214,7 +216,7 @@ export default function Analytics() {
         toast.error("URL doesn't exist");
       }
     }, 500);
-  }, [query.id]);
+  }, [query.id, loading]);
   const sortUrls = (urls: URLWithDuplicateCount[]) => {
     switch (sortOption) {
       case "dateAsc":
@@ -252,18 +254,6 @@ export default function Analytics() {
 
   if (!authenticated) {
     return null;
-  }
-
-  if (loading) {
-    return (
-      <Image
-        src="/images/bars-scale.svg"
-        width={20}
-        height={20}
-        className="dark:invert"
-        alt="..."
-      />
-    );
   }
 
   return (
@@ -356,10 +346,19 @@ export default function Analytics() {
                 <span className="cursor-pointer">Confirm before delete</span>
               </label>
             </section>
-            {urls.length > 0 ? (
+            {loading ? (
+              <div className="flex items-center justify-center w-full py-5">
+                <Image
+                  src="/images/bars-scale.svg"
+                  width={20}
+                  height={20}
+                  className="dark:invert"
+                  alt="..."
+                />
+              </div>
+            ) : urls.length > 0 ? (
               <ul className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-3">
                 {filteredUrls.map((url) => {
-                  // const [favicon, isReady, isError] = useFavicon(url.originalUrl);
                   return (
                     // url._id
                     <li
