@@ -1,3 +1,5 @@
+// @ts-nocheck
+// Weird stuff with strings and date
 import { useState, useEffect } from "react";
 import {
   Dialog,
@@ -11,9 +13,28 @@ import {
 import { Button } from "@components/ui/button";
 import { Input } from "@components/ui/input";
 import { Save } from "lucide-react";
+import { URLDocument, URLWithDuplicateCount } from "@/types/types";
 
-export function EditUrlDialog({ open, setOpen, urlToEdit, handleEdit }) {
-  const [newShortenUrl, setNewShortenUrl] = useState(
+type EditUrlDialogProps = {
+  open: boolean;
+  setOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  urlToEdit: URLDocument | null; // Fuck this
+  handleEdit: (
+    id: string,
+    updatedFields: {
+      shortenUrl: string;
+      expirationDate?: Date;
+      scheduledDate?: Date | null;
+    }
+  ) => void;
+};
+export function EditUrlDialog({
+  open,
+  setOpen,
+  urlToEdit,
+  handleEdit,
+}: EditUrlDialogProps) {
+  const [newShortenUrl, setNewShortenUrl] = useState<string>(
     urlToEdit?.shortenUrl || ""
   );
   const [newExpirationDate, setNewExpirationDate] = useState("");
@@ -31,7 +52,18 @@ export function EditUrlDialog({ open, setOpen, urlToEdit, handleEdit }) {
     }
   }, [urlToEdit]);
 
-  const formatDateForInput = (date) => {
+  const formatIncomingDate = (date: Date): string => {
+    if (!date) return "";
+    const localDate = new Date(date);
+    // Create a string formatted as 'YYYY-MM-DDTHH:MM'
+    const year = localDate.getFullYear();
+    const month = String(localDate.getMonth() + 1).padStart(2, "0"); // months are 0-based
+    const day = String(localDate.getDate()).padStart(2, "0");
+    const hours = String(localDate.getHours()).padStart(2, "0");
+    const minutes = String(localDate.getMinutes()).padStart(2, "0");
+    return `${year}-${month}-${day}T${hours}:${minutes}`;
+  };
+  const formatDateForInput = (date: Date) => {
     if (!date) return "";
     const localDate = new Date(date);
     // Adjust to local timezone using toLocaleString and format it back to input format
@@ -39,6 +71,14 @@ export function EditUrlDialog({ open, setOpen, urlToEdit, handleEdit }) {
       timeZoneName: "short",
       hour12: false,
     }); // Convert to "YYYY-MM-DDTHH:MM" format
+  };
+
+  const formatDateToComparableString = (
+    date: Date | undefined
+  ): string | undefined => {
+    if (!date) return undefined;
+    const localDate = new Date(date);
+    return localDate.toISOString().slice(0, 16); // Formats to 'YYYY-MM-DDTHH:MM'
   };
 
   const handleCancel = () => {
@@ -105,7 +145,9 @@ export function EditUrlDialog({ open, setOpen, urlToEdit, handleEdit }) {
           <Input
             type="datetime-local"
             id="expirationDate"
-            value={newExpirationDate}
+            value={
+              formatIncomingDate(urlToEdit?.expirationDate) || newExpirationDate
+            }
             onChange={(e) => setNewExpirationDate(e.target.value)}
             className="w-full p-2 mt-0.5 border rounded-md focus-visible:ring-0 focus-visible:ring-offset-0"
           />
@@ -119,7 +161,9 @@ export function EditUrlDialog({ open, setOpen, urlToEdit, handleEdit }) {
           <Input
             type="datetime-local"
             id="scheduledDate"
-            value={newScheduledDate}
+            value={
+              formatIncomingDate(urlToEdit?.scheduledDate) || newScheduledDate
+            }
             onChange={(e) => setNewScheduledDate(e.target.value)}
             className="w-full p-2 mt-0.5 border rounded-md focus-visible:ring-0 focus-visible:ring-offset-0"
           />

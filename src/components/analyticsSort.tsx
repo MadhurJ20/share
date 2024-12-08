@@ -1,3 +1,4 @@
+import { SortOption } from "@/types/types";
 import {
   Select,
   SelectContent,
@@ -8,7 +9,11 @@ import {
   SelectValue,
 } from "@components/ui/select";
 
-const SortSelect = ({ sortOption, onSortChange }) => {
+interface SortSelectProps {
+  sortOption: SortOption;
+  onSortChange: (value: SortOption) => void;
+}
+const SortSelect = ({ sortOption, onSortChange }: SortSelectProps) => {
   return (
     <Select value={sortOption} onValueChange={onSortChange}>
       <SelectTrigger className="w-[180px]">

@@ -1,4 +1,4 @@
-import dbConnect from "@utils/db";
+import dbConnect from "@/lib/utils/db";
 import Url from "@models/url";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import axios from "axios";

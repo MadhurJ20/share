@@ -7,15 +7,21 @@ import {
   DialogHeader,
   DialogTitle,
   DialogClose,
+  DialogDescription,
 } from "@components/ui/dialog";
 import { Button } from "@components/ui/button";
 import { downloadQRCode } from "@utils/utils";
 
-const QRCodeDialog = ({ open, setOpen, shortenUrl }) => {
-  const qrCodeRef = useRef(null);
+interface QRCodeDialogProps {
+  open: boolean;
+  setOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  shortenUrl: string;
+}
+const QRCodeDialog = ({ open, setOpen, shortenUrl }: QRCodeDialogProps) => {
+  const qrCodeRef = useRef<HTMLElement>(null);
   const BASE_URL = process.env.BASE_URL;
 
-  const generateQRCodeValue = (url) => {
+  const generateQRCodeValue = (url: string) => {
     if (url && !url.startsWith("http://") && !url.startsWith("https://")) {
       if (process.env.BASE_URL == "") return `http://${BASE_URL}`;
       else return `${BASE_URL}${url}`;
@@ -33,6 +39,7 @@ const QRCodeDialog = ({ open, setOpen, shortenUrl }) => {
         <DialogHeader>
           <DialogTitle className="flex space-x-2">QR Code</DialogTitle>
         </DialogHeader>
+        <DialogDescription className="hidden" />
         <div className="grid p-2 place-items-center">
           <section
             className="p-3 bg-white rounded-lg shadow max-w"

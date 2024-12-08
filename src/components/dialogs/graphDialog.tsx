@@ -8,10 +8,20 @@ import {
 } from "@components/ui/dialog";
 import { Button } from "@components/ui/button";
 import dynamic from "next/dynamic";
+import { Access, Accesses } from "@/types/types";
 
 const Chart = dynamic(() => import("react-apexcharts"), { ssr: false });
 
-const AccessGraphDialog = ({ open, setOpen, recentAccesses }) => {
+interface AccessGraphDialogProps {
+  open: boolean;
+  setOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  recentAccesses: Access[];
+}
+const AccessGraphDialog = ({
+  open,
+  setOpen,
+  recentAccesses,
+}: AccessGraphDialogProps) => {
   const groupByWeek = (accesses) => {
     const weeks = {};
 

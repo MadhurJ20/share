@@ -9,7 +9,18 @@ import {
   DialogTitle,
 } from "@components/ui/dialog";
 
-export function DeleteUrlDialog({ open, setOpen, urlToDelete, handleDelete }) {
+interface DeleteUrlDialogProps {
+  open: boolean;
+  setOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  urlToDelete: string;
+  handleDelete: (url: string) => void;
+}
+export function DeleteUrlDialog({
+  open,
+  setOpen,
+  urlToDelete,
+  handleDelete,
+}: DeleteUrlDialogProps) {
   const handleCancel = () => {
     setOpen(false);
   };
