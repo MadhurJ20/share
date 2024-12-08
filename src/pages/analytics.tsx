@@ -269,7 +269,7 @@ export default function Analytics() {
         url.originalUrl.toLowerCase().includes(searchTerm.toLowerCase())
     );
     return sortUrls(filtered);
-  }, [urls, searchTerm, sortOption]);
+  }, [urls, searchTerm, sortOption, sortUrls]);
 
   if (!authenticated) {
     return null;
