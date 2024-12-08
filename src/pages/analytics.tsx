@@ -1,5 +1,13 @@
 import { useRouter } from "next/router";
-import { useEffect, useState, useRef } from "react";
+import {
+  useEffect,
+  useState,
+  useRef,
+  useCallback,
+  useMemo,
+  Suspense,
+  lazy,
+} from "react";
 import Head from "next/head";
 import Link from "next/link";
 import { SpeedInsights } from "@vercel/speed-insights/next";
@@ -27,17 +35,21 @@ import {
   SortSelect,
   URLStatus,
   GradientTop,
-  DeleteUrlDialog,
-  EditUrlDialog,
-  QRCodeDialog,
-  RecentAccessesDialog,
-  AccessGraphDialog,
 } from "@components/index";
-import { Checkbox } from "@components/ui/checkbox";
-import { useHandleDialogs } from "@hooks/useHandleDialogs";
+import { Checkbox } from "@/components/ui/checkbox";
 import { downloadCSV } from "@utils/utils";
+import { useHandleDialogs } from "@hooks/useHandleDialogs";
 import { useAuthen } from "@hooks/useAuthen";
 import { URLDocument, URLWithDuplicateCount, SortOption } from "types/types";
+import Image from "next/image";
+// Lazy load Dialog Components
+const DeleteUrlDialog = lazy(() => import("@components/dialogs/deleteUrl"));
+const EditUrlDialog = lazy(() => import("@components/dialogs/editUrl"));
+const QRCodeDialog = lazy(() => import("@components/dialogs/qrcodeDialog"));
+const RecentAccessesDialog = lazy(
+  () => import("@components/dialogs/recentAccesses")
+);
+const AccessGraphDialog = lazy(() => import("@components/dialogs/graphDialog"));
 
 export default function Analytics() {
   const router = useRouter();
@@ -51,23 +63,33 @@ export default function Analytics() {
   const [copiedUrl, setCopiedUrl] = useState<string | null>(null);
   const [sortOption, setSortOption] = useState<SortOption>("dateAsc");
   const [showConfirmation, setShowConfirmation] = useState<boolean>(true);
+  const [loading, setLoading] = useState(true);
+
   const handleToggleConfirmation = () => {
     setShowConfirmation(!showConfirmation);
   };
 
-  const addDuplicateCounts = (urls: URLDocument[]): URLWithDuplicateCount[] => {
-    // const urlCountMap: Record<string, number> = urls.reduce((acc, url) => {
-    const urlCountMap: { [key: string]: number } = urls.reduce((acc, url) => {
-      acc[url.originalUrl] = (acc[url.originalUrl] || 0) + 1;
-      return acc;
-    }, {} as { [key: string]: number });
-    return urls.map((url) => {
-      const count = urlCountMap[url.originalUrl] || 0;
-      return { ...url, duplicateCount: count };
-    });
-  };
+  const addDuplicateCounts = useMemo(
+    () =>
+      (urls: URLDocument[]): URLWithDuplicateCount[] => {
+        // const urlCountMap: Record<string, number> = urls.reduce((acc, url) => {
+        const urlCountMap: { [key: string]: number } = urls.reduce(
+          (acc, url) => {
+            acc[url.originalUrl] = (acc[url.originalUrl] || 0) + 1;
+            return acc;
+          },
+          {} as { [key: string]: number }
+        );
+        return urls.map((url) => {
+          const count = urlCountMap[url.originalUrl] || 0;
+          return { ...url, duplicateCount: count };
+        });
+      },
+    []
+  );
 
-  const fetchUrls = async (): Promise<void> => {
+  const fetchUrls = useCallback(async (): Promise<void> => {
+    setLoading(true);
     try {
       const res = await fetch("/api/analytics");
       const data: URLDocument[] = await res.json();
@@ -75,13 +97,14 @@ export default function Analytics() {
       setUrls(processedData); // Store the fetched data in state
     } catch (error) {
       setError("Failed to fetch URLs");
+    } finally {
+      setLoading(false);
     }
-  };
+  }, [addDuplicateCounts]);
 
   useEffect(() => {
     fetchUrls();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [fetchUrls]);
 
   const refreshData = () => {
     fetchUrls();
@@ -218,16 +241,29 @@ export default function Analytics() {
         return urls;
     }
   };
-  const filteredUrls = sortUrls(
-    urls.filter(
+  const filteredUrls = useMemo(() => {
+    const filtered = urls.filter(
       (url) =>
         url.shortenUrl.toLowerCase().includes(searchTerm.toLowerCase()) ||
         url.originalUrl.toLowerCase().includes(searchTerm.toLowerCase())
-    )
-  );
+    );
+    return sortUrls(filtered);
+  }, [urls, searchTerm, sortOption]);
 
   if (!authenticated) {
     return null;
+  }
+
+  if (loading) {
+    return (
+      <Image
+        src="/images/bars-scale.svg"
+        width={20}
+        height={20}
+        className="dark:invert"
+        alt="..."
+      />
+    );
   }
 
   return (
@@ -339,7 +375,7 @@ export default function Analytics() {
                               href={url.shortenUrl}
                               target="_blank"
                               rel="noopener noreferrer"
-                              className="inline-block px-3 py-1.5 font-mono border rounded-lg text-primary c-beige:text-beige-700 hover:underline"
+                              className="inline-block px-3 py-1.5 font-mono border rounded-lg text-primary c-beige:text-beige-700 hover:underline overflow-x-auto max-w-[128px] scrollbar-none whitespace-nowrap"
                             >
                               {url.shortenUrl}
                             </Link>
@@ -473,44 +509,48 @@ export default function Analytics() {
               <p>No URLs found</p>
             )}
           </div>
-          <DeleteUrlDialog
-            open={dialogs.delete.isOpen}
-            setOpen={() => {
-              closeDialog("delete");
-            }}
-            urlToDelete={dialogs.delete.data || ""}
-            handleDelete={handleDelete}
-          />
-          <EditUrlDialog
-            open={dialogs.edit.isOpen}
-            setOpen={() => {
-              closeDialog("edit");
-            }}
-            urlToEdit={dialogs.edit.data}
-            handleEdit={handleEdit}
-          />
-          <QRCodeDialog
-            open={dialogs.qrCode.isOpen}
-            setOpen={() => {
-              closeDialog("qrCode");
-            }}
-            shortenUrl={dialogs.qrCode.data || ""}
-            // shortenUrl={dialogs.qrCode.data}
-          />
-          {dialogs.recents.data && (
-            <RecentAccessesDialog
-              open={dialogs.recents.isOpen}
-              setOpen={() => closeDialog("recents")}
-              recentAccesses={dialogs.recents.data?.accesses?.lastAccessed}
+          <Suspense fallback={<div></div>}>
+            <DeleteUrlDialog
+              open={dialogs.delete.isOpen}
+              setOpen={() => {
+                closeDialog("delete");
+              }}
+              urlToDelete={dialogs.delete.data || ""}
+              handleDelete={handleDelete}
             />
-          )}
-          {dialogs.accessGraph.data && (
-            <AccessGraphDialog
-              open={dialogs.accessGraph.isOpen}
-              setOpen={() => closeDialog("accessGraph")}
-              recentAccesses={dialogs.accessGraph.data?.accesses?.lastAccessed}
+            <EditUrlDialog
+              open={dialogs.edit.isOpen}
+              setOpen={() => {
+                closeDialog("edit");
+              }}
+              urlToEdit={dialogs.edit.data}
+              handleEdit={handleEdit}
             />
-          )}
+            <QRCodeDialog
+              open={dialogs.qrCode.isOpen}
+              setOpen={() => {
+                closeDialog("qrCode");
+              }}
+              shortenUrl={dialogs.qrCode.data || ""}
+              // shortenUrl={dialogs.qrCode.data}
+            />
+            {dialogs.recents.data && (
+              <RecentAccessesDialog
+                open={dialogs.recents.isOpen}
+                setOpen={() => closeDialog("recents")}
+                recentAccesses={dialogs.recents.data?.accesses?.lastAccessed}
+              />
+            )}
+            {dialogs.accessGraph.data && (
+              <AccessGraphDialog
+                open={dialogs.accessGraph.isOpen}
+                setOpen={() => closeDialog("accessGraph")}
+                recentAccesses={
+                  dialogs.accessGraph.data?.accesses?.lastAccessed
+                }
+              />
+            )}
+          </Suspense>
         </div>
         <SpeedInsights />
       </main>

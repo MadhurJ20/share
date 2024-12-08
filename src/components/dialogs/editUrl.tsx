@@ -28,7 +28,7 @@ type EditUrlDialogProps = {
     }
   ) => void;
 };
-export function EditUrlDialog({
+export default function EditUrlDialog({
   open,
   setOpen,
   urlToEdit,
