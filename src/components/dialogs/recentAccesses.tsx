@@ -64,11 +64,14 @@ const RecentAccessesDialog = ({
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
-      <DialogContent className="max-w-[90%] lg:max-w-[40%]">
+      <DialogContent
+        className="max-w-[90%] lg:max-w-[40%]"
+        aria-describedby={undefined}
+      >
+        {" "}
         <DialogHeader>
           <DialogTitle>Recent Accesses</DialogTitle>
         </DialogHeader>
-
         <div className="overflow-x-hidden md:p-3">
           {recentAccesses.length > 0 ? (
             <>
@@ -151,7 +154,6 @@ const RecentAccessesDialog = ({
             <p className="text-sm text-gray-500">No recent accesses</p>
           )}
         </div>
-
         <DialogFooter>
           <DialogClose asChild>
             <Button variant="outline">Close</Button>

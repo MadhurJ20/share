@@ -2,10 +2,10 @@
   "dependencies": {
     "@radix-ui/react-checkbox": "^1.1.2",
     "@radix-ui/react-dialog": "^1.1.2",
+    "@radix-ui/react-popover": "^1.1.2",
     "@radix-ui/react-select": "^2.1.2",
     "@radix-ui/react-slot": "^1.1.0",
     "@types/json2csv": "^5.0.7",
-    "@vercel/speed-insights": "^1.1.0",
     "apexcharts": "^4.1.0",
     "axios": "^1.7.8",
     "class-variance-authority": "^0.7.0",
@@ -18,9 +18,10 @@
     "nanoid": "^5.0.9",
     "next": "^15.0.3",
     "next-themes": "^0.4.3",
-    "qrcode.react": "^4.1.0",
+    "qr-code-styling": "^1.8.4",
     "react": "^18.3.1",
     "react-apexcharts": "^1.6.0",
+    "react-colorful": "^5.6.1",
     "react-dom": "^18.3.1",
     "react-icons": "^5.3.0",
     "sonner": "^1.7.0",
@@ -53,5 +54,9 @@
     "postcss": "^8.4.49",
     "tailwindcss": "^3.4.15",
     "typescript": "5.7.2"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ACES-RMDSSOE/share.git"
   }
 }

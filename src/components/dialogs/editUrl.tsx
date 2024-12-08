@@ -132,7 +132,7 @@ export function EditUrlDialog({
             id="shortenUrl"
             value={newShortenUrl}
             onChange={(e) => setNewShortenUrl(e.target.value)}
-            className="w-full p-2 mt-0.5 border rounded-md focus-visible:ring-0 focus-visible:ring-offset-0"
+            className="w-full p-2 mt-0.5 border rounded-md focus-visible:ring-0 focus-visible:ring-offset-0 c-beige:bg-input"
             placeholder="Enter new shortened URL"
           />
 

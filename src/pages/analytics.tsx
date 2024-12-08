@@ -183,12 +183,12 @@ export default function Analytics() {
         setTimeout(() => {
           element.classList.remove("animate-pulse");
           if (iconElement) {
-            iconElement.classList.add("animate-spin", "text-blue-500");
+            iconElement.classList.remove("animate-spin", "text-blue-500");
           }
           window.history.replaceState(null, "", window.location.pathname);
         }, 2000);
       } else {
-        // console.log("Element not found with id:", query.id);
+        toast.error("URL doesn't exist");
       }
     }, 500);
   }, [query.id]);
@@ -265,12 +265,12 @@ export default function Analytics() {
                   Share
                 </NextLink>
               </h1>
-              <p className="small-caps text-center">
+              <p className="mb-2 font-mono text-center small-caps c-beige:text-beige-800">
                 URL Shortener + QR Code Generator
               </p>
             </div>
             <header className="relative flex flex-col items-center justify-center w-full mb-10 space-y-8 overflow-hidden">
-              <h2 className="text-3xl font-extrabold tracking-tight scroll-m-20 lg:text-4xl">
+              <h2 className="text-4xl font-extrabold tracking-tight scroll-m-20 lg:text-5xl c-beige:text-beige-800">
                 Analytics
               </h2>
               <div className="flex space-x-2">

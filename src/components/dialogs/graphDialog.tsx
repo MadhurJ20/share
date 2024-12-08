@@ -1,3 +1,5 @@
+import dynamic from "next/dynamic";
+import { ApexOptions } from "apexcharts";
 import {
   Dialog,
   DialogContent,
@@ -7,9 +9,7 @@ import {
   DialogClose,
 } from "@components/ui/dialog";
 import { Button } from "@components/ui/button";
-import dynamic from "next/dynamic";
-import { Access, Accesses } from "@/types/types";
-import { ApexOptions } from "apexcharts";
+import { Access } from "@/types/types";
 
 const Chart = dynamic(() => import("react-apexcharts"), { ssr: false });
 
@@ -32,7 +32,7 @@ const AccessGraphDialog = ({
       const startOfWeek = new Date(date);
       startOfWeek.setDate(date.getDate() - date.getDay() + 1);
       const year = startOfWeek.getFullYear();
-      const month = startOfWeek.getMonth();
+      // const month = startOfWeek.getMonth();
       const firstDayOfYear = new Date(year, 0, 1);
       const dayOfYear = Math.floor(
         (startOfWeek.getTime() - firstDayOfYear.getTime()) /
@@ -113,7 +113,10 @@ const AccessGraphDialog = ({
   return (
     // @ts-ignore
     <Dialog open={open} onOpenChange={setOpen} className="w-full md:w-1/2">
-      <DialogContent className="rounded max-w-[80%]">
+      <DialogContent
+        className="rounded max-w-[80%]"
+        aria-describedby={undefined}
+      >
         <DialogHeader>
           <DialogTitle>Weekly Access Graph</DialogTitle>
         </DialogHeader>

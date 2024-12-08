@@ -22,7 +22,7 @@ export default async function handler(
 
   await dbConnect();
   try {
-    const existingUrl = await Url.findOne({ originalUrl });
+    // const existingUrl = await Url.findOne({ originalUrl });
     // if (existingUrl) {
     //   return res
     //     .status(400)

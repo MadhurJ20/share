@@ -32,7 +32,10 @@ export function DeleteUrlDialog({
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
-      <DialogContent className="max-w-[90%] sm:max-w-md">
+      <DialogContent
+        className="max-w-[90%] sm:max-w-md"
+        aria-describedby={undefined}
+      >
         <DialogHeader>
           <DialogTitle>Confirm Deletion</DialogTitle>
           <p>
