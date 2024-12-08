@@ -11,6 +11,7 @@ import {
 } from "@components/ui/dialog";
 import { Button } from "@components/ui/button";
 import { downloadQRCode } from "@utils/utils";
+import { CustomQR } from "@components/qrcustomize";
 
 interface QRCodeDialogProps {
   open: boolean;
@@ -35,45 +36,25 @@ const QRCodeDialog = ({ open, setOpen, shortenUrl }: QRCodeDialogProps) => {
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
-      <DialogContent className="max-w-[90%] sm:max-w-md">
+      <DialogContent className="max-w-[90%] max-w-max">
         <DialogHeader>
           <DialogTitle className="flex space-x-2">QR Code</DialogTitle>
         </DialogHeader>
         <DialogDescription className="hidden" />
         <div className="grid p-2 place-items-center">
-          <section
-            className="p-3 bg-white rounded-lg shadow max-w"
-            ref={qrCodeRef}
-          >
-            <QRCodeSVG
-              value={generateQRCodeValue(shortenUrl)}
-              title="Scan me!"
-              size={128}
-              bgColor="#ffffff"
-              fgColor="#000000"
-              level="H"
-              marginSize={1}
-              imageSettings={{
-                src: "https://images.vexels.com/content/137688/preview/logo-geometric-polygonal-shape-029edb.png",
-                x: undefined,
-                y: undefined,
-                height: 24,
-                width: 24,
-                opacity: 1,
-                excavate: true,
-              }}
-            />
+          <section className="p-3 bg-white rounded-lg" ref={qrCodeRef}>
+            <CustomQR url={generateQRCodeValue(shortenUrl)} />
           </section>
         </div>
 
         <DialogFooter>
-          <Button
+          {/* <Button
             variant="outline"
             onClick={() => downloadQRCode(qrCodeRef, shortenUrl)}
             className="my-2 sm:my-0"
           >
             Download QR Code
-          </Button>
+          </Button> */}
           <DialogClose asChild>
             <Button type="button" variant="outline" onClick={handleCancel}>
               Cancel
