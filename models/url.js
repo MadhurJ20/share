@@ -75,18 +75,18 @@ URLSchema.pre("save", function (next) {
 
   if (this.expirationDate) {
     if (this.expirationDate <= now) {
-      console.log("Expiration date in past");
+      // console.log("Expiration date in past");
       this.expirationDate = now;
     }
     if (this.expirationDate > new Date(now.getTime() + TWO_YEARS)) {
-      console.log("Expiration date too far");
+      // console.log("Expiration date too far");
       this.expirationDate = new Date(now.getTime() + TWO_YEARS);
     }
   }
 
   if (this.scheduledDate) {
     if (this.scheduledDate <= now) {
-      console.log("Scheduled date in past");
+      // console.log("Scheduled date in past");
       this.scheduledDate = now;
       this.isActive = false;
     }
@@ -94,7 +94,7 @@ URLSchema.pre("save", function (next) {
     this.isActive = true;
   }
 
-  console.log("Active status:", this.isActive);
+  // console.log("Active status:", this.isActive);
   next();
 });
 

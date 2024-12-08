@@ -3,25 +3,6 @@ import { useEffect, useState, useRef } from "react";
 import Head from "next/head";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 
-import {
-  ChartSpline,
-  Copy,
-  Check,
-  Mouse,
-  Trash2,
-  ImageDown,
-  MousePointerClick,
-  Database,
-} from "lucide-react";
-import {
-  QrCode,
-  Calendar,
-  Pencil,
-  Link,
-  ExternalLink,
-  RefreshCcw,
-} from "lucide-react";
-
 import { toast } from "sonner";
 import {
   Nav,
@@ -37,29 +18,36 @@ import {
   AccessGraphDialog,
 } from "@components/index";
 
-import { useHandleDialogs } from "./useHandleDialogs";
-
+import {
+  QrCode,
+  Calendar,
+  Pencil,
+  Link,
+  ExternalLink,
+  RefreshCcw,
+  ChartSpline,
+  Copy,
+  Check,
+  Trash2,
+  MousePointerClick,
+  Database,
+} from "lucide-react";
+import { useHandleDialogs } from "../hooks/useHandleDialogs";
+import { downloadCSV } from "@utils/utils";
+import { useAuthen } from "@hooks/useAuthen";
 export default function Analytics() {
   const [urls, setUrls] = useState([]);
   const [error, setError] = useState("");
   const [searchTerm, setSearchTerm] = useState("");
   const [copiedUrl, setCopiedUrl] = useState(null);
-  const [open, setOpen] = useState(false);
-  const [urlToDelete, setUrlToDelete] = useState(null);
-  const [urlToEdit, setUrlToEdit] = useState(null);
-  const [urlToQRCode, setUrlToQRCode] = useState(null);
-  const [selectedUrl, setSelectedUrl] = useState(null);
-  const [openEdit, setOpenEdit] = useState(false);
-  const [openQR, setOpenQR] = useState(false);
-  const [openRecents, setOpenRecents] = useState(false);
-  const [openGraphDialog, setOpenGraphDialog] = useState(false);
+
   const [sortOption, setSortOption] = useState("dateAsc");
   const { dialogs, openDialog, closeDialog } = useHandleDialogs();
 
   const inputRef = useRef(null);
   const router = useRouter();
   const { query } = router;
-  const [authenticated, setAuthenticated] = useState(false);
+  const authenticated = useAuthen();
 
   const addDuplicateCounts = (urls) => {
     const urlCountMap = urls.reduce((acc, url) => {
@@ -143,6 +131,8 @@ export default function Analytics() {
       }
     } catch (error) {
       toast.error("Error updating URL");
+    } finally {
+      closeDialog("edit");
     }
   };
 
@@ -165,59 +155,13 @@ export default function Analytics() {
     }
   };
 
-  const handleClickQRCode = (shortenUrl) => {
-    setUrlToQRCode(shortenUrl);
-    setOpenQR(true);
-  };
-
-  const handleShowRecents = (url) => {
-    if (url && url.accesses && Array.isArray(url.accesses.lastAccessed)) {
-      setSelectedUrl(url);
-      setOpenRecents(true);
-    } else {
-      setSelectedUrl(null);
-      setOpenRecents(false);
-    }
-  };
-
-  const handleOpenGraphDialog = (url) => {
-    if (url && url.accesses && Array.isArray(url.accesses.lastAccessed)) {
-      setSelectedUrl(url);
-      setOpenGraphDialog(true);
-    } else {
-      setSelectedUrl(null);
-      setOpenGraphDialog(false);
-    }
-  };
-
-  const downloadCSV = async () => {
-    try {
-      const res = await fetch("/api/csvAnalytics");
-      if (!res.ok) throw new Error("Failed to fetch CSV");
-
-      // Create a blob from the response and trigger the download
-      const csvBlob = await res.blob();
-      const csvUrl = URL.createObjectURL(csvBlob);
-      const link = document.createElement("a");
-      link.href = csvUrl;
-      link.download = "urls.csv"; // Set the file name for the CSV
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
-
-      toast.success("CSV file downloaded!");
-    } catch (error) {
-      toast.error("Error downloading CSV");
-    }
-  };
-
   useEffect(() => {
     if (!query.id) return;
 
     setTimeout(() => {
       const element = document.getElementById(query.id);
       if (element) {
-        console.log("Element found:", element);
+        // console.log("Element found:", element);
         element.scrollIntoView({ behavior: "smooth", block: "center" });
         const iconElement = element.querySelector(".short-link");
         element.classList.add("animate-pulse");
@@ -229,7 +173,7 @@ export default function Analytics() {
           window.history.replaceState(null, "", window.location.pathname);
         }, 2000);
       } else {
-        console.log("Element not found with id:", query.id);
+        // console.log("Element not found with id:", query.id);
       }
     }, 500);
   }, [query.id]);
@@ -263,17 +207,6 @@ export default function Analytics() {
     )
   );
 
-  useEffect(() => {
-    const cookies = document.cookie.split("; ");
-    const authCookie = cookies.find((cookie) =>
-      cookie.startsWith("authenticated=")
-    );
-    if (authCookie && authCookie.split("=")[1] === "true") {
-      setAuthenticated(true);
-    } else {
-      router.push("/");
-    }
-  }, [router]);
   if (!authenticated) {
     return null;
   }
@@ -340,8 +273,7 @@ export default function Analytics() {
                   Refresh Data
                 </Button>
               </div>
-              {/* <SearchUrls /> */}
-              {/* //! Make this work somehow */}
+
               <section className="flex items-center p-2 border rounded-lg dark:bg-[#0c0e0f] bg-white">
                 <Input
                   ref={inputRef}
@@ -436,10 +368,7 @@ export default function Analytics() {
                             <Button
                               type="button"
                               variant="outline"
-                              onClick={() => {
-                                setUrlToEdit(url);
-                                setOpenEdit(true);
-                              }}
+                              onClick={() => openDialog("edit", url)}
                             >
                               <span className="flex w-4 aspect-square">
                                 <Pencil className="text-yellow-600 dark:text-yellow-400" />
@@ -474,7 +403,7 @@ export default function Analytics() {
                             type="button"
                             className="mt-1"
                             variant="outline"
-                            onClick={() => handleShowRecents(url)}
+                            onClick={() => openDialog("recents", url)}
                           >
                             <span className="flex">Recents</span>
                           </Button>
@@ -482,7 +411,9 @@ export default function Analytics() {
                             <Button
                               type="button"
                               variant="outline"
-                              onClick={() => handleClickQRCode(url.shortenUrl)}
+                              onClick={() =>
+                                openDialog("qrCode", url.shortenUrl)
+                              }
                             >
                               <span className="flex w-4 aspect-square">
                                 <QrCode className="text-gray-600 dark:text-gray-400" />
@@ -492,7 +423,7 @@ export default function Analytics() {
                               type="button"
                               className="w-max"
                               variant="outline"
-                              onClick={() => handleOpenGraphDialog(url)}
+                              onClick={() => openDialog("accessGraph", url)}
                             >
                               <span className="flex w-4 aspect-square">
                                 <ChartSpline className="text-green-600 dark:text-green-400" />
@@ -519,28 +450,32 @@ export default function Analytics() {
             handleDelete={handleDelete}
           />
           <EditUrlDialog
-            open={openEdit}
-            setOpen={setOpenEdit}
-            urlToEdit={urlToEdit}
+            open={dialogs.edit.isOpen}
+            setOpen={() => {
+              closeDialog("edit");
+            }}
+            urlToEdit={dialogs.edit.data}
             handleEdit={handleEdit}
           />
           <QRCodeDialog
-            open={openQR}
-            setOpen={setOpenQR}
-            shortenUrl={urlToQRCode}
+            open={dialogs.qrCode.isOpen}
+            setOpen={() => {
+              closeDialog("qrCode");
+            }}
+            shortenUrl={dialogs.qrCode.data}
           />
-          {selectedUrl && (
+          {dialogs.recents.data && (
             <RecentAccessesDialog
-              open={openRecents}
-              setOpen={setOpenRecents}
-              recentAccesses={selectedUrl.accesses.lastAccessed}
+              open={dialogs.recents.isOpen}
+              setOpen={() => closeDialog("recents")}
+              recentAccesses={dialogs.recents.data?.accesses?.lastAccessed}
             />
           )}
-          {selectedUrl && (
+          {dialogs.accessGraph.data && (
             <AccessGraphDialog
-              open={openGraphDialog}
-              setOpen={setOpenGraphDialog}
-              recentAccesses={selectedUrl.accesses.lastAccessed}
+              open={dialogs.accessGraph.isOpen}
+              setOpen={() => closeDialog("accessGraph")}
+              recentAccesses={dialogs.accessGraph.data?.accesses?.lastAccessed}
             />
           )}
         </div>
