@@ -154,7 +154,7 @@ const RecentAccessesDialog = ({
 
         <DialogFooter>
           <DialogClose asChild>
-            <Button variant="secondary">Close</Button>
+            <Button variant="outline">Close</Button>
           </DialogClose>
         </DialogFooter>
       </DialogContent>

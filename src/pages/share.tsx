@@ -163,14 +163,14 @@ export default function Home() {
           href="https://raw.githubusercontent.com/ACES-RMDSSOE/Website/main/images/favicon.ico"
         />
       </Head>
-      <main className="relative overflow-x-hidden flex flex-col items-center justify-center h-screen font-inter min-h-svh bg-zinc-50 dark:bg-[#09090b]">
+      <main className="relative overflow-x-hidden flex flex-col items-center justify-center h-screen font-inter min-h-svh bg-zinc-50 dark:bg-[#09090b] c-beige:bg-beige-100">
         {/* Gradients */}
         <GradientTop />
         <Nav />
         <SearchUrls />
         <div className="relative w-full py-24 overflow-x-hidden">
           <div className="container relative py-10 lg:py-16">
-            <main className="max-w-2xl mx-auto text-center">
+            <main className="max-w-2xl mx-auto text-center c-beige:text-beige-800">
               <div className="header">
                 <div className="flex justify-center items-center">
                   <Link href="https://aces-rmdssoe.tech">
@@ -201,7 +201,7 @@ export default function Home() {
               </header>
 
               <article className="max-w-2xl mt-5">
-                <p className="text-base lg:text-lg text-muted-foreground">
+                <p className="text-base lg:text-lg text-muted-foreground c-beige:text-beige-700/60">
                   Enter your link below. In case you want to
                   <br className="md:hidden" /> see analytics or manage links
                   head over to the
@@ -354,14 +354,14 @@ export default function Home() {
                 {shortenUrl && (
                   <div className="flex flex-col items-center justify-center gap-4">
                     <header className="relative flex flex-col items-center justify-center gap-2 mt-6 mb-2 w-max">
-                      <h2 className="absolute -top-[20%] font-mono pe-2 ps-2 bg-[#fafafa] dark:bg-[#09090b] font-light text-md text-muted-foreground small-caps">
+                      <h2 className="absolute -top-[20%] font-mono pe-2 ps-2 bg-[#fafafa] dark:bg-[#09090b] font-light text-md text-muted-foreground small-caps c-beige:bg-beige-100 c-beige:text-beige-700/60">
                         Short url
                       </h2>
                       <a
                         href={generateQRCodeValue(shortenUrl)}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="z-10 inline-block px-6 py-4 font-mono border rounded-lg text-primary hover:underline"
+                        className="inline-block px-6 py-4 font-mono border rounded-lg text-primary c-beige:text-beige-700 hover:underline"
                       >
                         {shortenUrl}
                       </a>
