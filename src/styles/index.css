@@ -114,3 +114,20 @@
 .scrollbar-none {
   scrollbar-width: none;
 }
+
+.apexcharts-heatmap-rect[val="0"] {
+  fill: #ebedf0;
+  stroke-width: 1;
+}
+.dark .apexcharts-heatmap-rect[val="0"] {
+  fill: #161b22;
+  stroke-width: 1;
+}
+.dark .apexcharts-heatmap-rect {
+  stroke: #0d0e10;
+}
+.c-beige .apexcharts-heatmap-rect {
+  stroke: #f8f6ee;
+}
+/* .apexcharts-gridline { stroke-width: 0; } */
+/* .apexcharts-grid-borders line { stroke-width: 0; } */
