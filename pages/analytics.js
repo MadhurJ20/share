@@ -301,7 +301,7 @@ export default function Analytics() {
                 sortOption={sortOption}
                 onSortChange={setSortOption}
               />
-              <label className="flex h-10 items-center justify-center rounded-md border bg-background px-3 py-2 text-sm ring-offset-background focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 [&>span]:line-clamp-1 space-x-3 w-[180px]">
+              <label className="flex h-10 items-center justify-center rounded-md border bg-background px-3 py-2 text-sm ring-offset-background focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 [&>span]:line-clamp-1 space-x-3">
                 <Checkbox
                   checked={showConfirmation}
                   onCheckedChange={handleToggleConfirmation}
