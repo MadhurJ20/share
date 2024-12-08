@@ -17,7 +17,7 @@ import {
   FaMobileAlt,
   FaLaptop,
 } from "react-icons/fa";
-import { PiDevicesLight } from "react-icons/pi";
+import { PiDevicesLight, PiGoogleChromeLogoLight } from "react-icons/pi";
 import { Access } from "@/types/types";
 
 interface RecentAccessesDialogProps {
@@ -47,7 +47,7 @@ const RecentAccessesDialog = ({
   // Detect Browser Icon based on the userAgent
   const getBrowserIcon = (userAgent: string) => {
     if (/Chrome/i.test(userAgent)) {
-      return <FaChrome className="" />;
+      return <PiGoogleChromeLogoLight className="" />;
     } else if (/Firefox/i.test(userAgent)) {
       return <FaFirefox className="" />;
     } else if (/Safari/i.test(userAgent) && !/Chrome/i.test(userAgent)) {
@@ -55,7 +55,7 @@ const RecentAccessesDialog = ({
     } else if (/Edge/i.test(userAgent)) {
       return <FaEdge className="" />;
     }
-    return <FaChrome className="" />;
+    return <FaChrome className="" title="Unknown" />;
   };
   const getDeviceType = (userAgent: string) => {
     if (/mobile/i.test(userAgent)) return <FaMobileAlt className="" />;

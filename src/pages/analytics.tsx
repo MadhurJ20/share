@@ -1,5 +1,6 @@
 "use client";
 import { useRouter } from "next/router";
+import Image from "next/image";
 import {
   useEffect,
   useState,
@@ -12,8 +13,6 @@ import {
 import Head from "next/head";
 import Link from "next/link";
 import { SpeedInsights } from "@vercel/speed-insights/next";
-
-import { toast } from "sonner";
 
 import {
   QrCode,
@@ -38,11 +37,12 @@ import {
   GradientTop,
 } from "@components/index";
 import { Checkbox } from "@/components/ui/checkbox";
+import { toast } from "sonner";
 import { downloadCSV } from "@utils/utils";
 import { useHandleDialogs } from "@hooks/useHandleDialogs";
 import { useAuthen } from "@hooks/useAuthen";
 import { URLDocument, URLWithDuplicateCount, SortOption } from "types/types";
-import Image from "next/image";
+
 // Lazy load Dialog Components
 const DeleteUrlDialog = lazy(() => import("@components/dialogs/deleteUrl"));
 const EditUrlDialog = lazy(() => import("@components/dialogs/editUrl"));
