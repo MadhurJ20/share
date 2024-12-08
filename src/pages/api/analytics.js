@@ -1,6 +1,5 @@
-// pages/api/analytics.js
-import dbConnect from "../../utils/db";
-import Url from "../../models/url";
+import dbConnect from "@utils/db";
+import Url from "@models/url";
 
 export default async function handler(req, res) {
   try {

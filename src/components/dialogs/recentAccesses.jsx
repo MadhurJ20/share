@@ -1,3 +1,4 @@
+import { useState } from "react";
 import {
   Dialog,
   DialogContent,
@@ -7,7 +8,6 @@ import {
   DialogClose,
 } from "@components/ui/dialog";
 import { Button } from "@components/ui/button";
-import { useState } from "react";
 import { ChevronRight, ChevronLeft } from "lucide-react";
 import {
   FaChrome,

@@ -1,24 +1,23 @@
 {
   "compilerOptions": {
-    "baseUrl": ".",
+    "baseUrl": "src",
     "paths": {
-      "@components/*": ["components/*"],
-      "@components/ui/*": ["components/ui/*"],
-      "@models/*": ["models/*"],
-      "@pages/*": ["pages/*"],
+      "@components/*": ["src/components/*"],
+      "@components/ui/*": ["src/components/ui/*"],
+      "@models/*": ["src/models/*"],
+      "@pages/*": ["src/pages/*"],
       "@styles/*": ["styles/*"],
-      "@utils/*": ["utils/*"],
-      "@hooks/*": ["hooks/*"]
+      "@utils/*": ["src/utils/*"],
+      "@hooks/*": ["src/hooks/*"]
     }
   },
   "include": [
-    "components/**/*",
-    "models/**/*",
-    "pages/**/*",
-    "utils/**/*",
-    "hooks/**/*",
-    "styles/**/*",
-    "docs/**/*",
-    "hooks/useHandleDialogs.js"
+    "src/components/**/*",
+    "src/models/**/*",
+    "src/pages/**/*",
+    "src/hooks/**/*",
+    "src/styles/**/*",
+    "src/utils/**/*",
+    "docs/**/*"
   ]
 }

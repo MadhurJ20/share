@@ -33,7 +33,7 @@ import {
   AccessGraphDialog,
 } from "@components/index";
 import { Checkbox } from "@components/ui/checkbox";
-import { useHandleDialogs } from "../hooks/useHandleDialogs";
+import { useHandleDialogs } from "@/hooks/useHandleDialogs";
 import { downloadCSV } from "@utils/utils";
 import { useAuthen } from "@hooks/useAuthen";
 import Image from "next/image";

@@ -17,9 +17,9 @@ import {
 } from "lucide-react";
 import Head from "next/head";
 
-import { Nav } from "../components/nav";
-import { Input } from "../components/ui/input";
-import { Button } from "../components/ui/button";
+import { Nav } from "@components/nav";
+import { Input } from "@components/ui/input";
+import { Button } from "@components/ui/button";
 import { toast } from "sonner";
 import SearchUrls from "@components/searchURL";
 import { GradientTop } from "@components/gradientTop";

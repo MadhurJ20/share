@@ -1,6 +1,6 @@
-import "../styles/index.css";
-import "../styles/404.css";
-import { Toaster } from "../components/ui/sonner";
+import "@styles/index.css";
+import "@/styles/404.css";
+import { Toaster } from "@components/ui/sonner";
 
 import { Inter, JetBrains_Mono } from "next/font/google";
 const inter = Inter({ subsets: ["latin"] });
