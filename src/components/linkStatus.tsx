@@ -1,5 +1,4 @@
 import { useState } from "react";
-import { ImFire } from "react-icons/im";
 import { MdRestore } from "react-icons/md";
 import { PiStackDuotone } from "react-icons/pi";
 import { toast } from "sonner";
@@ -21,8 +20,8 @@ interface URLStatusProps {
 export const URLStatus = ({ url }: URLStatusProps) => {
   const [isRestoring, setIsRestoring] = useState(false);
   const [isPermanentlyDeleting, setIsPermanentlyDeleting] = useState(false);
-  const [restoreError, setRestoreError] = useState<string | null>(null);
-  const [deleteError, setDeleteError] = useState<string | null>(null);
+  // const [restoreError, setRestoreError] = useState<string | null>(null);
+  // const [deleteError, setDeleteError] = useState<string | null>(null);
   let expirationStatus;
   if (url.expirationDate) {
     const expirationDate = new Date(url.expirationDate);
@@ -66,12 +65,12 @@ export const URLStatus = ({ url }: URLStatusProps) => {
         toast.success("URL restored successfully!");
       } else {
         const error = await response.json();
-        setRestoreError(error.message || "Error restoring URL");
+        toast.error(error.message || "Error restoring URL");
         setIsRestoring(false);
       }
     } catch (error) {
       console.error("Error during restore:", error);
-      setRestoreError("An unexpected error occurred. Please try again.");
+      toast.error("An unexpected error occurred. Please try again.");
       setIsRestoring(false);
     }
   };
@@ -88,7 +87,7 @@ export const URLStatus = ({ url }: URLStatusProps) => {
         toast.success("URL permanently deleted successfully!");
       } else {
         const error = await response.json();
-        setDeleteError(error.message || "Error permanently deleting URL");
+        toast.error(error.message || "Error permanently deleting URL");
         setIsPermanentlyDeleting(false);
       }
     } catch (error) {

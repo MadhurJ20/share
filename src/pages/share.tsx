@@ -1,6 +1,6 @@
 "use client";
 // import { useRouter } from "next/router";
-import { useRef, useState, useEffect } from "react";
+import { useRef, useState } from "react";
 import Link from "next/link";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import {

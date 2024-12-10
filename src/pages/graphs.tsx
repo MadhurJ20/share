@@ -16,7 +16,6 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { SelectIcon } from "@radix-ui/react-select";
-import { getStartOfWeekQ } from "@/lib/utils/utils";
 import { useAuthen } from "@/hooks/useAuthen";
 import { Checkbox } from "@/components/ui/checkbox";
 
@@ -329,6 +328,7 @@ const Visualize: React.FC = () => {
                       <Button type="button" variant="outline" onClick={() => setShowIndividualLines((prev) => !prev)}>
                         <Checkbox
                           checked={showIndividualLines}
+                          // @ts-ignore
                           onCheckedChange={(checked) => setShowIndividualLines((prev) => !prev)}
                           className="mr-2 pointer-events-none"
                         />

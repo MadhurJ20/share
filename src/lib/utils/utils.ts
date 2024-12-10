@@ -171,7 +171,7 @@ export const generateTreemapColors = (baseColor: string, count: number = 5): str
   for (let i = 0; i < count; i++) {
     const hue = (baseH + i * (360 / count)) % 360;
     const lightness = Math.min(100, Math.max(0, l + i * (10 - count)));
-    colors.push(hslToHex(baseH, s, lightness));
+    colors.push(hslToHex(hue, s, lightness));
   }
 
   return colors;

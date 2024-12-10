@@ -9,7 +9,6 @@ import {
   DialogDescription,
 } from "@components/ui/dialog";
 import { Button } from "@components/ui/button";
-import { downloadQRCode } from "@utils/utils";
 import { CustomQR } from "@components/qrcustomize";
 
 interface QRCodeDialogProps {

@@ -1,7 +1,6 @@
 "use server";
 import dbConnect from "@/lib/utils/db";
 import Url from "@models/url";
-import { SpeedInsights } from "@vercel/speed-insights/next";
 import axios from "axios";
 import { GetServerSidePropsContext } from "next";
 
