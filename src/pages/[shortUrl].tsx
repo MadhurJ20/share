@@ -69,7 +69,8 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
       const currentTime = new Date();
       const userAgent = req.headers["user-agent"] || "Unknown";
       const referrer = req.headers["referer"] || "Direct";
-      const country = await getCountryByIp(clientIp);
+      // @ts-ignore
+      const country = req.headers.get('x-vercel-ip-country') || await getCountryByIp(clientIp);
       await Url.updateOne(
         { shortenUrl: shortUrl },
         {
