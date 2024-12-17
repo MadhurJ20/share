@@ -7,6 +7,7 @@ import { Input } from "@components/ui/input";
 import { Button } from "@components/ui/button";
 import { ThemeToggle } from "@components/themeToggle";
 import Head from "next/head";
+import Link from "next/link";
 
 export default function Home() {
   const [passcode, setPasscode] = useState<string>("");
@@ -58,6 +59,23 @@ export default function Home() {
           onSubmit={handleSubmit}
           className="flex flex-col items-center gap-4"
         >
+          <div className="flex justify-center items-center">
+            <Link href="https://aces-rmdssoe.tech">
+              <img
+                src="https://res.cloudinary.com/dygc8r0pv/image/upload/v1734452294/ACES_Logo_ACE_White_d6rz6a.png"
+                alt="ACES Logo"
+                className="w-[7em] h-[7em] rounded-[50%] mt-3"
+              />
+            </Link>
+          </div>
+          <h1 className="pt-4 pb-3 text-3xl font-bold xl:text-5xl md:text-4xl text-center">
+            <Link
+              className="text-4xl font-extrabold tracking-tight scroll-m-20 lg:text-5xl c-beige:text-beige-800"
+              href="/share"
+            >
+              Share
+            </Link>
+          </h1>
           <h1 className="text-3xl font-bold c-beige:text-beige-700/90">
             Hello :)
           </h1>

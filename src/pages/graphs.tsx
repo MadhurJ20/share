@@ -283,6 +283,9 @@ const Visualize: React.FC = () => {
               <p className="small-caps text-center c-beige:text-beige-800">
                 URL Shortener + QR Code Generator
               </p>
+              <h1 className="relative flex flex-col items-center justify-center w-full mb-10 space-y-8 overflow-hidden text-4xl font-extrabold tracking-tight scroll-m-20 lg:text-5xl c-beige:text-beige-800">
+                Visualize
+              </h1>
             </div>
             <br />
             {!loading && (
