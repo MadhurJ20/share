@@ -49,15 +49,15 @@ export default function Home() {
 
     const formattedUrl =
       originalUrl.startsWith("http://") ||
-        originalUrl.startsWith("https://") ||
-        originalUrl.startsWith("BASE_URL")
+      originalUrl.startsWith("https://") ||
+      originalUrl.startsWith("BASE_URL")
         ? originalUrl
         : `https://${originalUrl}`;
 
     if (
       expirationDate &&
       new Date(expirationDate) >
-      new Date(Date.now() + 2 * 365 * 24 * 60 * 60 * 1000)
+        new Date(Date.now() + 2 * 365 * 24 * 60 * 60 * 1000)
     ) {
       return toast.error(
         "Expiration date cannot be more than 2 years from the current date"
@@ -135,7 +135,7 @@ export default function Home() {
     }
   };
 
-  const handleClick = (buttonName: string, action = () => { }) => {
+  const handleClick = (buttonName: string, action = () => {}) => {
     action();
     setClickedButton(buttonName);
     setTimeout(() => {
@@ -166,7 +166,7 @@ export default function Home() {
         <title>ACES Share | Home</title>
         <link
           rel="icon"
-          href="https://raw.githubusercontent.com/ACES-RMDSSOE/Website/main/images/favicon.ico"
+          href="https://res.cloudinary.com/dygc8r0pv/image/upload/v1734452807/favicon_tjmufj.ico"
         />
       </Head>
       <main className="relative overflow-x-hidden flex flex-col items-center justify-center h-screen font-inter min-h-svh bg-zinc-50 dark:bg-[#09090b] c-beige:bg-beige-100">
@@ -181,7 +181,7 @@ export default function Home() {
                 <div className="flex justify-center items-center">
                   <Link href="https://aces-rmdssoe.tech">
                     <img
-                      src="https://raw.githubusercontent.com/ACES-RMDSSOE/Website/main/images/logo.png"
+                      src="https://res.cloudinary.com/dygc8r0pv/image/upload/v1734452294/ACES_Logo_ACE_White_d6rz6a.png"
                       alt="ACES Logo"
                       className="w-[7em] h-[7em] rounded-[50%] mt-3"
                     />
@@ -207,10 +207,26 @@ export default function Home() {
 
               <article className="max-w-2xl mt-7">
                 <p className="text-base lg:text-lg text-muted-foreground c-beige:text-beige-700/60">
-                  Enter your link below. In case you want to<br className='md:hidden' /> see analytics or manage links
-                  head over to the <Link href='/analytics' className='hover:underline hover:text-blue-500'><span>analytics page</span><LinkIcon className='inline-block w-6 ps-1 pe-1 aspect-square' /></Link><br className='md:hidden' /><span className='hidden lg:inline-flex'>(Press <kbd className="inline-flex items-center p-1 ml-2 mr-2 font-mono text-xs bg-gray-100 rounded c-beige:bg-primary ring-1 ring-gray-900/10 dark:bg-zinc-800 dark:ring-gray-900/50 dark:text-zinc-300 whitespace-nowrap">
-                    <Command className="inline-block w-3 h-3" /><span className="text-[.25rem]">&nbsp;</span>+<span className="text-[.25rem]">&nbsp;</span>K
-                  </kbd> to search for existing URLs).</span>
+                  Enter your link below. In case you want to
+                  <br className="md:hidden" /> see analytics or manage links
+                  head over to the{" "}
+                  <Link
+                    href="/analytics"
+                    className="hover:underline hover:text-blue-500"
+                  >
+                    <span>analytics page</span>
+                    <LinkIcon className="inline-block w-6 ps-1 pe-1 aspect-square" />
+                  </Link>
+                  <br className="md:hidden" />
+                  <span className="hidden lg:inline-flex">
+                    (Press{" "}
+                    <kbd className="inline-flex items-center p-1 ml-2 mr-2 font-mono text-xs bg-gray-100 rounded c-beige:bg-primary ring-1 ring-gray-900/10 dark:bg-zinc-800 dark:ring-gray-900/50 dark:text-zinc-300 whitespace-nowrap">
+                      <Command className="inline-block w-3 h-3" />
+                      <span className="text-[.25rem]">&nbsp;</span>+
+                      <span className="text-[.25rem]">&nbsp;</span>K
+                    </kbd>{" "}
+                    to search for existing URLs).
+                  </span>
                 </p>
               </article>
 

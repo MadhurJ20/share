@@ -12,7 +12,7 @@ export const Custom404 = () => {
         />
         <link
           rel="shortcut icon"
-          href="https://raw.githubusercontent.com/ACES-RMDSSOE/Website/main/images/favicon.ico"
+          href="https://res.cloudinary.com/dygc8r0pv/image/upload/v1734452807/favicon_tjmufj.ico"
         />
       </Head>
       <div className="flex flex-col items-center justify-center min-h-[100dvh] bg-gray-950 dark:bg-gray-950 text-gray-50 p-4">
@@ -20,7 +20,7 @@ export const Custom404 = () => {
           <div className="avatar-container">
             <a href="https://aces-rmdssoe.tech">
               <img
-                src="https://raw.githubusercontent.com/MadhurJ20/Invoice/master/assets/ACES_Logo.png"
+                src="https://res.cloudinary.com/dygc8r0pv/image/upload/v1734452294/ACES_Logo_ACE_White_d6rz6a.png"
                 alt="ACES Logo"
                 className="avatar"
               />

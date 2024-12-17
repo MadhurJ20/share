@@ -281,7 +281,7 @@ export default function Analytics() {
         <title>ACES Share | Analytics</title>
         <link
           rel="icon"
-          href="https://raw.githubusercontent.com/ACES-RMDSSOE/Website/main/images/favicon.ico"
+          href="https://res.cloudinary.com/dygc8r0pv/image/upload/v1734452807/favicon_tjmufj.ico"
         />
       </Head>
       <main className="relative overflow-x-hidden flex flex-col items-center justify-center h-screen font-inter min-h-svh bg-zinc-50 dark:bg-[#09090b] c-beige:bg-beige-100">
@@ -303,7 +303,7 @@ export default function Analytics() {
               <div className="flex justify-center items-center">
                 <a href="https://aces-rmdssoe.tech">
                   <img
-                    src="https://raw.githubusercontent.com/ACES-RMDSSOE/Website/main/images/logo.png"
+                    src="https://res.cloudinary.com/dygc8r0pv/image/upload/v1734452294/ACES_Logo_ACE_White_d6rz6a.png"
                     alt="ACES Logo"
                     className="w-[7em] h-[7em] rounded-[50%] mt-3"
                   />

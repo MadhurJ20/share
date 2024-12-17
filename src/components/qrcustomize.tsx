@@ -22,7 +22,7 @@ export const CustomQR = ({ url }: { url: string }) => {
     type: "svg",
     data: url,
     image:
-      "https://images.vexels.com/content/137688/preview/logo-geometric-polygonal-shape-029edb.png",
+      "https://res.cloudinary.com/dygc8r0pv/image/upload/v1734452294/ACES_Logo_ACE_White_d6rz6a.png",
     margin: 0,
     qrOptions: {
       // Object

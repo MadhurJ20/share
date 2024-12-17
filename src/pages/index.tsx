@@ -50,8 +50,8 @@ export default function Home() {
         />
         <link
           rel="shortcut icon"
-          href="https://raw.githubusercontent.com/ACES-RMDSSOE/Website/main/images/favicon.ico"
-        />{" "}
+          href="https://res.cloudinary.com/dygc8r0pv/image/upload/v1734452807/favicon_tjmufj.ico"
+        />
       </Head>
       <main className="flex flex-col items-center justify-center h-screen c-beige:bg-beige-100">
         <form
