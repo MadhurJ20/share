@@ -85,7 +85,7 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
                   country: country,
                 },
               ],
-              $slice: -100,
+              // $slice: -10000,
             },
           },
         },

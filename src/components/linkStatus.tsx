@@ -103,6 +103,7 @@ export const URLStatus = ({ url }: URLStatusProps) => {
   return (
     <section className="flex justify-between gap-2">
       <article className="flex flex-col mb-4 mt-2 space-y-1 text-sm *:flex *:items-center *:space-x-2">
+        <span className="font-mono text-xs text-muted-foreground"> {url._id} </span>
         <span className="">{expirationStatus}</span>
         <span className="">
           {isScheduledLive ? (
