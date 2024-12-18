@@ -87,6 +87,7 @@ export default function Home() {
             value={passcode}
             onChange={(e) => setPasscode(e.target.value)}
             placeholder="Enter passcode"
+            tabIndex={1}
             className="text-base c-beige:bg-beige-50/80 c-beige:border-beige-100 c-beige:placeholder:text-beige-800/50 c-beige:text-beige-800/80 c-beige:focus-visible:ring-beige-200 focus-visible:ring-offset-0"
           />
           <section className="flex space-x-3">
