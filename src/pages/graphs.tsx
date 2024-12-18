@@ -46,7 +46,7 @@ const Visualize: React.FC = () => {
   );
   const [timeframe, setTimeframe] = useState<string>("week"); // Or 'month', 'year'
   const [showIndividualLines, setShowIndividualLines] =
-    useState<boolean>(false);
+    useState<boolean>(true);
 
   const fetchUrls = async (): Promise<void> => {
     setLoading(true);
@@ -125,6 +125,7 @@ const Visualize: React.FC = () => {
     showIndividualLines: boolean
   ) => {
     const startDate = getStartDate(timeframe);
+    const startDate1 = new Date(getStartDate(timeframe).getTime() + 1000 * 60 * 60 * 24);
 
     if (showIndividualLines) {
       // Individual lines for each URL
@@ -160,15 +161,18 @@ const Visualize: React.FC = () => {
           });
       });
 
-      return [
-        {
-          name: "Total Clicks",
-          data: Object.entries(totalClicksByDate).map(([date, count]) => ({
-            x: date,
-            y: count,
-          })),
-        },
-      ];
+      const totalClicksData = Object.entries(totalClicksByDate)
+        .map(([date, count]) => ({
+          // Convert date to a Date object (or timestamp)
+          x: new Date(date).getTime(),  // Use timestamp for better sorting in datetime axis
+          y: count,
+        }))
+        .sort((a, b) => a.x - b.x); // Sort by timestamp to ensure chronological order
+
+      return [{
+        name: "Total Clicks",
+        data: totalClicksData,
+      }];
     }
   };
 
@@ -180,13 +184,13 @@ const Visualize: React.FC = () => {
         const browser = /Chrome/i.test(access.userAgent)
           ? "Chrome"
           : /Firefox/i.test(access.userAgent)
-          ? "Firefox"
-          : /Safari/i.test(access.userAgent) &&
-            !/Chrome/i.test(access.userAgent)
-          ? "Safari"
-          : /Edge/i.test(access.userAgent)
-          ? "Edge"
-          : "Unknown";
+            ? "Firefox"
+            : /Safari/i.test(access.userAgent) &&
+              !/Chrome/i.test(access.userAgent)
+              ? "Safari"
+              : /Edge/i.test(access.userAgent)
+                ? "Edge"
+                : "Unknown";
         browserCounts[browser] = (browserCounts[browser] || 0) + 1;
       })
     );
@@ -263,7 +267,7 @@ const Visualize: React.FC = () => {
         <div className="relative w-full py-24 overflow-x-hidden">
           <div className="w-full px-[1.15rem] py-10 mx-auto lg:px-8 lg:py-16">
             <div className="header">
-              <div className="flex justify-center items-center">
+              <div className="flex items-center justify-center">
                 <Link href="https://aces-rmdssoe.tech">
                   <img
                     src="https://res.cloudinary.com/dygc8r0pv/image/upload/v1734452294/ACES_Logo_ACE_White_d6rz6a.png"
@@ -272,7 +276,7 @@ const Visualize: React.FC = () => {
                   />
                 </Link>
               </div>
-              <h1 className="pt-4 pb-3 text-3xl font-bold xl:text-5xl md:text-4xl text-center">
+              <h1 className="pt-4 pb-3 text-3xl font-bold text-center xl:text-5xl md:text-4xl">
                 <Link
                   className="text-4xl font-extrabold tracking-tight scroll-m-20 lg:text-5xl c-beige:text-beige-800"
                   href="/share"
@@ -280,7 +284,7 @@ const Visualize: React.FC = () => {
                   Share
                 </Link>
               </h1>
-              <p className="small-caps text-center c-beige:text-beige-800">
+              <p className="text-center small-caps c-beige:text-beige-800">
                 URL Shortener + QR Code Generator
               </p>
               <h1 className="relative flex flex-col items-center justify-center w-full mb-10 space-y-8 overflow-hidden text-4xl font-extrabold tracking-tight scroll-m-20 lg:text-5xl c-beige:text-beige-800">
@@ -360,7 +364,7 @@ const Visualize: React.FC = () => {
                       URLs.
                     </p>
                     <Chart
-                      type="area"
+                      type={showIndividualLines ? "area" : "area"}
                       height="365"
                       series={getAreaChartData(
                         urls,
@@ -378,7 +382,7 @@ const Visualize: React.FC = () => {
                           height: 350,
                           fontFamily: "monospace",
                         },
-                        xaxis: { type: "datetime" },
+                        xaxis: { type: "datetime", labels: { datetimeUTC: false } },
                         colors: options.areaChartColors,
                         dataLabels: {
                           enabled: true,
