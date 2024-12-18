@@ -289,7 +289,7 @@ const Visualize: React.FC = () => {
                   {/* Area Chart */}
                   <div className="graph-card">
                     <h2 className="mb-2 c-beige:text-beige-700">Clicks per Day</h2>
-                    <header className="flex flex-col gap-2 mt-4 md:flex-row">
+                    <header className="flex flex-row gap-2 mt-4 md:flex-row">
                       <Select
                         value={timeframe}
                         onValueChange={(value) => setTimeframe(value)}
@@ -309,6 +309,7 @@ const Visualize: React.FC = () => {
                       <Button
                         type="button"
                         variant="outline"
+                        className="w-max"
                         onClick={() => setShowIndividualLines((prev) => !prev)}
                       >
                         <Checkbox
@@ -485,7 +486,7 @@ const Visualize: React.FC = () => {
                               showNullDataPoints: false,
                             },
                             grid: { show: false },
-                            tooltip: { shared: true },
+                            tooltip: { shared: true, },
                           }}
                         />
                       </div>
