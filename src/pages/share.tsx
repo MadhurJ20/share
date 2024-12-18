@@ -49,15 +49,15 @@ export default function Home() {
 
     const formattedUrl =
       originalUrl.startsWith("http://") ||
-      originalUrl.startsWith("https://") ||
-      originalUrl.startsWith("BASE_URL")
+        originalUrl.startsWith("https://") ||
+        originalUrl.startsWith("BASE_URL")
         ? originalUrl
         : `https://${originalUrl}`;
 
     if (
       expirationDate &&
       new Date(expirationDate) >
-        new Date(Date.now() + 2 * 365 * 24 * 60 * 60 * 1000)
+      new Date(Date.now() + 2 * 365 * 24 * 60 * 60 * 1000)
     ) {
       return toast.error(
         "Expiration date cannot be more than 2 years from the current date"
@@ -79,12 +79,9 @@ export default function Home() {
       return toast.error("Expiration date cannot be in the past");
     }
 
-    if (alias == "share" || alias == "analytics") {
-      return toast.error(`Custom alias cannot be: share`);
-    }
-    if (alias == "analytics") {
-      return toast.error(`Custom alias cannot be analytics`);
-    }
+    if (alias == "share") return toast.error(`Custom alias cannot be share`);
+    if (alias == "analytics") return toast.error(`Custom alias cannot be analytics`);
+    if (alias == "graphs") return toast.error(`Custom alias cannot be graphs`);
 
     try {
       const res = await fetch("/api/shorten", {
@@ -135,7 +132,7 @@ export default function Home() {
     }
   };
 
-  const handleClick = (buttonName: string, action = () => {}) => {
+  const handleClick = (buttonName: string, action = () => { }) => {
     action();
     setClickedButton(buttonName);
     setTimeout(() => {
@@ -178,7 +175,7 @@ export default function Home() {
           <div className="container relative py-10 lg:py-16">
             <main className="max-w-2xl mx-auto text-center c-beige:text-beige-800">
               <div className="header">
-                <div className="flex justify-center items-center">
+                <div className="flex items-center justify-center">
                   <Link href="https://aces-rmdssoe.tech">
                     <img
                       src="https://res.cloudinary.com/dygc8r0pv/image/upload/v1734452294/ACES_Logo_ACE_White_d6rz6a.png"
@@ -187,7 +184,7 @@ export default function Home() {
                     />
                   </Link>
                 </div>
-                <h1 className="pt-4 pb-3 text-3xl font-bold xl:text-5xl md:text-4xl text-center">
+                <h1 className="pt-4 pb-3 text-3xl font-bold text-center xl:text-5xl md:text-4xl">
                   <Link
                     className="text-4xl font-extrabold tracking-tight scroll-m-20 lg:text-5xl"
                     href="/share"
@@ -195,7 +192,7 @@ export default function Home() {
                     Share
                   </Link>
                 </h1>
-                <p className="small-caps text-center">
+                <p className="text-center small-caps">
                   URL Shortener + QR Code Generator
                 </p>
               </div>

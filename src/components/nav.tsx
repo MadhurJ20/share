@@ -1,6 +1,6 @@
 "use client";
 
-import { ChartArea, HomeIcon, UserCog2 } from "lucide-react";
+import { ChartColumnStacked, ChartPieIcon, HomeIcon, UserCog2 } from "lucide-react";
 import { ThemeToggle } from "@components/themeToggle";
 import Link from "next/link";
 
@@ -12,11 +12,11 @@ export const Nav = () => {
         <Link href="/share" className="hover:text-blue-500">
           <HomeIcon />
         </Link>
+        <Link href="/graphs" className="hover:text-blue-500">
+          <ChartPieIcon />
+        </Link>
         <Link href="/analytics" className="hover:text-blue-500">
           <UserCog2 />
-        </Link>
-        <Link href="/graphs" className="hover:text-blue-500">
-          <ChartArea />
         </Link>
         <ThemeToggle />
       </section>

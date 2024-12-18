@@ -1,7 +1,6 @@
 import { Button } from "@components/ui/button";
 import { useState, useEffect } from "react";
-import { Sun, Moon } from "lucide-react";
-import { LuScroll } from "react-icons/lu";
+import { Sun, Moon, ScrollIcon } from "lucide-react";
 
 export const ThemeToggle = () => {
   const [theme, setTheme] = useState(() => {
@@ -52,7 +51,7 @@ export const ThemeToggle = () => {
       {theme === "dark" ? (
         <Moon className="!w-5 !h-5 dark:text-white" />
       ) : theme === "c-beige" ? (
-        <LuScroll className="!w-5 !h-5 c-beige:text-beige-800" />
+        <ScrollIcon className="!w-5 !h-5 c-beige:text-beige-800" />
       ) : (
         <Sun className="!w-5 !h-5" />
       )}

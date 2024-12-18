@@ -52,8 +52,8 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
           // }
         };
       }
-      const forwarded =
-        req.headers["x-vercel-forwarded-for"] || req.headers["x-forwarded-for"];
+
+      const forwarded = req.headers["x-vercel-forwarded-for"] || req.headers["x-forwarded-for"];
       console.log("Forwarded IP:", forwarded);
       // let clientIp = forwarded ? String(forwarded.split(',')[0].trim()) : req.socket.remoteAddress;
       let clientIp = "";
@@ -64,15 +64,13 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
       } else {
         clientIp = req.socket.remoteAddress || "";
       }
-      if (clientIp.startsWith("::ffff:")) {
-        clientIp = clientIp.slice(7);
-      }
+
+      if (clientIp.startsWith("::ffff:")) clientIp = clientIp.slice(7);
       const currentTime = new Date();
       const userAgent = req.headers["user-agent"] || "Unknown";
       const referrer = req.headers["referer"] || "Direct";
       // @ts-ignore
-      const country =
-        req.headers["x-vercel-ip-country"] || (await getCountryByIp(clientIp));
+      const country = (await getCountryByIp(clientIp)) || req.headers["x-vercel-ip-country"] || "Unknown";
       await Url.updateOne(
         { shortenUrl: shortUrl },
         {

@@ -382,7 +382,12 @@ const Visualize: React.FC = () => {
                           height: 350,
                           fontFamily: "monospace",
                         },
-                        xaxis: { type: "datetime", labels: { datetimeUTC: false } },
+                        xaxis: {
+                          type: "datetime",
+                          labels: {
+                            datetimeUTC: false,
+                          }
+                        },
                         colors: options.areaChartColors,
                         dataLabels: {
                           enabled: true,
