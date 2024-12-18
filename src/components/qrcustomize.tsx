@@ -16,11 +16,15 @@ import { ChevronDown, DownloadIcon } from "lucide-react";
 import { SelectIcon } from "@radix-ui/react-select";
 
 export const CustomQR = ({ url }: { url: string }) => {
+  const sanitizedUrl = url.startsWith("undefined")
+    ? url.replace("undefined", "theaces.social/")
+    : url;
+
   const [options, setOptions] = useState<Options>({
     width: 132,
     height: 132,
     type: "svg",
-    data: url,
+    data: sanitizedUrl,
     image:
       "https://res.cloudinary.com/dygc8r0pv/image/upload/v1734452294/ACES_Logo_ACE_White_d6rz6a.png",
     margin: 0,
