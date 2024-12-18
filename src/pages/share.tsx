@@ -24,6 +24,7 @@ import SearchUrls from "@components/searchURL";
 import { GradientTop } from "@components/gradientTop";
 import { downloadQRCode } from "@utils/utils";
 import { useAuthen } from "@hooks/useAuthen";
+import { ACESHeader } from "@/components";
 
 export default function Home() {
   const authenticated = useAuthen();
@@ -174,30 +175,9 @@ export default function Home() {
         <div className="relative w-full py-24 overflow-x-hidden">
           <div className="container relative py-10 lg:py-16">
             <main className="max-w-2xl mx-auto text-center c-beige:text-beige-800">
-              <div className="header">
-                <div className="flex items-center justify-center">
-                  <Link href="https://aces-rmdssoe.tech">
-                    <img
-                      src="https://res.cloudinary.com/dygc8r0pv/image/upload/v1734452294/ACES_Logo_ACE_White_d6rz6a.png"
-                      alt="ACES Logo"
-                      className="w-[7em] h-[7em] rounded-[50%] mt-3"
-                    />
-                  </Link>
-                </div>
-                <h1 className="pt-4 pb-3 text-3xl font-bold text-center xl:text-5xl md:text-4xl">
-                  <Link
-                    className="text-4xl font-extrabold tracking-tight scroll-m-20 lg:text-5xl"
-                    href="/share"
-                  >
-                    Share
-                  </Link>
-                </h1>
-                <p className="text-center small-caps">
-                  URL Shortener + QR Code Generator
-                </p>
-              </div>
+              <ACESHeader />
               <header className="max-w-2xl mt-2">
-                <h2 className="text-3xl font-extrabold tracking-tight scroll-m-20 lg:text-4xl">
+                <h2 className="text-4xl font-extrabold tracking-tight scroll-m-20 lg:text-5xl">
                   Enter The Link!
                 </h2>
               </header>

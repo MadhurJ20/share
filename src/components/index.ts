@@ -13,6 +13,7 @@ import { URLStatus } from '@components/linkStatus';
 import SortSelect from '@components/analyticsSort';
 import { CustomQR } from "@components/qrcustomize";
 import SearchUrls from "@components/searchURL";
+import { ACESHeader } from "@components/acesHeader";
 
 export {
   Nav,
@@ -28,5 +29,6 @@ export {
   AccessGraphDialog,
   GradientTop,
   URLStatus,
-  SortSelect
+  SortSelect,
+  ACESHeader
 };

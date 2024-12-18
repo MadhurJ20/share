@@ -18,6 +18,7 @@ interface AccessGraphDialogProps {
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
   recentAccesses: Access[];
 }
+
 const AccessGraphDialog = ({
   open,
   setOpen,
@@ -36,12 +37,11 @@ const AccessGraphDialog = ({
       const firstDayOfYear = new Date(year, 0, 1);
       const dayOfYear = Math.floor(
         (startOfWeek.getTime() - firstDayOfYear.getTime()) /
-          (24 * 60 * 60 * 1000)
+        (24 * 60 * 60 * 1000)
       );
       const weekNumber = Math.ceil((dayOfYear + 1) / 7);
-      const weekKey = `${year}-W${
-        weekNumber < 10 ? "0" + weekNumber : weekNumber
-      }`;
+      const weekKey = `${year}-W${weekNumber < 10 ? "0" + weekNumber : weekNumber
+        }`;
       if (!weeks[weekKey]) {
         weeks[weekKey] = { week: weekKey, count: -1 };
       }

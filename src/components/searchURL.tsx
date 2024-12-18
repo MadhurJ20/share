@@ -92,7 +92,7 @@ const SearchUrls = () => {
 
   return (
     // @ts-ignore
-    <div className="border rounded-lg max-w-3/4 lg:w-1/4">
+    <aside className="border rounded-lg max-w-3/4 lg:w-1/4">
       <CommandDialog open={open} onOpenChange={setOpen}>
         <DialogTitle className="hidden"></DialogTitle>
         <DialogDescription className="hidden"></DialogDescription>
@@ -120,9 +120,7 @@ const SearchUrls = () => {
           {urls.length === 0 ? (
             <CommandEmpty>{error ? error : "No URLs found"}</CommandEmpty>
           ) : (
-            <CommandGroup
-              heading={searchQuery ? "Search Results" : "Recent URLs"}
-            >
+            <CommandGroup heading={searchQuery ? "Search Results" : "Recent URLs"}>
               {filteredUrls.map((url, index) => (
                 <CommandItem
                   key={index}
@@ -141,37 +139,38 @@ const SearchUrls = () => {
                       className="block rounded aspect-square"
                     />
                     <section className="flex flex-col space-y-2">
-                      <main className="flex items-center space-x-3 font-mono">
-                        <ExternalLinkIcon className="w-4 h-4" />
+                      <main className="flex items-center space-x-2 font-mono">
+                        <ExternalLinkIcon className="w-4 h-4 c-beige:text-beige-800" />
                         <a
                           href={url.originalUrl}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="text-sm font-normal hover:text-blue-400 hover:underline"
+                          className="!text-xs font-normal hover:text-blue-400 hover:underline inline-block px-2 py-1 font-mono border rounded-lg text-primary overflow-x-auto w-52 scrollbar-none whitespace-nowrap c-beige:text-beige-700"
                         >
                           {url.originalUrl.replace(/^https?:\/\//, "")}
                         </a>
                       </main>
-                      <div className="flex items-center space-x-3 font-mono text-muted-foreground">
+                      <div className="flex items-center space-x-2 font-mono text-muted-foreground">
                         <LinkIcon className="w-4 h-4" />
                         <Link
                           href={`/analytics?id=${url._id}`}
                           passHref
                           target="_blank"
-                          className="text-[.75rem] hover:underline"
+                          className="text-[.75rem] hover:underline inline-block px-2"
                         >
                           {url.shortenUrl}{" "}
                         </Link>
                       </div>
                     </section>
                   </article>
+                  <p className="flex ml-auto font-mono text-muted-foreground">{url.accesses.count}</p>
                 </CommandItem>
               ))}
             </CommandGroup>
           )}
         </CommandList>
       </CommandDialog>
-    </div>
+    </aside>
   );
 };
 

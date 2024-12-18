@@ -33,3 +33,14 @@ export type SortOption =
   | "duplicateAsc"
   | "toBeDeleted"
   | "everything";
+
+export type ChartColorOptions = {
+  backgroundOptions: { color: string };
+  areaChartColor: string;
+  areaChartColors: string[];
+  treemapColor: string;
+  treemapColors: string[];
+  heatmapColor: string;
+  heatmapColors: string[];
+  radarChartColor: string;
+}

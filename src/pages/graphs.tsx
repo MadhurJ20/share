@@ -4,7 +4,7 @@ import Head from "next/head";
 import Link from "next/link";
 
 import React, { useState, useEffect } from "react";
-import { URLDocument, URLWithDuplicateCount } from "@/types/types";
+import { ChartColorOptions, URLDocument, URLWithDuplicateCount } from "@/types/types";
 import { ChevronDown, RefreshCcw } from "lucide-react";
 import { Button } from "@components/ui/button";
 import { GradientTop, Nav, toast, SearchUrls } from "@/components";
@@ -18,22 +18,11 @@ import {
 import { SelectIcon } from "@radix-ui/react-select";
 import { useAuthen } from "@/hooks/useAuthen";
 import { Checkbox } from "@/components/ui/checkbox";
+import { ACESHeader } from "@/components/acesHeader";
 
-const VisualizeHeader = dynamic(() => import("@/components/visualizeHeader"), {
-  ssr: false,
-});
+const VisualizeHeader = dynamic(() => import("@/components/visualizeHeader"), { ssr: false, });
 const Chart = dynamic(() => import("react-apexcharts"), { ssr: false });
 
-interface ChartOptions {
-  backgroundOptions: { color: string };
-  areaChartColor: string;
-  areaChartColors: string[];
-  treemapColor: string;
-  treemapColors: string[];
-  heatmapColor: string;
-  heatmapColors: string[];
-  radarChartColor: string;
-}
 
 const Visualize: React.FC = () => {
   const authenticated = useAuthen();
@@ -226,17 +215,15 @@ const Visualize: React.FC = () => {
     document.dispatchEvent(event);
   };
 
-  const [options, setOptions] = useState<ChartOptions>({
-    backgroundOptions: {
-      color: "#ffffff", // Default color
-    },
-    areaChartColor: "#000000", // Default color for area chart
-    areaChartColors: [], // Empty array initially
-    treemapColor: "#ff0000", // Default color for treemap
-    treemapColors: [], // Empty array for treemap
-    heatmapColor: "#00ff00", // Default color for heatmap
-    heatmapColors: [], // Empty array for heatmap
-    radarChartColor: "#0000ff", // Default color for radar chart
+  const [options, setOptions] = useState<ChartColorOptions>({
+    backgroundOptions: { color: "#ffffff", }, // Default color
+    areaChartColor: "#000000",                // Default color for area chart
+    areaChartColors: [],                      // Empty array initially
+    treemapColor: "#ff0000",                  // Default color for treemap
+    treemapColors: [],                        // Empty array for treemap
+    heatmapColor: "#00ff00",                  // Default color for heatmap
+    heatmapColors: [],                        // Empty array for heatmap
+    radarChartColor: "#0000ff",               // Default color for radar chart
   });
 
   if (!authenticated) return null;
@@ -264,34 +251,12 @@ const Visualize: React.FC = () => {
         >
           <RefreshCcw className="w-4 h-4 text-black dark:text-white" />
         </Button>
-        <div className="relative w-full py-24 overflow-x-hidden">
+        <article className="relative w-full py-24 overflow-x-hidden">
           <div className="w-full px-[1.15rem] py-10 mx-auto lg:px-8 lg:py-16">
-            <div className="header">
-              <div className="flex items-center justify-center">
-                <Link href="https://aces-rmdssoe.tech">
-                  <img
-                    src="https://res.cloudinary.com/dygc8r0pv/image/upload/v1734452294/ACES_Logo_ACE_White_d6rz6a.png"
-                    alt="ACES Logo"
-                    className="w-[7em] h-[7em] rounded-[50%] mt-3"
-                  />
-                </Link>
-              </div>
-              <h1 className="pt-4 pb-3 text-3xl font-bold text-center xl:text-5xl md:text-4xl">
-                <Link
-                  className="text-4xl font-extrabold tracking-tight scroll-m-20 lg:text-5xl c-beige:text-beige-800"
-                  href="/share"
-                >
-                  Share
-                </Link>
-              </h1>
-              <p className="text-center small-caps c-beige:text-beige-800">
-                URL Shortener + QR Code Generator
-              </p>
-              <h1 className="relative flex flex-col items-center justify-center w-full mb-10 space-y-8 overflow-hidden text-4xl font-extrabold tracking-tight scroll-m-20 lg:text-5xl c-beige:text-beige-800">
-                Visualize
-              </h1>
-            </div>
-            <br />
+            <ACESHeader />
+            <h1 className="relative flex flex-col items-center justify-center w-full mb-10 space-y-8 overflow-hidden text-4xl font-extrabold tracking-tight scroll-m-20 lg:text-5xl c-beige:text-beige-800">
+              Visualize
+            </h1>
             {!loading && (
               <VisualizeHeader
                 urls={urls}
@@ -323,7 +288,7 @@ const Visualize: React.FC = () => {
                 <section className="flex flex-col gap-4 lg:flex-row *:flex-1">
                   {/* Area Chart */}
                   <div className="graph-card">
-                    <h2 className="mb-2">Clicks per Day</h2>
+                    <h2 className="mb-2 c-beige:text-beige-700">Clicks per Day</h2>
                     <header className="flex flex-col gap-2 mt-4 md:flex-row">
                       <Select
                         value={timeframe}
@@ -399,7 +364,7 @@ const Visualize: React.FC = () => {
                   </div>
                   {/* Tree Map */}
                   <div className="graph-card">
-                    <h2 className="">Browser Distribution</h2>
+                    <h2 className="c-beige:text-beige-700">Browser Distribution</h2>
                     <p className="">
                       The following treemap shows the distribution of browser
                       usage. It is the cumulative distribution of browser usage
@@ -442,7 +407,7 @@ const Visualize: React.FC = () => {
                     {/* Heatmap */}
                     {selectedUrl && (
                       <div className="graph-card">
-                        <h2 className="">
+                        <h2 className="c-beige:text-beige-700">
                           Heatmap ({selectedUrl.accesses.count} Total)
                         </h2>
                         <p className="">
@@ -529,7 +494,7 @@ const Visualize: React.FC = () => {
                     {/* Radar Chart */}
                     {selectedUrl && (
                       <div className="graph-card">
-                        <h2 className="">Radar Chart</h2>
+                        <h2 className="c-beige:text-beige-700">Radar Chart</h2>
                         <p className="">
                           The following radar chart displays the most accessed
                           hours for the selected URL. It goes over the entire
@@ -568,7 +533,7 @@ const Visualize: React.FC = () => {
               </main>
             )}
           </div>
-        </div>
+        </article>
       </main>
     </>
   );

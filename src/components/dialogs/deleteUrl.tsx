@@ -14,6 +14,7 @@ interface DeleteUrlDialogProps {
   urlToDelete: string;
   handleDelete: (url: string) => void;
 }
+
 export default function DeleteUrlDialog({
   open,
   setOpen,

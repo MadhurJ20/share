@@ -25,6 +25,7 @@ interface RecentAccessesDialogProps {
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
   recentAccesses: Access[];
 }
+
 const RecentAccessesDialog = ({
   open,
   setOpen,

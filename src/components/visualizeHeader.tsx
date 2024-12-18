@@ -7,7 +7,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/ui-index";
-import { URLWithDuplicateCount } from "@/types/types";
+import { ChartColorOptions, URLWithDuplicateCount } from "@/types/types";
 import ColorPicker from "@/components/colorPicker";
 import {
   generateAnalogousColors,
@@ -26,28 +26,8 @@ interface VisualizeHeaderProps {
   selectedUrl: URLWithDuplicateCount | null;
   onSearchMobile: () => void;
   onUrlSelect: (url: URLWithDuplicateCount | null) => void;
-  options: {
-    backgroundOptions: { color: string };
-    areaChartColor: string;
-    areaChartColors: string[];
-    treemapColor: string;
-    treemapColors: string[];
-    heatmapColor: string;
-    heatmapColors: string[];
-    radarChartColor: string;
-  };
-  setOptions: React.Dispatch<
-    React.SetStateAction<{
-      backgroundOptions: { color: string };
-      areaChartColor: string;
-      areaChartColors: string[];
-      treemapColor: string;
-      treemapColors: string[];
-      heatmapColor: string;
-      heatmapColors: string[];
-      radarChartColor: string;
-    }>
-  >;
+  options: ChartColorOptions;
+  setOptions: React.Dispatch<React.SetStateAction<ChartColorOptions>>;
 }
 
 const VisualizeHeader: React.FC<VisualizeHeaderProps> = ({

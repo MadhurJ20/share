@@ -8,10 +8,12 @@ import { Button } from "@components/ui/button";
 import { HexColorPicker } from "react-colorful";
 import { Input } from "@components/ui/input";
 import Image from "next/image";
+
 interface ColorPickerProps {
   onColorChange: (color: string) => void;
   value?: string;
 }
+
 const ColorPicker: React.FC<ColorPickerProps> = ({
   onColorChange,
   value = "#000000",

@@ -16,6 +16,7 @@ interface QRCodeDialogProps {
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
   shortenUrl: string;
 }
+
 const QRCodeDialog = ({ open, setOpen, shortenUrl }: QRCodeDialogProps) => {
   const qrCodeRef = useRef<HTMLElement>(null);
   const BASE_URL = process.env.BASE_URL;

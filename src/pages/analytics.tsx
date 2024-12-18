@@ -35,6 +35,7 @@ import {
   SortSelect,
   URLStatus,
   GradientTop,
+  ACESHeader,
 } from "@components/index";
 import { Checkbox } from "@/components/ui/checkbox";
 import { toast } from "sonner";
@@ -299,28 +300,7 @@ export default function Analytics() {
         </Button>
         <div className="relative w-full py-24 overflow-x-hidden">
           <div className="w-full px-[1.15rem] py-10 mx-auto lg:px-8 lg:py-16">
-            <div className="header">
-              <div className="flex justify-center items-center">
-                <a href="https://aces-rmdssoe.tech">
-                  <img
-                    src="https://res.cloudinary.com/dygc8r0pv/image/upload/v1734452294/ACES_Logo_ACE_White_d6rz6a.png"
-                    alt="ACES Logo"
-                    className="w-[7em] h-[7em] rounded-[50%] mt-3"
-                  />
-                </a>
-              </div>
-              <h1 className="pt-4 pb-3 text-3xl font-bold xl:text-5xl md:text-4xl text-center c-beige:text-beige-800">
-                <Link
-                  className="text-4xl font-extrabold tracking-tight scroll-m-20 lg:text-5xl"
-                  href="/share"
-                >
-                  Share
-                </Link>
-              </h1>
-              <p className="mb-2 font-mono text-center small-caps c-beige:text-beige-800">
-                URL Shortener + QR Code Generator
-              </p>
-            </div>
+            <ACESHeader />
             <header className="relative flex flex-col items-center justify-center w-full mb-10 space-y-8 overflow-hidden">
               <h2 className="text-4xl font-extrabold tracking-tight scroll-m-20 lg:text-5xl c-beige:text-beige-800">
                 Analytics
@@ -569,7 +549,7 @@ export default function Analytics() {
                 closeDialog("qrCode");
               }}
               shortenUrl={dialogs.qrCode.data || ""}
-              // shortenUrl={dialogs.qrCode.data}
+            // shortenUrl={dialogs.qrCode.data}
             />
             {dialogs.recents.data && (
               <RecentAccessesDialog
