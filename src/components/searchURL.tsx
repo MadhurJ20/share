@@ -145,7 +145,7 @@ const SearchUrls = () => {
                           href={url.originalUrl}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="!text-xs font-normal hover:text-blue-400 hover:underline inline-block px-2 py-1 font-mono border rounded-lg text-primary overflow-x-auto w-52 scrollbar-none whitespace-nowrap c-beige:text-beige-700"
+                          className="!text-xs font-normal hover:text-blue-400 hover:underline inline-block px-2 py-1 font-mono border rounded-lg text-primary overflow-x-auto w-40 lg:w-52 scrollbar-none whitespace-nowrap c-beige:text-beige-700"
                         >
                           {url.originalUrl.replace(/^https?:\/\//, "")}
                         </a>
