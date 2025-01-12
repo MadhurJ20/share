@@ -122,11 +122,15 @@ export default function Analytics() {
 
   const handleCopy = (shortenUrl: string) => {
     if (shortenUrl) {
+      // const fullUrl = `${process.env.BASE_URL}/${shortenUrl}`;
+      // const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL;
+      const fullUrl = `${process.env.NEXT_PUBLIC_BASE_URL}/${shortenUrl}`;
+      console.log("Full URL:", fullUrl);
       navigator.clipboard
-        .writeText(shortenUrl)
+        .writeText(fullUrl)
         .then(() => {
           toast.success("URL copied to clipboard!");
-          setCopiedUrl(shortenUrl);
+          setCopiedUrl(fullUrl);
         })
         .catch((err) => {
           toast.error("Failed to copy: " + err);
@@ -549,7 +553,7 @@ export default function Analytics() {
                 closeDialog("qrCode");
               }}
               shortenUrl={dialogs.qrCode.data || ""}
-            // shortenUrl={dialogs.qrCode.data}
+              // shortenUrl={dialogs.qrCode.data}
             />
             {dialogs.recents.data && (
               <RecentAccessesDialog
