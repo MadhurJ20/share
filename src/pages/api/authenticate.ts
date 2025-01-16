@@ -10,7 +10,6 @@ export default async function handler(
     const { passcode } = req.body;
     try {
       await dbConnect(req, res);
-
       const url = await Url.findOne({ q: passcode });
 
       if (url) {

@@ -90,13 +90,8 @@
   }
 }
 
-.text-shadow-c-beige {
-  text-shadow: 0px 1px 3px rgba(155, 155, 155, 0.5);
-}
-
-.small-caps {
-  font-variant: small-caps;
-}
+.text-shadow-c-beige { text-shadow: 0px 1px 3px rgba(155, 155, 155, 0.5) }
+.small-caps { font-variant: small-caps; }
 .highlighted {
   background-color: rgba(255, 255, 0, 0.3); /* Light yellow background */
   transition: background-color 0.3s ease-in-out;

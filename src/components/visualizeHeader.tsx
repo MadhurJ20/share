@@ -1,12 +1,8 @@
+"use client"
+
 import {
-  Button,
-  Select,
-  SelectContent,
-  SelectIcon,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/ui-index";
+  Button
+} from "@/components/ui/button";
 import { ChartColorOptions, URLWithDuplicateCount } from "@/types/types";
 import ColorPicker from "@/components/colorPicker";
 import {
@@ -15,11 +11,34 @@ import {
   generateTreemapColors,
 } from "@/lib/utils/utils";
 import {
-  ChevronDown,
+  CheckIcon,
+  ChevronsUpDownIcon,
   ExternalLinkIcon,
+  Link2Icon,
   LinkIcon,
   SearchIcon,
 } from "lucide-react";
+
+import { ScrollArea } from "@/components/ui/scroll-area"
+import {
+  Command,
+  CommandEmpty,
+  CommandGroup,
+  CommandInput,
+  CommandItem,
+  CommandList,
+} from "@/components/ui/command"
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover"
+import {
+  HoverCard,
+  HoverCardContent,
+  HoverCardTrigger,
+} from "@/components/ui/hover-card"
+import { useState } from "react";
 
 interface VisualizeHeaderProps {
   urls: URLWithDuplicateCount[];
@@ -38,43 +57,97 @@ const VisualizeHeader: React.FC<VisualizeHeaderProps> = ({
   options,
   setOptions,
 }) => {
-  return (
-    <header className="relative flex flex-col items-center justify-center w-full mb-10 space-y-10 overflow-hidden">
-      {/* Action Buttons Section */}
-      <section className="flex items-center justify-center space-x-2">
-        <Button
-          type="button"
-          variant="outline"
-          className="flex"
-          onClick={onSearchMobile}
-        >
-          <span className="flex w-4 aspect-square">
-            <SearchIcon />
-          </span>
-        </Button>
-        <Select
-          value={selectedUrl?._id || ""}
-          onValueChange={(value: string) => {
-            const selected = urls.find((url) => url._id === value) || null;
-            onUrlSelect(selected || null);
-          }}
-        >
-          <SelectTrigger className="lg:max-w-[50%] min-w-[200px] w-max max-w-[300px] focus-visible:ring-0 focus-visible:outline-none focus:ring-0 focus:ring-offset-0">
-            <SelectValue placeholder="Select URL" />
-            <SelectIcon asChild>
-              <ChevronDown className="w-4 h-4 ml-4 opacity-50" />
-            </SelectIcon>
-          </SelectTrigger>
-          <SelectContent>
-            {urls.map((url) => (
-              <SelectItem key={url._id} value={url._id}>
-                {url.shortenUrl}
-              </SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
-      </section>
+  const [open, setOpen] = useState(false)
+  const [searchTerm, setSearchTerm] = useState("")
 
+  return (
+    <header className="relative flex flex-col items-center justify-center w-full mb-10 space-y-8 overflow-hidden">
+      {/* Action Buttons Section */}
+      <article className="flex flex-col items-center justify-center space-y-2">
+        <section className="flex items-center justify-center space-x-2">
+          <Button
+            type="button"
+            variant="outline"
+            className="flex"
+            onClick={onSearchMobile}
+          >
+            <span className="flex w-4 aspect-square">
+              <SearchIcon />
+            </span>
+          </Button>
+          <Popover open={open} onOpenChange={setOpen}>
+            <PopoverTrigger asChild>
+              <Button
+                variant="outline"
+                role="combobox"
+                aria-expanded={open}
+                className="w-[200px] justify-between"
+              >
+                {selectedUrl
+                  ? selectedUrl.shortenUrl
+                  : "Select URL"}
+                <ChevronsUpDownIcon className="opacity-50" />
+              </Button>
+            </PopoverTrigger>
+            <PopoverContent className="w-[200px] p-0">
+              <Command>
+                <CommandInput
+                  placeholder="Search URL"
+                  className="h-9"
+                />
+                <CommandList className="scrollbar-none">
+                  <ScrollArea className="max-h-[200px]">
+                    <CommandEmpty>No URL found.</CommandEmpty>
+                    <CommandGroup className="">
+                      {urls.map((url) => (
+                        <CommandItem
+                          key={url._id}
+                          value={url.shortenUrl}
+                          onSelect={(currentValue) => {
+                            const selected = urls.find((u) => u.shortenUrl === currentValue) || null
+                            onUrlSelect(selected)
+                            setOpen(false)
+                          }}
+                        >
+                          <span className="pl-1">{url.shortenUrl}</span>
+                          <CheckIcon
+                            className={`ml-auto ${selectedUrl?._id === url._id ? "opacity-100" : "opacity-0"} w-4 h-4`}
+                          />
+                        </CommandItem>
+                      ))}
+                    </CommandGroup>
+                  </ScrollArea>
+                </CommandList>
+              </Command>
+            </PopoverContent>
+          </Popover>
+        </section>
+        <section className="flex items-center justify-center space-x-2">
+          {selectedUrl && (
+            <HoverCard>
+              <HoverCardTrigger asChild>
+                <Button variant="outline"><Link2Icon className="w-4 h-4" /></Button>
+              </HoverCardTrigger>
+              <HoverCardContent className="w-max dark:bg-[#2222] bg-[#ccc2] backdrop-blur-md">
+                <footer className="*:flex *:items-center *:space-x-4 flex flex-col space-y-2 text-xs">
+                  <p>
+                    <LinkIcon className="w-5 h-5 c-beige:text-beige-700" />
+                    <span className="inline-block px-3 py-1.5 font-mono border dark:border-neutral-700 rounded-lg text-primary hover:underline overflow-x-auto w-[128px] scrollbar-none whitespace-nowrap c-beige:text-beige-700">
+                      {selectedUrl?.shortenUrl}
+                    </span>
+                  </p>
+                  <p>
+                    <ExternalLinkIcon className="w-5 h-5 c-beige:text-beige-700" />
+                    <span className="inline-block px-3 py-1.5 font-mono border dark:border-neutral-700 rounded-lg text-primary hover:underline overflow-x-auto w-[128px] scrollbar-none whitespace-nowrap c-beige:text-beige-700">
+                      {selectedUrl?.originalUrl}
+                    </span>
+                  </p>
+                </footer>
+              </HoverCardContent>
+            </HoverCard>
+          )}
+        </section>
+      </article>
       {/* Color Picker Section */}
       <section className="flex items-center justify-center my-2 space-x-4 *:items-center">
         <div className="flex flex-col">
@@ -135,22 +208,6 @@ const VisualizeHeader: React.FC<VisualizeHeaderProps> = ({
       </section>
 
       {/* Footer Section */}
-      {selectedUrl && (
-        <footer className="*:flex *:items-center *:space-x-4 flex flex-col space-y-2 text-xs">
-          <p>
-            <LinkIcon className="w-5 h-5" />
-            <span className="inline-block px-3 py-1.5 font-mono border rounded-lg text-primary hover:underline overflow-x-auto w-[128px] scrollbar-none whitespace-nowrap c-beige:text-beige-700">
-              {selectedUrl?.shortenUrl}
-            </span>
-          </p>
-          <p>
-            <ExternalLinkIcon className="w-5 h-5" />
-            <span className="inline-block px-3 py-1.5 font-mono border rounded-lg text-primary hover:underline overflow-x-auto w-[128px] scrollbar-none whitespace-nowrap c-beige:text-beige-700">
-              {selectedUrl?.originalUrl}
-            </span>
-          </p>
-        </footer>
-      )}
     </header>
   );
 };

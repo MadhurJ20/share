@@ -83,7 +83,7 @@ export default function Home() {
             </p>
           </div>
           <Input
-            type="text"
+            type="password"
             value={passcode}
             onChange={(e) => setPasscode(e.target.value)}
             placeholder="Enter passcode"
@@ -117,7 +117,7 @@ export default function Home() {
             </div>
           </section>
         </form>
-        {error && <p>{error}</p>}
+        {error && <p className="mt-2">{error}</p>}
         <SpeedInsights />
       </main>
     </>
