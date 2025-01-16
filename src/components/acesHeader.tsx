@@ -9,6 +9,7 @@ export const ACESHeader = () => {
             src="https://res.cloudinary.com/dygc8r0pv/image/upload/v1734452294/ACES_Logo_ACE_White_d6rz6a.png"
             alt="ACES Logo"
             className="w-[7em] h-[7em] rounded-[50%] mt-3"
+            loading="lazy"
           />
         </Link>
       </div>

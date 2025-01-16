@@ -128,6 +128,7 @@ const VisualizeHeader: React.FC<VisualizeHeaderProps> = ({
           </Popover>
         </section>
         <section className="flex items-center justify-center space-x-2">
+          <Button onClick={() => onRecentSelect(true)} variant="outline" className="flex items-center w-[200px] space-x-2"><HistoryIcon className="w-4 h-4" /><span>Last 10 Recent</span></Button>
           {selectedUrl && (
             <HoverCard>
               <HoverCardTrigger asChild>
@@ -151,7 +152,7 @@ const VisualizeHeader: React.FC<VisualizeHeaderProps> = ({
               </HoverCardContent>
             </HoverCard>
           )}
-          <Button onClick={() => onRecentSelect(true)} variant="outline" className="flex items-center w-[200px] space-x-2"><HistoryIcon className="w-4 h-4" /><span>Last 10 Recent</span></Button>
+
         </section>
       </article>
       {/* Color Picker Section */}

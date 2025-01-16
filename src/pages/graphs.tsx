@@ -1,7 +1,6 @@
 import dynamic from "next/dynamic"; // Dynamically import ApexCharts
 import Image from "next/image";
 import Head from "next/head";
-import Link from "next/link";
 
 import React, { useState, useEffect } from "react";
 import { ChartColorOptions, URLDocument, URLWithDuplicateCount } from "@/types/types";
