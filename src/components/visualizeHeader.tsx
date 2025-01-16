@@ -14,6 +14,7 @@ import {
   CheckIcon,
   ChevronsUpDownIcon,
   ExternalLinkIcon,
+  HistoryIcon,
   Link2Icon,
   LinkIcon,
   SearchIcon,
@@ -44,6 +45,7 @@ interface VisualizeHeaderProps {
   urls: URLWithDuplicateCount[];
   selectedUrl: URLWithDuplicateCount | null;
   onSearchMobile: () => void;
+  onRecentSelect: React.Dispatch<React.SetStateAction<boolean>>;
   onUrlSelect: (url: URLWithDuplicateCount | null) => void;
   options: ChartColorOptions;
   setOptions: React.Dispatch<React.SetStateAction<ChartColorOptions>>;
@@ -54,6 +56,7 @@ const VisualizeHeader: React.FC<VisualizeHeaderProps> = ({
   selectedUrl,
   onSearchMobile,
   onUrlSelect,
+  onRecentSelect,
   options,
   setOptions,
 }) => {
@@ -96,27 +99,29 @@ const VisualizeHeader: React.FC<VisualizeHeaderProps> = ({
                   className="h-9"
                 />
                 <CommandList className="scrollbar-none">
-                  <ScrollArea className="max-h-[200px]">
-                    <CommandEmpty>No URL found.</CommandEmpty>
-                    <CommandGroup className="">
-                      {urls.map((url) => (
-                        <CommandItem
-                          key={url._id}
-                          value={url.shortenUrl}
-                          onSelect={(currentValue) => {
-                            const selected = urls.find((u) => u.shortenUrl === currentValue) || null
-                            onUrlSelect(selected)
-                            setOpen(false)
-                          }}
-                        >
-                          <span className="pl-1">{url.shortenUrl}</span>
-                          <CheckIcon
-                            className={`ml-auto ${selectedUrl?._id === url._id ? "opacity-100" : "opacity-0"} w-4 h-4`}
-                          />
-                        </CommandItem>
-                      ))}
-                    </CommandGroup>
-                  </ScrollArea>
+                  <CommandEmpty>No URL found.</CommandEmpty>
+                  <CommandGroup className="">
+                    <ScrollArea className="">
+                      <div className="max-h-48">
+                        {urls.map((url) => (
+                          <CommandItem
+                            key={url._id}
+                            value={url.shortenUrl}
+                            onSelect={(currentValue) => {
+                              const selected = urls.find((u) => u.shortenUrl === currentValue) || null
+                              onUrlSelect(selected)
+                              setOpen(false)
+                            }}
+                          >
+                            <span className="pl-1">{url.shortenUrl}</span>
+                            <CheckIcon
+                              className={`ml-auto ${selectedUrl?._id === url._id ? "opacity-100" : "opacity-0"} w-4 h-4 mr-1`}
+                            />
+                          </CommandItem>
+                        ))}
+                      </div>
+                    </ScrollArea>
+                  </CommandGroup>
                 </CommandList>
               </Command>
             </PopoverContent>
@@ -146,6 +151,7 @@ const VisualizeHeader: React.FC<VisualizeHeaderProps> = ({
               </HoverCardContent>
             </HoverCard>
           )}
+          <Button onClick={() => onRecentSelect(true)} variant="outline" className="flex items-center w-[200px] space-x-2"><HistoryIcon className="w-4 h-4" /><span>Last 10 Recent</span></Button>
         </section>
       </article>
       {/* Color Picker Section */}

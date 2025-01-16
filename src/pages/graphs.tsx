@@ -22,6 +22,7 @@ import { ACESHeader } from "@/components/acesHeader";
 
 const VisualizeHeader = dynamic(() => import("@/components/visualizeHeader"), { ssr: false, });
 const Chart = dynamic(() => import("react-apexcharts"), { ssr: false });
+const LastRecent = dynamic(() => import("@/components/dialogs/last-recent"), { ssr: false, });
 
 
 const Visualize: React.FC = () => {
@@ -34,8 +35,8 @@ const Visualize: React.FC = () => {
     null
   );
   const [timeframe, setTimeframe] = useState<string>("week"); // Or 'month', 'year'
-  const [showIndividualLines, setShowIndividualLines] =
-    useState<boolean>(true);
+  const [showIndividualLines, setShowIndividualLines] = useState<boolean>(true);
+  const [openRecent, setOpenRecent] = useState<boolean>(false);
 
   const fetchUrls = async (): Promise<void> => {
     setLoading(true);
@@ -263,6 +264,7 @@ const Visualize: React.FC = () => {
                 selectedUrl={selectedUrl}
                 onSearchMobile={handleSearchMobile}
                 onUrlSelect={setSelectedUrl}
+                onRecentSelect={setOpenRecent}
                 options={options}
                 setOptions={setOptions}
               />
@@ -280,7 +282,9 @@ const Visualize: React.FC = () => {
               </div>
             )}
             {error && <p className="text-red-500">{error}</p>}
-
+            {openRecent && (
+              <LastRecent open={openRecent} setOpen={setOpenRecent} />
+            )}
             {/* URL Selector */}
             {!loading && !error && (
               <main className="w-full *:w-full flex flex-col gap-4">
