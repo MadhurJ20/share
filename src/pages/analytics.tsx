@@ -160,7 +160,6 @@ export default function Analytics() {
         );
         toast.success("URL updated successfully!");
       } else {
-        // Handle error from API response
         const { message } = await res.json();
         toast.error(message || "Failed to update URL");
       }
@@ -553,7 +552,7 @@ export default function Analytics() {
                 closeDialog("qrCode");
               }}
               shortenUrl={dialogs.qrCode.data || ""}
-              // shortenUrl={dialogs.qrCode.data}
+            // shortenUrl={dialogs.qrCode.data}
             />
             {dialogs.recents.data && (
               <RecentAccessesDialog

@@ -153,7 +153,7 @@ const Visualize: React.FC = () => {
       const totalClicksData = Object.entries(totalClicksByDate)
         .map(([date, count]) => ({
           // Convert date to a Date object (or timestamp)
-          x: new Date(date).getTime(),  // Use timestamp for better sorting in datetime axis
+          x: new Date(date).getTime(), // Use timestamp for better sorting in datetime axis
           y: count,
         }))
         .sort((a, b) => a.x - b.x); // Sort by timestamp to ensure chronological order

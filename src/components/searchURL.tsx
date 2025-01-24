@@ -25,7 +25,7 @@ const SearchUrls = () => {
 
   const fetchUrls = async (searchQuery: string = "") => {
     try {
-      const query = searchQuery ? `?search=${searchQuery}` : ""; // Append search query if present
+      const query = searchQuery ? `?search=${searchQuery}` : "";
       const res = await fetch(`/api/searchDialogPages${query}`);
       const data: URLDocument[] = await res.json();
       setUrls(data);
@@ -72,7 +72,7 @@ const SearchUrls = () => {
     (e: KeyboardEvent) => {
       if (e.key === "Enter" && filteredUrls.length > 0) {
         const selectedUrl = filteredUrls[selectedIndex];
-      }
+      } // Useless
 
       if (e.key === "k" && (e.metaKey || e.ctrlKey || e.altKey)) {
         e.preventDefault();

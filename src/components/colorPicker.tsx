@@ -24,6 +24,7 @@ const ColorPicker: React.FC<ColorPickerProps> = ({
     setColor(newColor); // Update color state
     onColorChange(newColor); // Notify parent component of the color change
   };
+
   return (
     <Popover onOpenChange={setOpen} open={open}>
       <PopoverTrigger asChild>

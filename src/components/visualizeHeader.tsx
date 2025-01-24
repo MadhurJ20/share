@@ -206,7 +206,7 @@ const VisualizeHeader: React.FC<VisualizeHeaderProps> = ({
             onColorChange={(color: string) => {
               setOptions((options) => ({
                 ...options,
-                radarChartColor: color, // Only base color for radar
+                radarChartColor: color,
               }));
             }}
           />

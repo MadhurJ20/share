@@ -10,6 +10,7 @@ export default async function handler(
     await dbConnect(req, res);
 
     if (req.method === "GET" && req.query.action === "recent-ten") {
+      // For last-recent.tsx specifically
       try {
         const urls = await Url.find({ "accesses.lastAccessed": { $exists: true } })
           .sort({ "accesses.lastAccessed.date": -1 })
@@ -23,13 +24,14 @@ export default async function handler(
     }
 
     if (req.method === "GET") {
+      // Used basically everywhere
       const urls = await Url.find({ q: { $exists: false } });
       return res.status(200).json(urls);
     }
 
     if (req.method === "DELETE") {
       const { id } = req.query; // Get the URL ID from the query parameters
-      const { permanent } = req.query;
+      const { permanent } = req.query; // Perma or not
 
       if (!id) {
         return res.status(400).json({ message: "URL ID is required" });
@@ -38,7 +40,7 @@ export default async function handler(
       if (!url) return res.status(404).json({ message: "URL not found" });
       // Soft delete if permanent delete is not specified
       if (req.query.action !== "permanent") {
-        if (url.isDeleted) {
+        if (url.isDeleted) { // If soft deleted
           return res
             .status(400)
             .json({ message: "URL has already been deleted" });
@@ -52,7 +54,7 @@ export default async function handler(
           return res.status(404).json({ message: "URL not found" });
         return res.status(200).json({ message: "URL deleted successfully" });
       }
-      console.log("Permanent delete issued on URL ID:", id);
+      console.log("Permanent delete issued on URL ID:", id); // Don't remove
       const deleteResult = await Url.findByIdAndDelete(id);
       if (!deleteResult)
         return res.status(404).json({ message: "URL not found" });
@@ -61,10 +63,9 @@ export default async function handler(
 
     if (req.method === "PUT") {
       const { id } = req.query; // Get the URL ID from the query parameters
-      if (!id) {
-        return res.status(400).json({ message: "URL ID is required" });
-      }
+      if (!id) return res.status(400).json({ message: "URL ID is required" });
       const { shortenUrl, expirationDate, scheduledDate } = req.body;
+      // Only changeable parameters are ^
 
       if (!shortenUrl) {
         return res.status(400).json({ message: "Shorten URL is required" });
@@ -89,13 +90,14 @@ export default async function handler(
       };
 
       // Perform the update operation
-
       const result = await Url.findByIdAndUpdate(id, updateData, { new: true });
       if (!result) {
         return res.status(404).json({ message: "URL not found" });
       }
       return res.status(200).json({ message: "URL updated successfully" });
     }
+
+    // For soft deleted ones
     if (req.method === "POST" && req.query.action === "restore") {
       const { id } = req.query;
       if (!id) {
@@ -107,12 +109,13 @@ export default async function handler(
         return res.status(404).json({ message: "URL not found" });
       }
       // Check if the URL has been soft deleted and if it's within the 1-hour grace period
+      // Maybe we should have more than 1 hour
       const now = new Date();
       if (
         url.deletedAt &&
         now.getTime() - (url.deletedAt as Date).getTime() <= 60 * 60 * 1000
       ) {
-        // Restore the URL (soft restore)
+        // Restore the URL
         url.deletedAt = null;
         url.isDeleted = false;
         await url.save();

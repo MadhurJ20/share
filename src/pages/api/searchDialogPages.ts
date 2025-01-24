@@ -21,7 +21,7 @@ export default async function handler(
         }).exec();
         return res.status(200).json(urls);
       }
-      // If no search query, fetch only the 10 most recent URLs
+      // If no search query
       const urls = await Url.find({ q: { $exists: false } })
         .sort({ createdAt: -1 }) // Sort by the most recent
         .limit(10) // Limit to 10 most recent
