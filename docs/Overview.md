@@ -24,6 +24,11 @@ The flow of the website is:
 
 # Technologies
 
-1. Frontend + Backend: Nextjs ([Docs](https://nextjs.org/docs))
-2. Database: [MongoDB](https://www.mongodb.com/)
-3.
+1. Language: Typescript
+2. Frontend + Backend: Nextjs ([Docs](https://nextjs.org/docs))
+3. Database: [MongoDB](https://www.mongodb.com/)
+4. Other libraries: [Tailwind v3](https://v3.tailwindcss.com/) and [ShadCN](https://ui.shadcn.com/)
+5. How it works:
+   1. For shortening we basically store the shortened version of the link and store the original URL, when the user does get to the slug URL `theaces.social/*` (Via `[shortUrl].tsx`) it will do some validations and update other fields and then redirect user to the `originalUrl` by matching the provided `shortenUrl`.
+   2. The admin page is basically simple CRUD operations
+   3. The graphs page is just fetching and transforming the data

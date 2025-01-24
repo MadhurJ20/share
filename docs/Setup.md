@@ -6,7 +6,7 @@
    1. Try wit `google.com`, `http://google.com`, `www.bing`, `https://google.com`
    2. Above is just to ensure all the link types work as expected
 
-## Issues
+## For any Issues
 
 1. Always do a simple `git pull` before anything and check `.env`
 2. Any issues in home form: Drop the `urls` Database and try again
