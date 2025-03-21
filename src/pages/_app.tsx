@@ -2,7 +2,7 @@ import "@styles/index.css";
 import "@styles/404.css";
 import { Toaster } from "@components/ui/sonner";
 
-import { Inter, JetBrains_Mono } from "next/font/google";
+import { Inter, JetBrains_Mono, Geist, Geist_Mono } from "next/font/google";
 import { AppProps } from "next/app";
 import { Suspense } from "react";
 import Image from "next/image";
@@ -12,9 +12,14 @@ export const jetBrainsMono = JetBrains_Mono({
   display: "swap",
 });
 
+export const geistSans = Geist({
+  variable: '--font-geist-sans',
+  subsets: ['latin'],
+})
+
 export default function MyApp({ Component, pageProps }: AppProps) {
   return (
-    <main className={inter.className}>
+    <main className={`${geistSans.className}`}>
       <Suspense fallback={<Fallback />}>
         <Component {...pageProps} />
       </Suspense>{" "}

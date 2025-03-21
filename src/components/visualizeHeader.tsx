@@ -86,9 +86,10 @@ const VisualizeHeader: React.FC<VisualizeHeaderProps> = ({
                 aria-expanded={open}
                 className="w-[200px] justify-between"
               >
-                {selectedUrl
+                <span className="truncate">{selectedUrl
                   ? selectedUrl.shortenUrl
                   : "Select URL"}
+                </span>
                 <ChevronsUpDownIcon className="opacity-50" />
               </Button>
             </PopoverTrigger>
