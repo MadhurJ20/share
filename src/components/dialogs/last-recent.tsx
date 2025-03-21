@@ -1,23 +1,35 @@
 import {
   Dialog,
+  DialogClose,
   DialogContent,
   DialogFooter,
   DialogHeader,
   DialogTitle,
-  DialogClose,
 } from "@components/ui/dialog";
 
-import { mutate } from "swr";
-import useSWRImmutable from 'swr/immutable'
-import { PiDevicesLight, PiGoogleChromeLogoLight } from "react-icons/pi";
-import { FaFirefox, FaSafari, FaEdge, FaChrome, FaMobileAlt, FaLaptop } from "react-icons/fa";
-import { Button } from "@components/ui/button";
+import { getAuthToken } from "@/lib/utils";
 import { URLDocument } from "@/types/types";
+import { Button } from "@components/ui/button";
 import { ListCollapseIcon } from "lucide-react";
 import React, { useState } from "react";
+import { FaChrome, FaEdge, FaFirefox, FaLaptop, FaMobileAlt, FaSafari } from "react-icons/fa";
+import { PiDevicesLight, PiGoogleChromeLogoLight } from "react-icons/pi";
+import { mutate } from "swr";
+import useSWRImmutable from 'swr/immutable';
 
 // Function to fetch data
-const fetcher = (url: string) => fetch(url).then((res) => res.json());
+const fetcher = async (url: string) => {
+  const token = getAuthToken();
+  if (!token) {
+    throw new Error('No token found. Please log in.');
+  }
+  const res = await fetch(url, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+  return res.json();
+};
 
 const getBrowserIcon = (userAgent: string) => {
   if (/Chrome/i.test(userAgent)) {
@@ -57,7 +69,7 @@ const LastRecent = ({ open, setOpen }: RecentAccessesDialogProps) => {
   if (!urls) return <div></div>;
 
   const handleRefresh = () => {
-    mutate("/api/analytics?action=recent-ten"); // Trigger re-fetch for the specific key
+    mutate("/api/analytics?action=recent-ten");
   };
 
   return (
@@ -114,7 +126,7 @@ const LastRecent = ({ open, setOpen }: RecentAccessesDialogProps) => {
                             {otherAccesses.length > 0 && (
                               <td colSpan={4} className="text-center">
                                 <Button
-                                  className="w-8 h-8"
+                                  size={'sm-icon'}
                                   onClick={() => handleToggleVisibility(url._id)}
                                 >
                                   <ListCollapseIcon className="w-4 h-4" />

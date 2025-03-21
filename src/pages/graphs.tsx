@@ -18,6 +18,7 @@ import { SelectIcon } from "@radix-ui/react-select";
 import { useAuthen } from "@/hooks/useAuthen";
 import { Checkbox } from "@/components/ui/checkbox";
 import { ACESHeader } from "@/components/acesHeader";
+import { getAuthToken } from "@/lib/utils";
 
 const VisualizeHeader = dynamic(() => import("@/components/visualizeHeader"), { ssr: false, });
 const Chart = dynamic(() => import("react-apexcharts"), { ssr: false });
@@ -40,7 +41,12 @@ const Visualize: React.FC = () => {
   const fetchUrls = async (): Promise<void> => {
     setLoading(true);
     try {
-      const res = await fetch("/api/analytics");
+      const token = getAuthToken()
+      const res = await fetch("/api/analytics", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
       const data: URLDocument[] = await res.json();
 
       // Add duplicate counts

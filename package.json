@@ -15,12 +15,14 @@
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "cmdk": "^1.0.4",
+    "cookies-next": "^5.1.0",
+    "jose": "^6.0.10",
     "json2csv": "6.0.0-alpha.2",
     "lucide-react": "^0.460.0",
     "mongoose": "^8.9.5",
     "mongoose-sequence": "^6.0.1",
     "nanoid": "^5.0.9",
-    "next": "^15.1.4",
+    "next": "^15.2.3",
     "next-themes": "^0.4.4",
     "qr-code-styling": "^1.9.1",
     "react": "^18.3.1",
@@ -63,5 +65,12 @@
   "repository": {
     "type": "git",
     "url": "git+https://github.com/ACES-RMDSSOE/share.git"
+  },
+  "packageManager": "pnpm@10.4.1",
+  "pnpm": {
+    "onlyBuiltDependencies": [
+      "@vercel/speed-insights",
+      "sharp"
+    ]
   }
 }

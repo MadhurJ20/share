@@ -1,48 +1,49 @@
 "use client";
-import { useRouter } from "next/router";
+import { SpeedInsights } from "@vercel/speed-insights/next";
+import Head from "next/head";
 import Image from "next/image";
+import Link from "next/link";
+import { useRouter } from "next/router";
 import {
-  useEffect,
-  useState,
-  useRef,
-  useCallback,
-  useMemo,
   Suspense,
   lazy,
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
 } from "react";
-import Head from "next/head";
-import Link from "next/link";
-import { SpeedInsights } from "@vercel/speed-insights/next";
 
+import { Checkbox } from "@/components/ui/checkbox";
 import {
-  QrCode,
-  Calendar,
-  Pencil,
-  Link as LinkIcon,
-  ExternalLink,
-  RefreshCcw,
-  ChartSpline,
-  Copy,
-  Check,
-  Trash2,
-  MousePointerClick,
-  Database,
-} from "lucide-react";
-import {
-  Nav,
-  Input,
+  ACESHeader,
   Button,
+  GradientTop,
+  Input,
+  Nav,
   SortSelect,
   URLStatus,
-  GradientTop,
-  ACESHeader,
 } from "@components/index";
-import { Checkbox } from "@/components/ui/checkbox";
-import { toast } from "sonner";
-import { downloadCSV } from "@utils/utils";
-import { useHandleDialogs } from "@hooks/useHandleDialogs";
 import { useAuthen } from "@hooks/useAuthen";
-import { URLDocument, URLWithDuplicateCount, SortOption } from "types/types";
+import { useHandleDialogs } from "@hooks/useHandleDialogs";
+import { downloadCSV } from "@utils/utils";
+import {
+  Calendar,
+  ChartSpline,
+  Check,
+  Copy,
+  Database,
+  ExternalLink,
+  Link as LinkIcon,
+  MousePointerClick,
+  Pencil,
+  QrCode,
+  RefreshCcw,
+  Trash2,
+} from "lucide-react";
+import { toast } from "sonner";
+import { SortOption, URLDocument, URLWithDuplicateCount } from "types/types";
+import { getAuthToken } from "@/lib/utils";
 
 // Lazy load Dialog Components
 const DeleteUrlDialog = lazy(() => import("@components/dialogs/deleteUrl"));
@@ -63,7 +64,7 @@ export default function Analytics() {
   const [error, setError] = useState<string>("");
   const [searchTerm, setSearchTerm] = useState<string>("");
   const [copiedUrl, setCopiedUrl] = useState<string | null>(null);
-  const [sortOption, setSortOption] = useState<SortOption>("dateAsc");
+  const [sortOption, setSortOption] = useState<SortOption>("dateDesc");
   const [showConfirmation, setShowConfirmation] = useState<boolean>(true);
   const [loading, setLoading] = useState(true);
   const [isPermanentDelete, setIsPermanentDelete] = useState<boolean>(false);
@@ -87,7 +88,12 @@ export default function Analytics() {
   const fetchUrls = async (): Promise<void> => {
     setLoading(true);
     try {
-      const res = await fetch("/api/analytics");
+      const token = getAuthToken();
+      const res = await fetch('/api/analytics', {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
       const data: URLDocument[] = await res.json();
       const processedData: URLWithDuplicateCount[] = addDuplicateCounts(data);
       setUrls(processedData); // Store the fetched data in state
@@ -143,10 +149,12 @@ export default function Analytics() {
     updatedFields: Partial<URLDocument>
   ) => {
     try {
+      const token = getAuthToken()
       const res = await fetch(`/api/analytics?id=${urlId}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify(updatedFields),
       });
@@ -171,14 +179,18 @@ export default function Analytics() {
   };
 
   const handleDelete = async (urlId: string) => {
-    const action = isPermanentDelete ? "permanent" : "soft"; // Determine the type of delete
+    const action = isPermanentDelete ? "permanent" : "soft";
     try {
+      const token = getAuthToken()
       const res = await fetch(`/api/analytics?id=${urlId}&action=${action}`, {
         method: "DELETE",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        }
       });
 
       if (res.ok) {
-        setUrls(urls.filter((url) => url._id !== urlId)); // Remove the deleted URL from the state
+        setUrls(urls.filter((url) => url._id !== urlId));
         toast.success(
           isPermanentDelete
             ? "URL permanently deleted"

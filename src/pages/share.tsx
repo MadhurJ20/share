@@ -25,6 +25,7 @@ import { GradientTop } from "@components/gradientTop";
 import { downloadQRCode } from "@utils/utils";
 import { useAuthen } from "@hooks/useAuthen";
 import { ACESHeader } from "@/components";
+import { getAuthToken } from "@/lib/utils";
 
 export default function Home() {
   const authenticated = useAuthen();
@@ -85,9 +86,17 @@ export default function Home() {
     if (alias == "graphs") return toast.error(`Custom alias cannot be graphs`);
 
     try {
+      const token = getAuthToken();
+      if (!token) {
+        setError('No token found. Please log in.');
+        return;
+      }
       const res = await fetch("/api/shorten", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
         body: JSON.stringify({
           originalUrl: formattedUrl,
           alias,

@@ -60,7 +60,7 @@ export default function Home() {
           onSubmit={handleSubmit}
           className="flex flex-col items-center gap-4"
         >
-          <div className="flex flex-col mb-4 space-y-3 header">
+          <header className="flex flex-col mb-4 space-y-3 header">
             <div className="flex items-center justify-center">
               <Link href="https://aces-rmdssoe.tech">
                 <img
@@ -81,7 +81,7 @@ export default function Home() {
             <p className="text-sm text-center small-caps lg:text-base c-beige:text-beige-800">
               URL Shortener + QR Code Generator
             </p>
-          </div>
+          </header>
           <Input
             type="password"
             value={passcode}
