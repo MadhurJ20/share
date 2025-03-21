@@ -4,6 +4,7 @@ import { PiStackDuotone } from "react-icons/pi";
 import { toast } from "sonner";
 import { Button } from "@components/ui/button";
 import { BsDatabaseFillSlash } from "react-icons/bs";
+import { getAuthToken } from "@/lib/utils";
 
 type URL = {
   _id: string;
@@ -56,9 +57,15 @@ export const URLStatus = ({ url }: URLStatusProps) => {
     if (!url.deletedAt) return;
     setIsRestoring(true);
     try {
+      const token = getAuthToken()
       const response = await fetch(
         `/api/analytics?id=${url._id}&action=restore`,
-        { method: "POST" }
+        {
+          method: "POST",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          }
+        }
       );
       if (response.ok) {
         setIsRestoring(false);
@@ -78,9 +85,15 @@ export const URLStatus = ({ url }: URLStatusProps) => {
   const handlePermanentDelete = async () => {
     setIsPermanentlyDeleting(true);
     try {
+      const token = getAuthToken()
       const response = await fetch(
         `/api/analytics?id=${url._id}&action=permanent`,
-        { method: "DELETE" }
+        {
+          method: "DELETE",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          }
+        }
       );
       if (response.ok) {
         setIsPermanentlyDeleting(false);

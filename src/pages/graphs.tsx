@@ -1,4 +1,4 @@
-import dynamic from "next/dynamic"; // Dynamically import ApexCharts
+import dynamic from "next/dynamic";
 import Image from "next/image";
 import Head from "next/head";
 
@@ -34,7 +34,7 @@ const Visualize: React.FC = () => {
   const [selectedUrl, setSelectedUrl] = useState<URLWithDuplicateCount | null>(
     null
   );
-  const [timeframe, setTimeframe] = useState<string>("week"); // Or 'month', 'year'
+  const [timeframe, setTimeframe] = useState<string>("week"); // Or 'month', 'year', 'last-week', 'all'
   const [showIndividualLines, setShowIndividualLines] = useState<boolean>(true);
   const [openRecent, setOpenRecent] = useState<boolean>(false);
 
