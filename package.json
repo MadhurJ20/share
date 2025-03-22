@@ -43,7 +43,7 @@
     "lint-ts": "tsc --noEmit"
   },
   "name": "share",
-  "version": "1.2.0",
+  "version": "2.1.0",
   "description": "This is a repository to be used by ACES to shorten URLs & track them.",
   "main": "src/pages/index.tsx",
   "directories": {
